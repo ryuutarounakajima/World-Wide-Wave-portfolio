@@ -272,8 +272,24 @@ struct SliderModifier: View {
         
         
 }
+//form view preview
+#Preview {
+    struct FormViewPreview: View {
+        @State private var isSizeSelect = false
+        @State private var isConditionSelect = false
+        @StateObject private var formData = FormData()
+
+        var body: some View {
+            FormView(isSizeSelect: $isSizeSelect, isConditionSelect: $isConditionSelect)
+                .environmentObject(formData)
+        }
+    }
+
+    return FormViewPreview()
+}
+
 //Media picker button preview
-struct MediaPickerButtonPreview: PreviewProvider {
+/*struct MediaPickerButtonPreview: PreviewProvider {
    @State static var selectedURL: URL? = nil
    @State static var selectedUImage: UIImage? = nil
     
@@ -283,7 +299,7 @@ struct MediaPickerButtonPreview: PreviewProvider {
             .padding()
     }
 }
-
+*/
 //Horizontal drag slider animation effect preview
 /*#Preview {
     struct sliderPreview: View {
