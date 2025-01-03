@@ -7,6 +7,102 @@
 
 import SwiftUI
 
+class FormData: ObservableObject {
+    @Published var selectedSize: String = ""
+    @Published var selectedCondition: String = ""
+}
+
+
+struct FormView: View {
+  
+    @EnvironmentObject var formData: FormData
+    //wave size select
+    @Binding var isSizeSelect: Bool
+    @State private var waveSize: String = ""
+    @State private var waveSizes: [(key: String, value: String)] = [ ("" , ""), ("Small" , "Small"), ("Chest-high" , "Chest-high"), ("Head-high", "Head-high"), ("Overhead", "Overhead"), ("Double", "Double"), ("Triple over", "Triple over")
+    ]
+    
+    //wave conditon select
+    @Binding var isConditionSelect: Bool
+    @State private var waveCondition: String = ""
+    @State private var waveCondtions: [(key: String, value: String)] = [("", ""), ("Go home", "Go home"), ("Choppy", "Choppy"), ("Mushy", "Mushy"), ("Windy", "windy"), ("Clean", "Clean"), ("Glass", "Glass"), ("Rippable", "Rippable"), ("Barrels", "Barrels"), ("Peaky", "Peaky"), ("Gnarly", "Gnarly"), ("Close out", "Close out") ]
+    
+    var body: some View {
+        //info form
+        Form {
+            //wave size section
+            Section(header: Button(action: {
+                isSizeSelect.toggle()
+            }){
+                Text("Size")
+                    .headerProminence(.increased)
+                    .modifier(SectionButtonModifier(isSelected: $isSizeSelect))
+                
+                
+            })
+            {
+                if isSizeSelect {
+                    Picker("", selection: $formData.selectedSize){
+                        ForEach(waveSizes, id: \.key) { size in
+                            Text(size.value).tag(size.key)
+                        }
+                    }
+                    .pickerStyle(.wheel)
+                    .labelsHidden()
+                    .onChange( of: formData.selectedSize) {
+                        waveSize = formData.selectedSize
+                        withAnimation{
+                            isSizeSelect  = false
+                        }
+                    }
+                }
+                //Logged wave size
+                Text(formData.selectedSize)
+                    .font(.custom("AvenirNext-Bold", size: 14))
+                    .scaleEffect(1.2)
+                    .shadow(radius: 2)
+            }
+            
+            //wave conditon section
+            Section(header: Button(action: {
+                isConditionSelect.toggle()
+            }) {
+                Text("Conditon")
+                    .headerProminence(.increased)
+                    .modifier(SectionButtonModifier(isSelected: $isConditionSelect))
+            })
+            {
+                if isConditionSelect {
+                    Picker("", selection: $formData.selectedCondition) {
+                        ForEach(waveCondtions, id: \.key) {
+                            condition in
+                            Text(condition.value).tag(condition.key)
+                        }
+                    }
+                    .pickerStyle(.wheel)
+                    .labelsHidden()
+                    .onChange( of: formData.selectedCondition) {
+                        waveCondition = formData.selectedCondition
+                        withAnimation {
+                            isConditionSelect = false
+                        }
+                    }
+                }
+                
+                Text(formData.selectedCondition)
+                    .font(.custom("AvenirNext-Bold", size: 14))
+                    .scaleEffect(1.2)
+                    .shadow(radius: 2)
+                  
+            }
+            
+            //swell
+        }
+    }
+}
+  
+
+
 struct MediaPicker: View {
     @Binding var selectedImage: UIImage?
     @Binding var selectedVideoURL: URL?

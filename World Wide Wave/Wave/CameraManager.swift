@@ -55,12 +55,17 @@ struct CameraPreviewView: UIViewControllerRepresentable {
     
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
     
-    func dismantleUIViewController(_ uiViewController: CameraPreviewController, context: Context) {
+    /*
+     func dismantleUIViewController(_ uiViewController: CameraPreviewController, context: Context) {
         DispatchQueue.global(qos: .background).async {
-            uiViewController.session.stopRunning()
-            print("seesion stopped")
+            if uiViewController.session.isRunning {
+                uiViewController.session.stopRunning()
+                print("seesion stopped")
+            }
+            
         }
     }
+     */
 }
 
 class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {

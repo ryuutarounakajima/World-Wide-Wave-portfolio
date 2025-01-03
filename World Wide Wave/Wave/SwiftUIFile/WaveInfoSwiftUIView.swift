@@ -11,11 +11,12 @@ import CoreLocation
 import AVKit
 
 
-    
 
 
 struct WaveInfoSwiftUIView: View {
     
+    @StateObject  var formData: FormData
+   
     //Wave size select
     @State private var waveSize: String = ""
     @State private var selectedSize: String = ""
@@ -148,23 +149,22 @@ struct WaveInfoSwiftUIView: View {
                             })
                             {
                                 if isSizeSelect {
-                                    Picker("", selection: $selectedSize){
+                                    Picker("", selection: $formData.selectedSize){
                                         ForEach(waveSizes, id: \.key) { size in
                                             Text(size.value).tag(size.key)
                                         }
                                     }
                                     .pickerStyle(.wheel)
                                     .labelsHidden()
-                                    .frame(width: .infinity)
-                                    .onChange( of: selectedSize) {
-                                        waveSize = selectedSize
+                                    .onChange( of: formData.selectedSize) {
+                                        waveSize = formData.selectedSize
                                         withAnimation{
                                             isSizeSelect = false
                                         }
                                     }
                                 }
                                 //Logged wave size
-                                Text(waveSize)
+                                Text(formData.selectedSize)
                                     .font(.custom("AvenirNext-Bold", size: 14))
                                     .scaleEffect(1.2)
                                         .shadow(radius: 2)
@@ -187,7 +187,6 @@ struct WaveInfoSwiftUIView: View {
                                         }
                                     }.pickerStyle(.wheel)
                                         .labelsHidden()
-                                        .frame(width: .infinity)
                                         .onChange(of: selectedCondition) {
                                             waveCondition = selectedCondition
                                             
@@ -221,7 +220,6 @@ struct WaveInfoSwiftUIView: View {
                                     }
                                     .pickerStyle(.wheel)
                                     .labelsHidden()
-                                    .frame(width: .infinity)
                                     .onChange(of: selectedSwell) {
                                         swell = selectedSwell
                                         withAnimation {
@@ -552,6 +550,6 @@ struct WaveInfoSwiftUIView: View {
     
     let mockCoordinate = CLLocationCoordinate2D(latitude: 35.6895, longitude: 139.6917)
     let mockTimestamp = Date()
-
-    WaveInfoSwiftUIView(coordinate: mockCoordinate, timestamp: mockTimestamp)
+    let formdata = FormData()
+    WaveInfoSwiftUIView(formData: formdata, coordinate: mockCoordinate, timestamp: mockTimestamp)
 }

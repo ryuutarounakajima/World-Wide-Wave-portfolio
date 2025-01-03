@@ -21,7 +21,7 @@ class WaveInfoViewContrroler: UIViewController {
       
         guard let coordinate = coordinate, let timestamp = timestamp else {return}
         
-        let swiftUIView = WaveInfoSwiftUIView(coordinate: coordinate, timestamp: timestamp)
+        let swiftUIView = WaveInfoSwiftUIView(formData: FormData(), coordinate: coordinate, timestamp: timestamp)
         let hostingController = UIHostingController(rootView: swiftUIView)
         
         addChild(hostingController)
