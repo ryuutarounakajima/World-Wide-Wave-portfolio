@@ -10,6 +10,57 @@ import SwiftUI
 class FormData: ObservableObject {
     @Published var selectedSize: String = ""
     @Published var selectedCondition: String = ""
+    @Published var selectedSwell : String = ""
+    @Published var selectedWind: String = ""
+}
+
+struct CustomFormSection<Content: View>: View {
+    
+    var title: String
+    var options: [(key: String, value: String)]
+    var content: () -> Content
+    
+    @Binding var isSelected: Bool
+    @Binding var selectedValue: String
+    
+    init(title: String, isSelected: Binding<Bool>, selectedValue: Binding<String>, options: [(key: String, value:String)],@ViewBuilder content: @escaping () -> Content) {
+        
+        self.title = title
+        self._isSelected = isSelected
+        self._selectedValue = selectedValue
+        self.options = options
+        self.content = content
+    }
+    
+    var body: some View {
+        Section(header: Button(action: {
+            withAnimation{
+                isSelected.toggle()
+            }
+        }) {
+            Text(title)
+                .headerProminence(.increased)
+                .modifier(SectionButtonModifier(isSelected: $isSelected))
+        }) {
+            if isSelected {
+                Picker("", selection: $selectedValue) {
+                    ForEach(options, id: \.key) { option in
+                        Text(option.value).tag(option.key)
+                    }
+                }
+                .pickerStyle(.wheel)
+                .labelsHidden()
+                .onChange(of: selectedValue) {
+                    withAnimation {
+                        isSelected = false
+                    }
+                }
+               
+            }
+            content()
+        }
+    }
+    
 }
 
 
@@ -27,12 +78,24 @@ struct FormView: View {
     @State private var waveCondition: String = ""
     @State private var waveCondtions: [(key: String, value: String)] = [("", ""), ("Go home", "Go home"), ("Choppy", "Choppy"), ("Mushy", "Mushy"), ("Windy", "windy"), ("Clean", "Clean"), ("Glass", "Glass"), ("Rippable", "Rippable"), ("Barrels", "Barrels"), ("Peaky", "Peaky"), ("Gnarly", "Gnarly"), ("Close out", "Close out") ]
     
+    //swell
+    @Binding var isSwellSelect: Bool
+    @State private var swell: String = ""
+    @State private var swells: [(key: String, value: String)] = [("", ""), ("Small", "Small"), ("Chest-high" , "Chest-high"), ("Head-high", "Head-high"), ("Overhead", "Overhead"), ("Double", "Double"), ("Triple over", "Triple over")
+    ]
+    
+    //wind
+    @Binding var isWindSelect: Bool
+    @State private var wind: String = ""
+    @State private var winds: [(key: String, value: String)] = [("", ""), ("Offshore", "Offshore"), ("Onshore" , "Onshore"), ("Side off", "Side off"), ("Side on", "Side on"), ("ClossShore", "ClossShore")]
+    
     var body: some View {
         //info form
         Form {
             //wave size section
             Section(header: Button(action: {
                 isSizeSelect.toggle()
+                print(isSizeSelect)
             }){
                 Text("Size")
                     .headerProminence(.increased)
@@ -97,9 +160,52 @@ struct FormView: View {
             }
             
             //swell
+            Section(header: Button(action:{isSwellSelect.toggle()})
+                    {
+                Text("swell")
+                    .headerProminence(.increased)
+                    .modifier(SectionButtonModifier(isSelected: $isSwellSelect))
+            })
+            {
+                if isSwellSelect {
+                    Picker("", selection: $formData.selectedSwell) {
+                        ForEach(swells, id: \.key) {
+                            swell in
+                            Text(swell.value).tag(swell.key)
+                        }
+                    }
+                    .pickerStyle(.wheel)
+                    .labelsHidden()
+                    .onChange( of: formData.selectedSwell) {
+                        swell = formData.selectedSwell
+                        
+                        withAnimation {
+                            isSwellSelect = false
+                        }
+                    }
+                }
+                
+                Text(formData.selectedSwell)
+                    .font(.custom("AvenirNext-Bold", size: 14))
+                    .scaleEffect(1.2)
+                        .shadow(radius: 2)
+            }
+            
+            //wind
+            CustomFormSection(title: "Wind", isSelected: $isWindSelect, selectedValue: $formData.selectedWind, options: winds) {
+                Text(formData.selectedWind)
+                    .font(.custom("AvenirNext-Bold", size: 14))
+                    .scaleEffect(1.2)
+                        .shadow(radius: 2)
+            }
+          
         }
     }
 }
+            
+       
+
+
   
 
 
@@ -201,23 +307,29 @@ struct SectionButtonModifier: ViewModifier {
     
     @Binding var isSelected: Bool
     
-    var shadowColor: Color = Color.black.opacity(0.2)
-    var shadowRadius: CGFloat = 9
-    var shadowOffsetX: CGFloat = 3
-    var shadowOffsetY: CGFloat = 6
+    var shadowColor: Color = Color.black.opacity(0.4)
+    var shadowRadius: CGFloat = 12
+    var shadowOffsetX: CGFloat = 5
+    var shadowOffsetY: CGFloat = 10
     
     func body(content: Content) -> some View {
         content
             .font(.headline)
             .fontWeight(.bold)
             .foregroundStyle(.white)
-            .shadow(color: shadowColor, radius: shadowRadius, x: shadowOffsetX, y: shadowOffsetY)
             .padding([.leading,.trailing])
             .background(.primary)
             .clipShape(RoundedRectangle(cornerRadius: 30))
+            .shadow(color: shadowColor, radius: shadowRadius, x: shadowOffsetX, y: shadowOffsetY)
             .scaleEffect(isSelected ? 1.2 : 1)
             .animation(.easeInOut(duration: 0.3), value: isSelected)
-            
+            .overlay(
+                RoundedRectangle(cornerRadius: 30)
+                    .stroke(Color.white, lineWidth: 3)
+                    .scaleEffect(isSelected ? 1.2 : 1)
+                    .animation(.easeInOut(duration: 0.3), value: isSelected)
+            )
+            .padding(.bottom, 10)
     }
 }
 
@@ -277,10 +389,12 @@ struct SliderModifier: View {
     struct FormViewPreview: View {
         @State private var isSizeSelect = false
         @State private var isConditionSelect = false
+        @State private var isSwellSelect = false
+        @State private var isWindSelect = false
         @StateObject private var formData = FormData()
 
         var body: some View {
-            FormView(isSizeSelect: $isSizeSelect, isConditionSelect: $isConditionSelect)
+            FormView(isSizeSelect: $isSizeSelect, isConditionSelect: $isConditionSelect, isSwellSelect: $isSwellSelect, isWindSelect: $isWindSelect)
                 .environmentObject(formData)
         }
     }
