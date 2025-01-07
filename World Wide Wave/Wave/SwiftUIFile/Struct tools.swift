@@ -12,6 +12,8 @@ class FormData: ObservableObject {
     @Published var selectedCondition: String = ""
     @Published var selectedSwell : String = ""
     @Published var selectedWind: String = ""
+    @Published var selectedWindStrengthValue: Double = 0
+    
 }
 
 struct CustomFormSection<Content: View>: View {
@@ -93,121 +95,44 @@ struct FormView: View {
         //info form
         Form {
             //wave size section
-            Section(header: Button(action: {
-                isSizeSelect.toggle()
-                print(isSizeSelect)
-            }){
-                Text("Size")
-                    .headerProminence(.increased)
-                    .modifier(SectionButtonModifier(isSelected: $isSizeSelect))
-                
-                
-            })
-            {
-                if isSizeSelect {
-                    Picker("", selection: $formData.selectedSize){
-                        ForEach(waveSizes, id: \.key) { size in
-                            Text(size.value).tag(size.key)
-                        }
-                    }
-                    .pickerStyle(.wheel)
-                    .labelsHidden()
-                    .onChange( of: formData.selectedSize) {
-                        waveSize = formData.selectedSize
-                        withAnimation{
-                            isSizeSelect  = false
-                        }
-                    }
-                }
-                //Logged wave size
+            CustomFormSection(title: "size", isSelected: $isSizeSelect, selectedValue: $formData.selectedSize, options: waveSizes) {
                 Text(formData.selectedSize)
-                    .font(.custom("AvenirNext-Bold", size: 14))
-                    .scaleEffect(1.2)
-                    .shadow(radius: 2)
+                    .modifier(CustomFormTextModifier())
             }
             
-            //wave conditon section
-            Section(header: Button(action: {
-                isConditionSelect.toggle()
-            }) {
-                Text("Conditon")
-                    .headerProminence(.increased)
-                    .modifier(SectionButtonModifier(isSelected: $isConditionSelect))
-            })
-            {
-                if isConditionSelect {
-                    Picker("", selection: $formData.selectedCondition) {
-                        ForEach(waveCondtions, id: \.key) {
-                            condition in
-                            Text(condition.value).tag(condition.key)
-                        }
-                    }
-                    .pickerStyle(.wheel)
-                    .labelsHidden()
-                    .onChange( of: formData.selectedCondition) {
-                        waveCondition = formData.selectedCondition
-                        withAnimation {
-                            isConditionSelect = false
-                        }
-                    }
-                }
-                
+            //wave condtion section
+            CustomFormSection(title: "conditon", isSelected: $isConditionSelect, selectedValue: $formData.selectedCondition, options: waveCondtions) {
                 Text(formData.selectedCondition)
-                    .font(.custom("AvenirNext-Bold", size: 14))
-                    .scaleEffect(1.2)
-                    .shadow(radius: 2)
-                  
+                    .modifier(CustomFormTextModifier())
             }
-            
+
             //swell
-            Section(header: Button(action:{isSwellSelect.toggle()})
-                    {
-                Text("swell")
-                    .headerProminence(.increased)
-                    .modifier(SectionButtonModifier(isSelected: $isSwellSelect))
-            })
-            {
-                if isSwellSelect {
-                    Picker("", selection: $formData.selectedSwell) {
-                        ForEach(swells, id: \.key) {
-                            swell in
-                            Text(swell.value).tag(swell.key)
-                        }
-                    }
-                    .pickerStyle(.wheel)
-                    .labelsHidden()
-                    .onChange( of: formData.selectedSwell) {
-                        swell = formData.selectedSwell
-                        
-                        withAnimation {
-                            isSwellSelect = false
-                        }
-                    }
-                }
-                
+            CustomFormSection(title: "swell", isSelected: $isSwellSelect, selectedValue: $formData.selectedSwell, options: swells) {
                 Text(formData.selectedSwell)
-                    .font(.custom("AvenirNext-Bold", size: 14))
-                    .scaleEffect(1.2)
-                        .shadow(radius: 2)
+                    .modifier(CustomFormTextModifier())
             }
-            
+
             //wind
             CustomFormSection(title: "Wind", isSelected: $isWindSelect, selectedValue: $formData.selectedWind, options: winds) {
-                Text(formData.selectedWind)
-                    .font(.custom("AvenirNext-Bold", size: 14))
-                    .scaleEffect(1.2)
-                        .shadow(radius: 2)
+                VStack {
+                    Text(formData.selectedWind)
+                        .modifier(CustomFormTextModifier())
+                }
+                
             }
           
         }
     }
 }
             
-       
-
-
-  
-
+struct CustomFormTextModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.custom("AvenirNext-Bold", size: 14))
+                        .scaleEffect(1.2)
+                        .shadow(radius: 2)
+    }
+}
 
 struct MediaPicker: View {
     @Binding var selectedImage: UIImage?
