@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-//view model
+//Model
 class FormData: ObservableObject {
     @Published var selectedSize: String = ""
     @Published var selectedCondition: String = ""
@@ -91,30 +91,26 @@ struct CustomFormSection<Content: View>: View {
     
 }
 
-
+//View model
 struct FormViewModel: View {
   
     @EnvironmentObject var formData: FormData
     //wave size select
     @Binding var isSizeSelect: Bool
-    @State private var waveSize: String = ""
     @State private var waveSizes: [(key: String, value: String)] = [ ("" , ""), ("Small" , "Small"), ("Chest-high" , "Chest-high"), ("Head-high", "Head-high"), ("Overhead", "Overhead"), ("Double", "Double"), ("Triple over", "Triple over")
     ]
     
     //wave conditon select
     @Binding var isConditionSelect: Bool
-    @State private var waveCondition: String = ""
     @State private var waveCondtions: [(key: String, value: String)] = [("", ""), ("Go home", "Go home"), ("Choppy", "Choppy"), ("Mushy", "Mushy"), ("Windy", "windy"), ("Clean", "Clean"), ("Glass", "Glass"), ("Rippable", "Rippable"), ("Barrels", "Barrels"), ("Peaky", "Peaky"), ("Gnarly", "Gnarly"), ("Close out", "Close out") ]
     
     //swell
     @Binding var isSwellSelect: Bool
-    
     @State private var swells: [(key: String, value: String)] = [("", ""), ("Small", "Small"), ("Chest-high" , "Chest-high"), ("Head-high", "Head-high"), ("Overhead", "Overhead"), ("Double", "Double"), ("Triple over", "Triple over")
     ]
     
     //wind
     @Binding var isWindSelect: Bool
-    @State private var wind: String = ""
     @State private var winds: [(key: String, value: String)] = [("", ""), ("Offshore", "Offshore"), ("Onshore" , "Onshore"), ("Side off", "Side off"), ("Side on", "Side on"), ("ClossShore", "ClossShore")]
     
     var body: some View {

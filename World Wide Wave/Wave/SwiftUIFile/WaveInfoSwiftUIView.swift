@@ -155,7 +155,7 @@ struct WaveInfoSwiftUIView: View {
                                             isRecordedButton.toggle()
                                             
                                         }
-                                        formData.submitForm()
+                                        
                                         showAlert = true
                                     } 
                                 }) {
@@ -182,6 +182,7 @@ struct WaveInfoSwiftUIView: View {
                                     Button("Yes") {
                                         print("Yes")
                                         print("You are optimistic person from now!!")
+                                        formData.submitForm()
                                         
                                     }
                                 } message:{
