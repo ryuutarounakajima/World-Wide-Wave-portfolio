@@ -117,6 +117,18 @@ struct FormView: View {
                 VStack {
                     Text(formData.selectedWind)
                         .modifier(CustomFormTextModifier())
+                    HStack {
+                        Text("Strength")
+                            .font(.custom("AvenirNext-Bold", size: 14))
+                            .scaleEffect(0.8)
+                            .shadow(radius: 2)
+                        
+                        Spacer()
+                        
+                        SliderModifier(value: $formData.selectedWindStrengthValue, range: 0...100, gradient: Gradient(colors:[.blue, .red]))
+                        
+                        
+                    }
                 }
                 
             }
