@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+//view model
 class FormData: ObservableObject {
     @Published var selectedSize: String = ""
     @Published var selectedCondition: String = ""
@@ -14,8 +14,16 @@ class FormData: ObservableObject {
     @Published var selectedWind: String = ""
     @Published var selectedWindStrengthValue: Double = 0
     
+    func isFormValid() -> Bool {
+        return !selectedSize.isEmpty && !selectedCondition.isEmpty && !selectedSwell.isEmpty && !selectedWind.isEmpty
+    }
+    
+    func submitForm() {
+        print("Form submitted with \(selectedSize), \(selectedCondition), \(selectedSwell), \(selectedWind), \(selectedWindStrengthValue)")
+    }
+    
 }
-
+//View
 struct CustomFormSection<Content: View>: View {
     
     var title: String
@@ -24,6 +32,8 @@ struct CustomFormSection<Content: View>: View {
     
     @Binding var isSelected: Bool
     @Binding var selectedValue: String
+    
+    @EnvironmentObject var formData: FormData
     
     init(title: String, isSelected: Binding<Bool>, selectedValue: Binding<String>, options: [(key: String, value:String)],@ViewBuilder content: @escaping () -> Content) {
         
@@ -53,6 +63,7 @@ struct CustomFormSection<Content: View>: View {
                 .pickerStyle(.wheel)
                 .labelsHidden()
                 .onChange(of: selectedValue) {
+                    upDateFormData()
                     withAnimation {
                         isSelected = false
                     }
@@ -63,10 +74,25 @@ struct CustomFormSection<Content: View>: View {
         }
     }
     
+    private func upDateFormData() {
+        switch title {
+        case "Size":
+            formData.selectedSize = selectedValue
+        case "Condition":
+            formData.selectedCondition = selectedValue
+        case "Swell":
+            formData.selectedSwell = selectedValue
+        case "Wind" :
+            formData.selectedWind = selectedValue
+        default:
+            break
+        }
+    }
+    
 }
 
 
-struct FormView: View {
+struct FormViewModel: View {
   
     @EnvironmentObject var formData: FormData
     //wave size select
@@ -82,7 +108,7 @@ struct FormView: View {
     
     //swell
     @Binding var isSwellSelect: Bool
-    @State private var swell: String = ""
+    
     @State private var swells: [(key: String, value: String)] = [("", ""), ("Small", "Small"), ("Chest-high" , "Chest-high"), ("Head-high", "Head-high"), ("Overhead", "Overhead"), ("Double", "Double"), ("Triple over", "Triple over")
     ]
     
@@ -95,19 +121,19 @@ struct FormView: View {
         //info form
         Form {
             //wave size section
-            CustomFormSection(title: "size", isSelected: $isSizeSelect, selectedValue: $formData.selectedSize, options: waveSizes) {
+            CustomFormSection(title: "Size", isSelected: $isSizeSelect, selectedValue: $formData.selectedSize, options: waveSizes) {
                 Text(formData.selectedSize)
                     .modifier(CustomFormTextModifier())
             }
             
             //wave condtion section
-            CustomFormSection(title: "conditon", isSelected: $isConditionSelect, selectedValue: $formData.selectedCondition, options: waveCondtions) {
+            CustomFormSection(title: "Conditon", isSelected: $isConditionSelect, selectedValue: $formData.selectedCondition, options: waveCondtions) {
                 Text(formData.selectedCondition)
                     .modifier(CustomFormTextModifier())
             }
 
             //swell
-            CustomFormSection(title: "swell", isSelected: $isSwellSelect, selectedValue: $formData.selectedSwell, options: swells) {
+            CustomFormSection(title: "Swell", isSelected: $isSwellSelect, selectedValue: $formData.selectedSwell, options: swells) {
                 Text(formData.selectedSwell)
                     .modifier(CustomFormTextModifier())
             }
@@ -331,7 +357,7 @@ struct SliderModifier: View {
         @StateObject private var formData = FormData()
 
         var body: some View {
-            FormView(isSizeSelect: $isSizeSelect, isConditionSelect: $isConditionSelect, isSwellSelect: $isSwellSelect, isWindSelect: $isWindSelect)
+            FormViewModel(isSizeSelect: $isSizeSelect, isConditionSelect: $isConditionSelect, isSwellSelect: $isSwellSelect, isWindSelect: $isWindSelect)
                 .environmentObject(formData)
         }
     }

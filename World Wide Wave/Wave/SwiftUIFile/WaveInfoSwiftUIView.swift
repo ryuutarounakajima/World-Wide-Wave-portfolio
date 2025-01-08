@@ -123,7 +123,7 @@ struct WaveInfoSwiftUIView: View {
                         
                         //info form
                         
-                            FormView(isSizeSelect: $isSizeSelect, isConditionSelect: $isConditionSelect, isSwellSelect: $isSwellSelected, isWindSelect: $isWindSelected)
+                            FormViewModel(isSizeSelect: $isSizeSelect, isConditionSelect: $isConditionSelect, isSwellSelect: $isSwellSelected, isWindSelect: $isWindSelected)
                                 .environmentObject(formData)
                         
                         //.cornerRadius(20)
@@ -155,7 +155,7 @@ struct WaveInfoSwiftUIView: View {
                                             isRecordedButton.toggle()
                                             
                                         }
-                                        
+                                        formData.submitForm()
                                         showAlert = true
                                     } 
                                 }) {
