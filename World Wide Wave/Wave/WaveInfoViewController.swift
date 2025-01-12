@@ -14,14 +14,14 @@ class WaveInfoViewContrroler: UIViewController {
     
     var coordinate: CLLocationCoordinate2D?
     var timestamp: Date?
-    
+    var formData: FormData?
     
     override func viewDidLoad() {
         super.viewDidLoad()
       
         guard let coordinate = coordinate, let timestamp = timestamp else {return}
         
-        let swiftUIView = WaveInfoSwiftUIView(formData: FormData(), coordinate: coordinate, timestamp: timestamp)
+        let swiftUIView = WaveInfoSwiftUIView( coordinate: coordinate, timestamp: timestamp).environmentObject(formData!)
         let hostingController = UIHostingController(rootView: swiftUIView)
         
         addChild(hostingController)

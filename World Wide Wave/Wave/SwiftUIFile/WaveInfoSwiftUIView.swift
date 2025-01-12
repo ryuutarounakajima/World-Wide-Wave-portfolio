@@ -15,7 +15,7 @@ import AVKit
 
 struct WaveInfoSwiftUIView: View {
     
-    @StateObject  var formData: FormData
+    @EnvironmentObject  var formData: FormData
    
     //Wave size select
     @State private var isSizeSelect: Bool = false
@@ -69,7 +69,7 @@ struct WaveInfoSwiftUIView: View {
     //Photo picker visible
     @State private var isPickerVisable: Bool = false
     @State private var cameraAutorized: Bool = false
-    @State private var captuteImage: UIImage?
+   // @State private var captuteImage: UIImage?
     private let cameraManager = CameraManager()
     
     var coordinate: CLLocationCoordinate2D
@@ -92,7 +92,7 @@ struct WaveInfoSwiftUIView: View {
                                 }
                             }
                         }) {
-                            if let image = captuteImage {
+                            if let image = formData.capturedImage{
                                 Image(uiImage: image)
                                     .resizable()
                                     .scaledToFill()
@@ -111,7 +111,7 @@ struct WaveInfoSwiftUIView: View {
                             }
                         }
                         .fullScreenCover(isPresented: $isPickerVisable) {
-                            CameraPreviewView(captureImage: $captuteImage, isCameraPresented: $isPickerVisable)
+                            CameraPreviewView(captureImage: $formData.capturedImage, isCameraPresented: $isPickerVisable)
                         }
                         /*.sheet(isPresented: $isPickerVisable) {
                             MediaPicker(selectedImage: $selectedImage, selectedVideoURL: $selectedVideoURL)
@@ -138,9 +138,8 @@ struct WaveInfoSwiftUIView: View {
                                 Spacer()
                                 VStack {
                                     
-                                    Text("latitude: \(coordinate.latitude)")
-                                    
-                                    Text("longitude:\(coordinate.longitude)")
+                                    Text("latitude: \(formData.coordinate? .latitude ?? 0.0)")
+                                    Text("longitude:\(formData.coordinate? .longitude ?? 0.0)")
                                 }
                                 
                                 Spacer()
@@ -222,5 +221,5 @@ struct WaveInfoSwiftUIView: View {
     let mockCoordinate = CLLocationCoordinate2D(latitude: 35.6895, longitude: 139.6917)
     let mockTimestamp = Date()
     let formdata = FormData()
-    WaveInfoSwiftUIView(formData: formdata, coordinate: mockCoordinate, timestamp: mockTimestamp)
+    WaveInfoSwiftUIView(coordinate: mockCoordinate, timestamp: mockTimestamp).environmentObject(formdata)
 }

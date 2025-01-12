@@ -16,7 +16,7 @@ class WaveViewController: UIViewController, CLLocationManagerDelegate, MKMapView
     var locationManager: CLLocationManager!
     var selectedLocation: CLLocationCoordinate2D?
     var isTransiting = false
-    
+    var formData = FormData()
     
     
     override func viewDidLoad() {
@@ -171,6 +171,10 @@ class WaveViewController: UIViewController, CLLocationManagerDelegate, MKMapView
         let waveInfoVC = WaveInfoViewContrroler()
         waveInfoVC.coordinate = selectedLocation!
            waveInfoVC.timestamp = Date()
+           
+           waveInfoVC.formData = self.formData
+           waveInfoVC.formData?.coordinate = selectedLocation!
+           waveInfoVC.formData?.timestamp = Date()
            waveInfoVC.hidesBottomBarWhenPushed = true
            
         navigationController?.pushViewController(waveInfoVC, animated: true)
@@ -219,8 +223,13 @@ class WaveViewController: UIViewController, CLLocationManagerDelegate, MKMapView
                     annotation.coordinate = coordinate
                     mkMapView.addAnnotation(annotation)
 
-                   
                     selectedLocation = coordinate
+            
+                    
+            let newFormData = FormData()
+            newFormData.coordinate = coordinate
+            newFormData.timestamp = Date()
+            self.formData = newFormData
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         self.navigateToWaveInfoViewController()

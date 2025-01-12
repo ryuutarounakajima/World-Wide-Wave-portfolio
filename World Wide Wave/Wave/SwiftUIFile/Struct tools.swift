@@ -6,20 +6,33 @@
 //
 
 import SwiftUI
+import CoreLocation
 //Model
 class FormData: ObservableObject {
+    
+    @Published var coordinate: CLLocationCoordinate2D?
+    @Published var timestamp: Date?
+    
     @Published var selectedSize: String = ""
     @Published var selectedCondition: String = ""
     @Published var selectedSwell : String = ""
     @Published var selectedWind: String = ""
     @Published var selectedWindStrengthValue: Double = 0
+    @Published var capturedImage: UIImage?
     
     func isFormValid() -> Bool {
         return !selectedSize.isEmpty && !selectedCondition.isEmpty && !selectedSwell.isEmpty && !selectedWind.isEmpty
     }
     
     func submitForm() {
+        
         print("Form submitted with \(selectedSize), \(selectedCondition), \(selectedSwell), \(selectedWind), \(selectedWindStrengthValue)")
+        
+        if let image = capturedImage {
+            print("image captured: \(image)")
+        } else {
+            print("no image captured")
+        }
     }
     
 }
