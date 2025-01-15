@@ -24,7 +24,7 @@ struct CameraSwiftUIPreview: View {
             
             ZStack {
                 
-                Color.black.opacity(0.7)
+                Color.black.opacity(0.9)
                     .ignoresSafeArea(.all)
                 
                 
@@ -32,12 +32,31 @@ struct CameraSwiftUIPreview: View {
                 
                 CameraPreviewView(captureImage: $captureImage, isCameraPresented: $isCameraPresented)
                     .ignoresSafeArea(.all)
-                
+                    .overlay(
+                        Circle()
+                            .stroke(
+                                LinearGradient(
+                                    colors: [Color.blue.opacity(0.6), Color.pink.opacity(0.3)],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                ),
+                                lineWidth: 6
+                            )
+                            .frame(width: buttonSize, height: buttonSize)
+                            .position(x: xPosition, y: yPosition)
+                            .allowsHitTesting(false)
+                    )
+                    /*.overlay (
+                        Circle()
+                            
+                        .fill(Color.blue.opacity(0.4))
+                        .frame(width: buttonSize, height: buttonSize)
+                        .position(x: xPosition, y: yPosition)
+                        .allowsHitTesting(false)
+                        
+                    )*/
               
-                Circle()
-                    .fill(Color.blue.opacity(0.4))
-                    .frame(width: buttonSize, height: buttonSize)
-                    .position(x: xPosition, y: yPosition)
+               
                 
             }
             
