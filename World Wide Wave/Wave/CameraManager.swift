@@ -31,9 +31,40 @@ actor PhotoCaptureManager {
 }
 
 struct CameraPreviewView: UIViewControllerRepresentable {
-    
+  
     @Binding var captureImage: UIImage?
     @Binding var isCameraPresented: Bool
+    
+    class Coordinator: NSObject , AVCapturePhotoCaptureDelegate {
+        var parent: CameraPreviewView
+        
+        init(parent: CameraPreviewView) {
+            self.parent = parent
+        }
+        
+        func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Error)?) {
+            
+            guard let photoData = photo.fileDataRepresentation(), let image = UIImage(data: photoData) else {
+                print("Failed to convert photo")
+                return }
+            
+            DispatchQueue.main.async {
+                self.parent.captureImage = image
+            }
+            
+            DispatchQueue.main.async {
+                self.parent.isCameraPresented = false
+            }
+            
+            
+        }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(parent: self)
+    }
+    
+    
     
     func makeUIViewController(context: Context) -> UIViewController {
         let controller = CameraPreviewController()
@@ -80,7 +111,7 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
         super.viewDidLoad()
         setupCameraSession()
         setupPreviewLayer()
-        setuoCaputreButton()
+        setupCaptureButton()
     }
     
     private func setupCameraSession() {
@@ -108,12 +139,22 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
         view.layer.addSublayer(videoPreviewLayer)
     }
     
-    private func setuoCaputreButton() {
+    private func setupCaptureButton() {
         let captureButton = UIButton(type: .system)
         captureButton.setTitle("", for: .normal)
         captureButton.backgroundColor = UIColor.white.withAlphaComponent(0.7)
-        captureButton.frame = CGRect(x: view.frame.width / 2 - 25, y: view.frame.height - 80, width: 50, height: 50)
+        
+        let buttonSize: CGFloat = 50
+        let screenWidth = UIScreen.main.bounds.width
+        let screenHeight = UIScreen.main.bounds.height
+        let xPosition: CGFloat = (screenWidth - buttonSize) / 2
+        let yPosition: CGFloat = (screenHeight - buttonSize) - 50
+        captureButton.frame = CGRect(x: xPosition, y: yPosition, width: buttonSize, height: buttonSize)
+        captureButton.layer.cornerRadius = buttonSize / 2
+        captureButton.clipsToBounds = true
+        
         captureButton.addTarget(self, action: #selector(capturePhoto), for: .touchUpInside)
+        
         view.addSubview(captureButton)
         
         

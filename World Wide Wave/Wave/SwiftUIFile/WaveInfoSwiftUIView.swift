@@ -97,11 +97,11 @@ struct WaveInfoSwiftUIView: View {
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: geometry.size.width * 1.0, height: geometry.size.height * 0.4)
-                                    .modifier(MediaFrameModifier())
+                                   // .modifier(MediaFrameModifier())
                                     
                             } else if let videoURL = selectedVideoURL {
                                 VideoPlayer(player: AVPlayer(url: videoURL))
-                                    .modifier(MediaFrameModifier())
+                                   // .modifier(MediaFrameModifier())
                             } else {
                                 Image("Logo")
                                     .resizable()
@@ -111,7 +111,8 @@ struct WaveInfoSwiftUIView: View {
                             }
                         }
                         .fullScreenCover(isPresented: $isPickerVisable) {
-                            CameraPreviewView(captureImage: $formData.capturedImage, isCameraPresented: $isPickerVisable)
+                           // CameraPreviewView(captureImage: $formData.capturedImage, isCameraPresented: $isPickerVisable)
+                            CameraSwiftUIPreview(isCameraPresented: $isPickerVisable, captureImage: $formData.capturedImage)
                         }
                         /*.sheet(isPresented: $isPickerVisable) {
                             MediaPicker(selectedImage: $selectedImage, selectedVideoURL: $selectedVideoURL)
