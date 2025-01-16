@@ -281,8 +281,8 @@ struct SectionButtonModifier: ViewModifier {
     
     var shadowColor: Color = Color.black.opacity(0.4)
     var shadowRadius: CGFloat = 12
-    var shadowOffsetX: CGFloat = 5
-    var shadowOffsetY: CGFloat = 10
+    var shadowOffsetX: CGFloat = 6
+    var shadowOffsetY: CGFloat = 9
     
     func body(content: Content) -> some View {
         content
