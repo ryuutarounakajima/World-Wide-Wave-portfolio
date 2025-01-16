@@ -31,7 +31,7 @@ struct CameraSwiftUIPreview: View {
                    
                 
                 CameraPreviewView(captureImage: $captureImage, isCameraPresented: $isCameraPresented)
-                    .ignoresSafeArea(.all)
+                  //  .ignoresSafeArea(.all)
                     .overlay(
                         Circle()
                             .stroke(
@@ -55,17 +55,11 @@ struct CameraSwiftUIPreview: View {
                         .allowsHitTesting(false)
                         
                     )*/
-              
-               
-                
-            }
-            
-           
-                
+              }
         }.ignoresSafeArea(.all)
-        }
-       
     }
+       
+}
 
 
 #Preview {
