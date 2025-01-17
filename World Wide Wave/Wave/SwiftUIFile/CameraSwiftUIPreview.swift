@@ -36,7 +36,7 @@ struct CameraSwiftUIPreview: View {
                         Circle()
                             .stroke(
                                 LinearGradient(
-                                    colors: [Color.blue.opacity(0.6), Color.pink.opacity(0.3)],
+                                    colors: [Color.blue.opacity(0.9), Color.pink.opacity(0.9)],
                                     startPoint: .top,
                                     endPoint: .bottom
                                 ),

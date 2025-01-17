@@ -142,7 +142,7 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
     private func setupCaptureButton() {
         let captureButton = UIButton(type: .system)
         captureButton.setTitle("", for: .normal)
-        captureButton.backgroundColor = UIColor.white.withAlphaComponent(0.7)
+        captureButton.backgroundColor = UIColor.white.withAlphaComponent(0.9)
         
         let buttonSize: CGFloat = 50
         let screenWidth = UIScreen.main.bounds.width
