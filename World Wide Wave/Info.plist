@@ -1,78 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>CFBundleIdentifier</key>
-	<string></string>
-	<key>NSAppleIDUsageDescription</key>
-	<string>　Use an apple acount for login</string>
-	<key>UIApplicationSceneManifest</key>
-	<dict>
-		<key>UIApplicationSupportsMultipleScenes</key>
-		<false/>
-		<key>UISceneConfigurations</key>
-		<dict>
-			<key>UIWindowSceneSessionRoleApplication</key>
-			<array>
-				<dict>
-					<key>UISceneConfigurationName</key>
-					<string>Default Configuration</string>
-					<key>UISceneDelegateClassName</key>
-					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
-					<key>UISceneStoryboardFile</key>
-					<string>Main</string>
-				</dict>
-			</array>
-		</dict>
-	</dict>
-    
-    
-    <key>CFBundleIcons</key>
-       <dict>
-           <key>CFBundlePrimaryIcon</key>
-           <dict>
-               <key>CFBundleIconFiles</key>
-               <array>
-                   <string>60.png</string>
-                   <string>120.png</string>
-                   <string>180.png</string>
-                   <string>Monochrome60.png</string>
-                   <string>Monochrome120.png</string>
-                   <string>Monochrome180.png</string>
-               </array>
-           </dict>
-       </dict>
-       <key>CFBundleIcons~ipad</key>
-       <dict>
-           <key>CFBundlePrimaryIcon</key>
-           <dict>
-               <key>CFBundleIconFiles</key>
-               <array>
-                   <string>76.png</string>
-                   <string>152.png</string>
-                   <string>167.png</string>
-                   <string>Monochrome76.png</string>
-                   <string>Monochrome152.png</string>
-                   <string>Monochrome167.png</string>
-               </array>
-           </dict>
-       </dict>
-       
-       <key>NSLocationWhenInUseUsageDescription</key>
-       <string>The app uses location information while in use</string>
-
-       <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-       <string>The app retrieves location information in the background.</string>
-       
-       <key>NSCameraUsageDescription</key>
-       <string>This app requires access to the camera for capturing photos and videos.</string>
-       
-       <key>NSMicrophoneUsageDescription</key>
-       <string>This app requires access to the microphone for recording audio.</string>
-       
-       <key>NSPhotoLibraryUsageDescription</key>
-       <string>This app requires access to the photo library to select and upload photos or videos.</string>
-       
-       <key>NSPhotoLibraryAddUsageDescription</key>
-       <string>This app requires access to the photo library to save photos and videos.</string></dict>
+    <dict>
+        <key>CFBundleIdentifier</key>
+        <string></string>
+        <key>NSAppleIDUsageDescription</key>
+        <string>　Use an apple acount for login</string>
+        <key>UIApplicationSceneManifest</key>
+        <dict>
+            <key>UIApplicationSupportsMultipleScenes</key>
+            <false/>
+            <key>UISceneConfigurations</key>
+            <dict>
+                <key>UIWindowSceneSessionRoleApplication</key>
+                <array>
+                    <dict>
+                        <key>UISceneConfigurationName</key>
+                        <string>Default Configuration</string>
+                        <key>UISceneDelegateClassName</key>
+                        <string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+                        <key>UISceneStoryboardFile</key>
+                        <string>Main</string>
+                    </dict>
+                </array>
+            </dict>
+        </dict>
+        
+        
+        <key>CFBundleIcons</key>
+        <dict>
+            <key>CFBundlePrimaryIcon</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>60.png</string>
+                    <string>120.png</string>
+                    <string>180.png</string>
+                    <string>Monochrome60.png</string>
+                    <string>Monochrome120.png</string>
+                    <string>Monochrome180.png</string>
+                </array>
+            </dict>
+        </dict>
+        <key>CFBundleIcons~ipad</key>
+        <dict>
+            <key>CFBundlePrimaryIcon</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>76.png</string>
+                    <string>152.png</string>
+                    <string>167.png</string>
+                    <string>Monochrome76.png</string>
+                    <string>Monochrome152.png</string>
+                    <string>Monochrome167.png</string>
+                </array>
+            </dict>
+        </dict>
+        
+        <key>NSLocationWhenInUseUsageDescription</key>
+        <string>The app uses location information while in use</string>
+        
+        <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+        <string>The app retrieves location information in the background.</string>
+        
+        <key>NSCameraUsageDescription</key>
+        <string>This app requires access to the camera for capturing photos and videos.</string>
+        
+        <key>NSMicrophoneUsageDescription</key>
+        <string>This app requires access to the microphone for recording audio.</string>
+        
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>This app requires access to the photo library to select and upload photos or videos.</string>
+        
+        <key>NSPhotoLibraryAddUsageDescription</key>
+        <string>This app requires access to the photo library to save photos and videos.</string>
+        
+        <key> ITAppUsesNonExemptEncryption</key>
+        <false/>
+    </dict>
 </plist>

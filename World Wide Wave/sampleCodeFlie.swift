@@ -11,7 +11,10 @@ import Foundation
 
 /*
  
-
+//ITEncryption
+ <key>ITSAppUsesNonExemptEncryption</key>
+ <false/>
+ 
 // ASAuthorizationControllerDelegate methods
 func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
     if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
