@@ -107,11 +107,18 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
     var onPhotoCaptured: ((UIImage) -> Void)?
     var onCameraDismissed: (() -> Void)?
     
+    private var currentZoomFactor: CGFloat = 1.0
+       
+    private let minZoomFactor: CGFloat = 1.0
+       
+    private var maxZoomFactor: CGFloat = 1.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCameraSession()
         setupPreviewLayer()
         setupCaptureButton()
+        setupZoomGesture()
     }
     
     private func setupCameraSession() {
@@ -120,7 +127,7 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
             print("failed to load camera")
             return
         }
-        
+        maxZoomFactor = device.activeFormat.videoMaxZoomFactor
         session.addInput(input)
         
         if session.canAddOutput(photoOutPut){
@@ -160,6 +167,7 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
         
     }
     
+    //camera capture
     @objc func capturePhoto() {
         let settings = AVCapturePhotoSettings()
         photoOutPut.capturePhoto(with: settings, delegate: self)
@@ -174,5 +182,32 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
         
         onCameraDismissed?()
     }
+    
+    //camera zoom
+       private func setupZoomGesture() {
+           // ピンチジェスチャーを追加
+           let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture))
+           view.addGestureRecognizer(pinchGesture)
+       }
+       
+       @objc func handlePinchGesture(gesture: UIPinchGestureRecognizer) {
+           guard let device = AVCaptureDevice.default(for: .video) else { return }
+           
+           if gesture.state == .changed {
+               let zoomFactor = currentZoomFactor * gesture.scale
+              
+               currentZoomFactor = max(minZoomFactor, min(zoomFactor, maxZoomFactor))
+
+               do {
+                   try device.lockForConfiguration()
+                   device.videoZoomFactor = currentZoomFactor
+                   device.unlockForConfiguration()
+               } catch {
+                   print("Failed to set zoom factor")
+               }
+
+               gesture.scale = 1.0
+           }
+       }
 }
 
