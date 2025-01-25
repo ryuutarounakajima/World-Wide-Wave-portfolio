@@ -19,15 +19,10 @@ struct WaveInfoSwiftUIView: View {
    
     //Wave size select
     @State private var isSizeSelect: Bool = false
-    
-    
     //Wave condition select
     @State private var isConditionSelect: Bool = false
-    
     //Swell
     @State private var isSwellSelected: Bool = false
-   
-    
     //Winds
     @State private var isWindSelected: Bool = false
     
@@ -77,6 +72,16 @@ struct WaveInfoSwiftUIView: View {
     @State var selectedImage: UIImage?
     @State var selectedVideoURL: URL?
     
+    //camera orientation
+    @State private var deviceOrientation = UIDevice.current.orientation
+    
+    private func detectOrientation() {
+        let orientation = UIDevice.current.orientation
+        if orientation != deviceOrientation {
+            deviceOrientation = orientation
+        }
+    }
+    
     var body: some View {
         NavigationView {
            
@@ -96,7 +101,8 @@ struct WaveInfoSwiftUIView: View {
                                 Image(uiImage: image)
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(width: geometry.size.width * 1.0, height: geometry.size.height * 0.4)
+                                    .frame(width: geometry.size.width, height: geometry.size.height * 0.4)
+                                    
                                    // .modifier(MediaFrameModifier())
                                     
                             } else if let videoURL = selectedVideoURL {
@@ -106,12 +112,14 @@ struct WaveInfoSwiftUIView: View {
                                 Image("Logo")
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(width: geometry.size.width * 1.0, height: geometry.size.height * 0.4)
+                                    .frame(width: geometry.size.width, height: geometry.size.height * 0.4)
+                                    
                                     .modifier(MediaFrameModifier())
                             }
                         }
                         .fullScreenCover(isPresented: $isPickerVisable) {
-                           // CameraPreviewView(captureImage: $formData.capturedImage, isCameraPresented: $isPickerVisable)
+                            //CameraPreviewView(captureImage: $formData.capturedImage, isCameraPresented: $isPickerVisable)
+                                //.ignoresSafeArea(.all)
                             CameraSwiftUIPreview(isCameraPresented: $isPickerVisable, captureImage: $formData.capturedImage)
                         }
                         /*.sheet(isPresented: $isPickerVisable) {
@@ -203,10 +211,13 @@ struct WaveInfoSwiftUIView: View {
                         //Text("\(timestamp)")
                         .padding([.leading, .trailing, .bottom])
                     }
+                    .frame(maxHeight: .infinity)
+                   
+                    }
+                    .ignoresSafeArea()
                     
-                }
-                .frame(maxHeight: .infinity)
-                .ignoresSafeArea()
+            
+               // .ignoresSafeArea()
                 
              
           

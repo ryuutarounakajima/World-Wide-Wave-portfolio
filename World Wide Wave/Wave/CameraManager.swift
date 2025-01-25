@@ -108,10 +108,10 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
     var onCameraDismissed: (() -> Void)?
     
     private var currentZoomFactor: CGFloat = 1.0
-       
     private let minZoomFactor: CGFloat = 1.0
-       
     private var maxZoomFactor: CGFloat = 1.0
+    
+    private var captureButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,6 +119,7 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
         setupPreviewLayer()
         setupCaptureButton()
         setupZoomGesture()
+        configureRotationHandling()
     }
     
     private func setupCameraSession() {
@@ -147,7 +148,7 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
     }
     
     private func setupCaptureButton() {
-        let captureButton = UIButton(type: .system)
+        captureButton = UIButton(type: .system)
         captureButton.setTitle("", for: .normal)
         captureButton.backgroundColor = UIColor.white.withAlphaComponent(0.9)
         
@@ -184,30 +185,76 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
     }
     
     //camera zoom
-       private func setupZoomGesture() {
-           // ピンチジェスチャーを追加
-           let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture))
-           view.addGestureRecognizer(pinchGesture)
-       }
-       
-       @objc func handlePinchGesture(gesture: UIPinchGestureRecognizer) {
-           guard let device = AVCaptureDevice.default(for: .video) else { return }
-           
-           if gesture.state == .changed {
-               let zoomFactor = currentZoomFactor * gesture.scale
-              
-               currentZoomFactor = max(minZoomFactor, min(zoomFactor, maxZoomFactor))
-
-               do {
-                   try device.lockForConfiguration()
-                   device.videoZoomFactor = currentZoomFactor
-                   device.unlockForConfiguration()
-               } catch {
-                   print("Failed to set zoom factor")
-               }
-
-               gesture.scale = 1.0
-           }
-       }
+    private func setupZoomGesture() {
+        // ピンチジェスチャーを追加
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture))
+        view.addGestureRecognizer(pinchGesture)
+    }
+    
+    @objc func handlePinchGesture(gesture: UIPinchGestureRecognizer) {
+        guard let device = AVCaptureDevice.default(for: .video) else { return }
+        
+        if gesture.state == .changed {
+            let zoomFactor = currentZoomFactor * gesture.scale
+            
+            currentZoomFactor = max(minZoomFactor, min(zoomFactor, maxZoomFactor))
+            
+            do {
+                try device.lockForConfiguration()
+                device.videoZoomFactor = currentZoomFactor
+                device.unlockForConfiguration()
+            } catch {
+                print("Failed to set zoom factor")
+            }
+            
+            gesture.scale = 1.0
+        }
+    }
+    
+    //camera orientation
+    private func updatePreviewLayerFrame() {
+        videoPreviewLayer.frame = view.bounds
+    }
+    
+    private func updateButtonPosition() {
+        let buttonsize: CGFloat = 50
+        let xPosition = (view.bounds.width - buttonsize) / 2
+        let yPosition = (view.bounds.height - buttonsize) - 50
+        captureButton.frame = CGRect(x: xPosition, y: yPosition, width: buttonsize, height: buttonsize)
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        updatePreviewLayerFrame()
+        updateButtonPosition()
+    }
+    
+    private func configureRotationHandling() {
+        
+       // guard let device = AVCaptureDevice.default(for: .video) else { return }
+        
+       // let rotationCoordinator = AVCaptureDevice.RotationCoordinator(device: device, previewLayer: videoPreviewLayer)
+        
+        NotificationCenter.default.addObserver(
+            forName: UIDevice.orientationDidChangeNotification, object: nil, queue: .main) { [weak self] _ in guard let self = self else {return}
+                self.updatePreviewLayerOrientation()            }
+    }
+    
+    private func updatePreviewLayerOrientation() {
+        guard let connection = videoPreviewLayer.connection else { return }
+        
+        switch UIDevice.current.orientation {
+        case .portrait:
+            connection.videoRotationAngle = 90
+        case .landscapeLeft:
+            connection.videoRotationAngle = 0
+        case .landscapeRight:
+            connection.videoRotationAngle = 180
+        case .portraitUpsideDown:
+            connection.videoRotationAngle = 270
+        default : break
+            
+        }
+    }
 }
 
