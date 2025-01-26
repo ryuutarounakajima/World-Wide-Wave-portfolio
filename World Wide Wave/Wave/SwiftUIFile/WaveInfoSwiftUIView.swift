@@ -11,7 +11,21 @@ import CoreLocation
 import AVKit
 
 
-
+extension UIImage {
+    func fixedOrientation() -> UIImage {
+        
+        guard self.imageOrientation != .up else {
+            return self
+        }
+        
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        self.draw(in: CGRect(origin: .zero, size: size))
+        let nomalizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return nomalizedImage ?? self
+    }
+}
 
 struct WaveInfoSwiftUIView: View {
     
@@ -102,6 +116,7 @@ struct WaveInfoSwiftUIView: View {
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: geometry.size.width, height: geometry.size.height * 0.4)
+                                    .clipped()
                                     
                                    // .modifier(MediaFrameModifier())
                                     
@@ -120,7 +135,10 @@ struct WaveInfoSwiftUIView: View {
                         .fullScreenCover(isPresented: $isPickerVisable) {
                             //CameraPreviewView(captureImage: $formData.capturedImage, isCameraPresented: $isPickerVisable)
                                 //.ignoresSafeArea(.all)
-                            CameraSwiftUIPreview(isCameraPresented: $isPickerVisable, captureImage: $formData.capturedImage)
+                            CameraSwiftUIPreview(isCameraPresented: $isPickerVisable, captureImage: Binding(get: { formData.capturedImage }, set:{ newValue in
+                                if let image = newValue {
+                                    formData.capturedImage = image.fixedOrientation()
+                                }}))
                         }
                         /*.sheet(isPresented: $isPickerVisable) {
                             MediaPicker(selectedImage: $selectedImage, selectedVideoURL: $selectedVideoURL)

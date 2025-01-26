@@ -18,7 +18,7 @@ class WaveInfoViewContrroler: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-      
+        
         guard let coordinate = coordinate, let timestamp = timestamp else {return}
         
         let swiftUIView = WaveInfoSwiftUIView( coordinate: coordinate, timestamp: timestamp).environmentObject(formData!)
@@ -26,10 +26,21 @@ class WaveInfoViewContrroler: UIViewController {
         
         addChild(hostingController)
         hostingController.view.frame = view.bounds
+        hostingController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(hostingController.view)
         hostingController.didMove(toParent: self)
         
     }
     
-   
+    override var shouldAutorotate: Bool{
+        return true
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return [.portrait, .landscapeLeft, .landscapeRight]
+    }
+    
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
+    }
 }
