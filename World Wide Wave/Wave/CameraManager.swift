@@ -112,6 +112,7 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
     private var maxZoomFactor: CGFloat = 1.0
     
     private var captureButton: UIButton!
+    private var backButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,6 +121,7 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
         setupCaptureButton()
         setupZoomGesture()
         configureRotationHandling()
+        setupBackButton()
     }
     
     private func setupCameraSession() {
@@ -176,9 +178,26 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
     
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Error)?) {
         guard let photoData = photo.fileDataRepresentation(),
-              let image = UIImage(data: photoData) else {
+              var image = UIImage(data: photoData) else {
             print("Failed to convert photo")
             return }
+        
+        let rotationAngle2: CGFloat
+          switch UIDevice.current.orientation {
+          case .portrait:
+              rotationAngle2 = 0
+          case .landscapeLeft:
+              rotationAngle2 = 270
+          case .landscapeRight:
+              rotationAngle2 = -270
+          case .portraitUpsideDown:
+              rotationAngle2 = 180
+          default:
+              rotationAngle2 = 0
+          }
+
+        
+        image = rotateImage(image, by: rotationAngle2)
         onPhotoCaptured?(image)
         
         onCameraDismissed?()
@@ -186,7 +205,7 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
     
     //camera zoom
     private func setupZoomGesture() {
-        // ピンチジェスチャーを追加
+        
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture))
         view.addGestureRecognizer(pinchGesture)
     }
@@ -231,10 +250,6 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
     
     private func configureRotationHandling() {
         
-       // guard let device = AVCaptureDevice.default(for: .video) else { return }
-        
-       // let rotationCoordinator = AVCaptureDevice.RotationCoordinator(device: device, previewLayer: videoPreviewLayer)
-        
         NotificationCenter.default.addObserver(
             forName: UIDevice.orientationDidChangeNotification, object: nil, queue: .main) { [weak self] _ in guard let self = self else {return}
                 self.updatePreviewLayerOrientation()            }
@@ -255,6 +270,57 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
         default : break
             
         }
+    }
+    func rotateImage(_ image: UIImage, by degrees: CGFloat) -> UIImage {
+        let radians = degrees * .pi / 180
+        var newSize = CGRect(origin: .zero, size: image.size)
+            .applying(CGAffineTransform(rotationAngle: radians)).size
+        newSize.width = floor(newSize.width)
+        newSize.height = floor(newSize.height)
+
+        UIGraphicsBeginImageContextWithOptions(newSize, false, image.scale)
+        let context = UIGraphicsGetCurrentContext()!
+        
+        context.translateBy(x: newSize.width / 2, y: newSize.height / 2)
+        context.rotate(by: radians)
+        image.draw(in: CGRect(x: -image.size.width / 2, y: -image.size.height / 2, width: image.size.width, height: image.size.height))
+        
+        let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return rotatedImage ?? image
+    }
+    
+    //back button
+    private func setupBackButton() {
+            
+            let backImage = UIImage(systemName: "chevron.backward")
+            
+            backButton = UIButton(type: .system)
+            backButton.setImage(backImage, for: .normal)
+            backButton.setTitle(" Back", for: .normal)
+            backButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+            backButton.setTitleColor(.systemBlue, for: .normal)
+            
+            backButton.backgroundColor = UIColor.black.withAlphaComponent(0.0)
+            backButton.layer.cornerRadius = 5
+            backButton.clipsToBounds = true
+            
+            
+            let buttonWidth: CGFloat = 80
+            let buttonHeight: CGFloat = 44
+            backButton.frame = CGRect(x: 0, y: 20, width: buttonWidth, height: buttonHeight)
+            
+            
+            backButton.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
+            
+            
+            view.addSubview(backButton)
+        }
+    
+    @objc private func didTapBackButton() {
+        onCameraDismissed?()
+        dismiss(animated: true, completion: nil)
     }
 }
 
