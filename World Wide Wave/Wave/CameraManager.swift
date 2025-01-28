@@ -246,6 +246,7 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
         super.viewWillLayoutSubviews()
         updatePreviewLayerFrame()
         updateButtonPosition()
+        updateBackButtonPosition()
     }
     
     private func configureRotationHandling() {
@@ -306,18 +307,20 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
             backButton.layer.cornerRadius = 5
             backButton.clipsToBounds = true
             
-            
-            let buttonWidth: CGFloat = 80
-            let buttonHeight: CGFloat = 44
-            backButton.frame = CGRect(x: 0, y: 20, width: buttonWidth, height: buttonHeight)
-            
+        
+            updateButtonPosition()
             
             backButton.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
             
             
             view.addSubview(backButton)
         }
-    
+    private func updateBackButtonPosition() {
+        
+        let buttonWidth: CGFloat = 80
+        let buttonHeight: CGFloat = 44
+        backButton.frame = CGRect(x: 0, y: 20, width: buttonWidth, height: buttonHeight)
+    }
     @objc private func didTapBackButton() {
         onCameraDismissed?()
         dismiss(animated: true, completion: nil)
