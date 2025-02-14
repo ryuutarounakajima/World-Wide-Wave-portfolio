@@ -64,8 +64,6 @@ struct CameraPreviewView: UIViewControllerRepresentable {
         return Coordinator(parent: self)
     }
     
-    
-    
     func makeUIViewController(context: Context) -> UIViewController {
         let controller = CameraPreviewController()
     
@@ -114,6 +112,8 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
     private var captureButton: UIButton!
     private var backButton: UIButton!
     
+    private var exposureSlider: UISlider!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCameraSession()
@@ -122,6 +122,7 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
         setupZoomGesture()
         configureRotationHandling()
         setupBackButton()
+        setupExposureSlider()
     }
     
     private func setupCameraSession() {
@@ -152,65 +153,135 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
 
 }
 
+//setupUI
 extension CameraPreviewController {
     
-    //Photo capture
-     private func setupCaptureButton() {
-         captureButton = UIButton(type: .system)
-         captureButton.setTitle("", for: .normal)
-         captureButton.backgroundColor = UIColor.white.withAlphaComponent(0.9)
-         
-         let buttonSize: CGFloat = 50
+    //photo capture button
+    private func setupCaptureButton() {
+        captureButton = UIButton(type: .system)
+        captureButton.setTitle("", for: .normal)
+        captureButton.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+        
+        let buttonSize: CGFloat = 50
         // let screenWidth = UIScreen.main.bounds.width
         // let screenHeight = UIScreen.main.bounds.height
         // let xPosition: CGFloat = (screenWidth - buttonSize) / 2
         // let yPosition: CGFloat = (screenHeight - buttonSize) - 50
-         //captureButton.frame = CGRect(x: xPosition, y: yPosition, width: buttonSize, height: buttonSize)
-         captureButton.layer.cornerRadius = buttonSize / 2
-         captureButton.clipsToBounds = true
-         
-         captureButton.addTarget(self, action: #selector(capturePhoto), for: .touchUpInside)
-         
-         view.addSubview(captureButton)
-         
-         
-     }
-     
-     //camera capture
-     @objc func capturePhoto() {
-         let settings = AVCapturePhotoSettings()
-         photoOutPut.capturePhoto(with: settings, delegate: self)
-     }
-     
-     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Error)?) {
-         guard let photoData = photo.fileDataRepresentation(),
-               var image = UIImage(data: photoData) else {
-             print("Failed to convert photo")
-             return }
-         
-         let rotationAngle2: CGFloat
-           switch UIDevice.current.orientation {
-           case .portrait:
-               rotationAngle2 = 0
-           case .landscapeLeft:
-               rotationAngle2 = 270
-           case .landscapeRight:
-               rotationAngle2 = -270
-           case .portraitUpsideDown:
-               rotationAngle2 = 180
-           default:
-               rotationAngle2 = 0
-           }
+        //captureButton.frame = CGRect(x: xPosition, y: yPosition, width: buttonSize, height: buttonSize)
+        captureButton.layer.cornerRadius = buttonSize / 2
+        captureButton.clipsToBounds = true
+        
+        captureButton.addTarget(self, action: #selector(capturePhoto), for: .touchUpInside)
+        
+        view.addSubview(captureButton)
+        
+        
+    }
+    @objc func capturePhoto() {
+        let settings = AVCapturePhotoSettings()
+        photoOutPut.capturePhoto(with: settings, delegate: self)
+    }
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Error)?) {
+        guard let photoData = photo.fileDataRepresentation(),
+              var image = UIImage(data: photoData) else {
+            print("Failed to convert photo")
+            return }
+        
+        let rotationAngle2: CGFloat
+        switch UIDevice.current.orientation {
+        case .portrait:
+            rotationAngle2 = 0
+        case .landscapeLeft:
+            rotationAngle2 = 270
+        case .landscapeRight:
+            rotationAngle2 = -270
+        case .portraitUpsideDown:
+            rotationAngle2 = 180
+        default:
+            rotationAngle2 = 0
+        }
+        
+        
+        image = rotateImage(image, by: rotationAngle2)
+        onPhotoCaptured?(image)
+        
+        onCameraDismissed?()
+    }
+    
+    
+    //back button
+    private func setupBackButton() {
+        
+        let backImage = UIImage(systemName: "chevron.backward")
+        
+        backButton = UIButton(type: .system)
+        backButton.setImage(backImage, for: .normal)
+        backButton.setTitle(" Back", for: .normal)
+        backButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        backButton.setTitleColor(.systemBlue, for: .normal)
+        
+        backButton.backgroundColor = UIColor.black.withAlphaComponent(0.0)
+        backButton.layer.cornerRadius = 5
+        backButton.clipsToBounds = true
+        
+        
+        
+        
+        backButton.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
+        
+        
+        view.addSubview(backButton)
+    }
+    @objc private func didTapBackButton() {
+        onCameraDismissed?()
+        dismiss(animated: true, completion: nil)
+    }
+    
+    //exposure slider
+    private func setupExposureSlider() {
+    
+        exposureSlider = UISlider()
+        let sliderHeight: CGFloat = 5
+        let sliderWidth: CGFloat = view.bounds.width / 4
+        let xPosition: CGFloat = 16
+        let yPosition: CGFloat = (view.bounds.height - sliderHeight) - 70
+        
+        exposureSlider.frame = CGRect(x: xPosition, y: yPosition, width: sliderWidth, height: sliderHeight)
+        exposureSlider.minimumValue = -8
+        exposureSlider.maximumValue = 8
+        exposureSlider.value = 0
+        
+        exposureSlider.tintColor = .yellow
+        exposureSlider.minimumTrackTintColor = .yellow
+        exposureSlider.maximumTrackTintColor = .white
+        
+        if let sunIcon = UIImage(systemName: "sun.max.fill") {
+            let resizedIcon = sunIcon.withConfiguration(UIImage.SymbolConfiguration(pointSize: 25))
+            exposureSlider.setThumbImage(resizedIcon, for: .normal)
+        }
+        
+       
+        exposureSlider.addTarget(self, action: #selector(exposureChanged(_:)), for: .valueChanged)
+        
+        view.addSubview(exposureSlider)
+        
+    }
+    @objc private func exposureChanged(_ sender: UISlider) {
+        guard let device = AVCaptureDevice.default(for: .video) else { return }
+        
+        do {
+            try device.lockForConfiguration()
+            device.setExposureTargetBias(sender.value, completionHandler: nil)
+            device.unlockForConfiguration()
+        } catch {
+            print("Failed to change exposure")
+        }
+    }
+}
 
-         
-         image = rotateImage(image, by: rotationAngle2)
-         onPhotoCaptured?(image)
-         
-         onCameraDismissed?()
-     }
-     
-   
-    //camera zoom
+//zoom
+extension CameraPreviewController {
+    
     private func setupZoomGesture() {
         
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture))
@@ -237,36 +308,10 @@ extension CameraPreviewController {
         }
     }
     
-    
-    //back button
-    private func setupBackButton() {
-            
-            let backImage = UIImage(systemName: "chevron.backward")
-            
-            backButton = UIButton(type: .system)
-            backButton.setImage(backImage, for: .normal)
-            backButton.setTitle(" Back", for: .normal)
-            backButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-            backButton.setTitleColor(.systemBlue, for: .normal)
-            
-            backButton.backgroundColor = UIColor.black.withAlphaComponent(0.0)
-            backButton.layer.cornerRadius = 5
-            backButton.clipsToBounds = true
-        
-            
-        
-            
-            backButton.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
-            
-            
-            view.addSubview(backButton)
-        }
-    @objc private func didTapBackButton() {
-        onCameraDismissed?()
-        dismiss(animated: true, completion: nil)
-    }
-    
-    //camera  orientation
+}
+
+//updateUIPlacement
+extension CameraPreviewController {
     private func updatePreviewLayerFrame() {
         videoPreviewLayer.frame = view.bounds
     }
@@ -282,16 +327,34 @@ extension CameraPreviewController {
         let safeAreaTop = view.safeAreaInsets.top
         let xPosition: CGFloat = 16
         let yPosition: CGFloat = (safeAreaTop > 0) ? safeAreaTop + 10 : 30
-
+        
         backButton.frame = CGRect(x: xPosition, y: yPosition, width: buttonWidth, height: buttonHeight)
     }
+    
+    private func updateExposureSliderPosition() {
+         
+         let sliderHeight: CGFloat = 5
+         let sliderWidth: CGFloat = view.bounds.width / 4 
+         let xPosition: CGFloat = 16
+         let yPosition: CGFloat = (view.bounds.height - sliderHeight) - 70
+
+         exposureSlider.frame = CGRect(x: xPosition, y: yPosition, width: sliderWidth, height: sliderHeight)
+    }
+    
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updatePreviewLayerFrame()
         updateButtonPosition()
         updateBackButtonPosition()
+        updateExposureSliderPosition()
     }
+}
+
+//rotationAngle
+extension CameraPreviewController {
     
+    //Rotation angle
     private func configureRotationHandling() {
         
         NotificationCenter.default.addObserver(
@@ -322,7 +385,7 @@ extension CameraPreviewController {
             .applying(CGAffineTransform(rotationAngle: radians)).size
         newSize.width = floor(newSize.width)
         newSize.height = floor(newSize.height)
-
+        
         UIGraphicsBeginImageContextWithOptions(newSize, false, image.scale)
         let context = UIGraphicsGetCurrentContext()!
         
@@ -335,4 +398,7 @@ extension CameraPreviewController {
         
         return rotatedImage ?? image
     }
+    
 }
+
+
