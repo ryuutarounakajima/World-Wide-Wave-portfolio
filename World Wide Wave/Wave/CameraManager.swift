@@ -8,6 +8,15 @@
 import SwiftUI
 import AVFoundation
 
+
+/*actor PhotoCaptureManager {
+    private(set) var captureImage: UIImage? = nil
+    
+    func savePhoto(_ image: UIImage)  {
+        self.captureImage = image
+    }
+}*/
+
 actor CameraManager {
     func requestCameraAccess() async -> Bool {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
@@ -21,14 +30,6 @@ actor CameraManager {
         }
     }
 }
-
-/*actor PhotoCaptureManager {
-    private(set) var captureImage: UIImage? = nil
-    
-    func savePhoto(_ image: UIImage)  {
-        self.captureImage = image
-    }
-}*/
 
 struct CameraPreviewView: UIViewControllerRepresentable {
   
@@ -325,8 +326,9 @@ extension CameraPreviewController {
         let buttonWidth: CGFloat = 80
         let buttonHeight: CGFloat = 44
         let safeAreaTop = view.safeAreaInsets.top
-        let xPosition: CGFloat = 16
-        let yPosition: CGFloat = (safeAreaTop > 0) ? safeAreaTop + 10 : 30
+        let safeAreaLeft = view.safeAreaInsets.left
+        let xPosition: CGFloat = safeAreaLeft
+        let yPosition: CGFloat = safeAreaTop
         
         backButton.frame = CGRect(x: xPosition, y: yPosition, width: buttonWidth, height: buttonHeight)
     }

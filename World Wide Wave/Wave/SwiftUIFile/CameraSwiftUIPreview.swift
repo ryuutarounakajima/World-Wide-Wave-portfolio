@@ -12,51 +12,62 @@ struct CameraSwiftUIPreview: View {
     @Binding var isCameraPresented: Bool
     @Binding var captureImage: UIImage?
     @State private var cameraController: CameraPreviewController?
+    @State private var isSwiped = false
     
     var body: some View {
-        GeometryReader { geometry in
-            let screenWidth = geometry.size.width
-            let screenHeight = geometry.size.height
-            let buttonSize: CGFloat = 70
-            
-            let xPosition: CGFloat = screenWidth / 2
-            let yPosition: CGFloat = screenHeight - 40 - (buttonSize / 2)
-            
-            ZStack {
+        NavigationStack {
+            GeometryReader { geometry in
+                let screenWidth = geometry.size.width
+                let screenHeight = geometry.size.height
+                let buttonSize: CGFloat = 70
                 
-                Color.black.opacity(0.6)
-                    .ignoresSafeArea(.all)
+                let xPosition: CGFloat = screenWidth / 2
+                let yPosition: CGFloat = screenHeight - 40 - (buttonSize / 2)
                 
-                
-                   
-                
-                CameraPreviewView(captureImage: $captureImage, isCameraPresented: $isCameraPresented)
-                  //  .ignoresSafeArea(.all)
-                    .overlay(
-                        Circle()
-                            .stroke(
-                                LinearGradient(
-                                    colors: [Color.blue.opacity(1.0), Color.pink.opacity(0.9)],
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                ),
-                                lineWidth: 6
-                            )
-                            .frame(width: buttonSize, height: buttonSize)
-                            .position(x: xPosition, y: yPosition)
-                            .allowsHitTesting(false)
-                    )
-                    /*.overlay (
-                        Circle()
-                            
-                        .fill(Color.blue.opacity(0.4))
-                        .frame(width: buttonSize, height: buttonSize)
-                        .position(x: xPosition, y: yPosition)
-                        .allowsHitTesting(false)
-                        
-                    )*/
-              }
-        }.ignoresSafeArea(.all)
+                ZStack {
+                    
+                    Color.black.opacity(0.6)
+                        .ignoresSafeArea(.all)
+                    
+                    
+                    
+                    
+                    CameraPreviewView(captureImage: $captureImage, isCameraPresented: $isCameraPresented)
+                        .overlay(
+                            Circle()
+                                .stroke(
+                                    LinearGradient(
+                                        colors: [Color.blue.opacity(1.0), Color.pink.opacity(0.9)],
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    ),
+                                    lineWidth: 6
+                                )
+                                .frame(width: buttonSize, height: buttonSize)
+                                .position(x: xPosition, y: yPosition)
+
+                                .allowsHitTesting(false)
+                        )
+                      
+                }
+                .contentShape(Rectangle())
+                .gesture(
+                    DragGesture()
+                        .onEnded {
+                            value in
+                            if value.translation.width < -100 {
+                                isSwiped = true
+                            }
+                        }
+                )
+
+            }
+            .ignoresSafeArea(.all)
+            .navigationDestination(isPresented: $isSwiped) {
+                VideoSwiftUIPreview()
+            }
+        }
+      
     }
        
 }
