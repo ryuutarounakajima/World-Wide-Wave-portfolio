@@ -13,6 +13,10 @@ struct CameraSwiftUIPreview: View {
     @Binding var captureImage: UIImage?
     @State private var cameraController: CameraPreviewController?
     @State private var isSwiped = false
+    @State private var showHint: Bool = true
+    @State private var opacity: Double = 1.0
+    @State private var scale: Double = 1.0
+    
     
     var body: some View {
         NavigationStack {
@@ -48,6 +52,38 @@ struct CameraSwiftUIPreview: View {
 
                                 .allowsHitTesting(false)
                         )
+                    
+                    if showHint {
+                        
+                        HStack(spacing: 5)  {
+                            
+                            Image(systemName: "chevron.left.chevron.left.dotted")
+                                .font(.title)
+                                .foregroundColor(.black)
+                                .opacity(opacity)
+                                .scaleEffect(scale)
+                                .onAppear {
+                                    withAnimation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) {
+                                        opacity = 0.4
+                                        scale = 1.2
+                                    }
+                                }
+                            Text("Video")
+                                .font(.title2)
+                                .foregroundColor(.black)
+                        }
+                            .background(Color.green.opacity(0.6).cornerRadius(10))
+                            .padding()
+                            .position(x: screenWidth / 8, y: screenHeight / 2)
+                            .opacity(showHint ? 1 : 0)
+                            .animation(.easeOut(duration: 1), value: showHint)
+                    }
+                }
+                .onAppear {
+                    // ⏳
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                        showHint = false
+                    }
                       
                 }
                 .contentShape(Rectangle())
