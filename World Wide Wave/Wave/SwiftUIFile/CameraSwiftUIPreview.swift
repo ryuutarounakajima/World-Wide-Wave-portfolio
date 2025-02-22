@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct CameraSwiftUIPreview: View {
+    
+    private let micManaget = MicManager()
   //  @EnvironmentObject var formData : FormData
     @Binding var isCameraPresented: Bool
     @Binding var captureImage: UIImage?
-    @State private var cameraController: CameraPreviewController?
+    //@State private var cameraController: CameraPreviewController?
     @State private var isSwiped = false
     @State private var showHint: Bool = true
     @State private var opacity: Double = 1.0
     @State private var scale: Double = 1.0
+    
     
     
     var body: some View {
@@ -92,7 +95,14 @@ struct CameraSwiftUIPreview: View {
                         .onEnded {
                             value in
                             if value.translation.width < -100 {
-                                isSwiped = true
+                                Task {
+                                    if await micManaget.requestMicAccess() {
+                                        isSwiped = true
+                                    } else {
+                                        print("mic access denied")
+                                    }
+                                }
+                                
                             }
                         }
                 )

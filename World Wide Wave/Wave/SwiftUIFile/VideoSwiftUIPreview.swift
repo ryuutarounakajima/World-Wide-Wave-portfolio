@@ -8,8 +8,14 @@
 import SwiftUI
 
 struct VideoSwiftUIPreview: View {
+    @State private var isPresented: Bool = false
+    @State private var videoURL: URL?
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            videoPreviewView(isPresented: $isPresented, videoURL: $videoURL)
+        }
+        .ignoresSafeArea(.all)
     }
 }
 
