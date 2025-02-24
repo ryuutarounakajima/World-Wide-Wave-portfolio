@@ -114,6 +114,7 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
     private var backButton: UIButton!
     
     private var exposureSlider: UISlider!
+    private var capturedImageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -124,6 +125,7 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
         configureRotationHandling()
         setupBackButton()
         setupExposureSlider()
+        setupCapturedImageView()
     }
     
     private func setupCameraSession() {
@@ -204,9 +206,15 @@ extension CameraPreviewController {
         
         
         image = rotateImage(image, by: rotationAngle2)
-        onPhotoCaptured?(image)
         
-        onCameraDismissed?()
+        
+        capturedImageView.image = image
+        UIView.animate(withDuration: 0.3) {
+            self.captureButton.alpha = 0
+        }
+        
+        onPhotoCaptured?(image)
+        //onCameraDismissed?()
     }
     
     
@@ -278,7 +286,40 @@ extension CameraPreviewController {
             print("Failed to change exposure")
         }
     }
+    
+    //image preview
+    func setupCapturedImageView() {
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(previewImageTapped))
+        
+        capturedImageView = UIImageView()
+        capturedImageView.contentMode = .scaleAspectFit
+        capturedImageView.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        capturedImageView.layer.cornerRadius = 10
+        capturedImageView.clipsToBounds = true
+        capturedImageView.isUserInteractionEnabled = true
+        capturedImageView.addGestureRecognizer(tapGesture)
+        
+        view.addSubview(capturedImageView)
+        
+        
+    }
+    
+    @objc private func previewImageTapped() {
+        
+        guard let image = capturedImageView.image else { return }
+        
+        let previewView = ImagePreview(image: image, onCameraDismissed: {
+            self.dismiss(animated: true) {
+                self.onCameraDismissed?()
+            }
+        })
+        let hostController = UIHostingController(rootView: previewView)
+        hostController.modalPresentationStyle = .fullScreen
+        present(hostController, animated: true)
+    }
 }
+
 
 //zoom
 extension CameraPreviewController {
@@ -343,13 +384,19 @@ extension CameraPreviewController {
          exposureSlider.frame = CGRect(x: xPosition, y: yPosition, width: sliderWidth, height: sliderHeight)
     }
     
-    
+    private func updateImagePreviewPosition() {
+        let previewSize: CGFloat = 60
+        let xPosition = (view.bounds.width - previewSize) - 10
+        let yPosition = (view.bounds.height - previewSize) - 40
+        capturedImageView.frame = CGRect(x: xPosition, y: yPosition, width: previewSize, height: previewSize)
+    }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updatePreviewLayerFrame()
         updateButtonPosition()
         updateBackButtonPosition()
         updateExposureSliderPosition()
+        updateImagePreviewPosition()
     }
 }
 
