@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ImagePreview: View {
+struct CameraPreview: View {
 
     var image : UIImage
     var onCameraDismissed: () -> Void
@@ -30,7 +30,7 @@ struct ImagePreview: View {
 }
 
 #Preview {
-    ImagePreview(image: UIImage(systemName: "photo") ?? UIImage()) {
+    CameraPreview(image: UIImage(systemName: "photo") ?? UIImage()) {
         print("Cameradismissed!")
     }
 }

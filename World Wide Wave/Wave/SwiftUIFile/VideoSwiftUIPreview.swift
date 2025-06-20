@@ -13,7 +13,7 @@ struct VideoSwiftUIPreview: View {
     
     var body: some View {
         ZStack {
-            videoPreviewView(isPresented: $isPresented, videoURL: $videoURL)
+            
         }
         .ignoresSafeArea(.all)
     }

@@ -309,7 +309,7 @@ extension CameraPreviewController {
         
         guard let image = capturedImageView.image else { return }
         
-        let previewView = ImagePreview(image: image, onCameraDismissed: {
+        let previewView = CameraPreview(image: image, onCameraDismissed: {
             self.dismiss(animated: true) {
                 self.onCameraDismissed?()
             }
