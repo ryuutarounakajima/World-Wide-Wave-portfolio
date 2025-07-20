@@ -18,23 +18,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         
-        guard (scene is UIWindowScene) else { return }
+        //guard (scene is UIWindowScene) else { return }
         
-        //let window = UIWindow(windowScene: windowScene)
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        
+              let window = UIWindow(windowScene: windowScene)
         
         // cheking if user logeed in or not
             if let appleAuthToken = UserDefaults.standard.string(forKey: "appleAuthToken"), !appleAuthToken.isEmpty {
                 // トークンが存在し、ログイン済みの場合
-                let tabBarVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "TabBarController") as! UITabBarController
-                tabBarVC.selectedIndex = 0
-                window?.rootViewController = tabBarVC
+                if let tabBarVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "TabBarController") as? UITabBarController {
+                    
+                    tabBarVC.selectedIndex = 1
+                    window.rootViewController = tabBarVC
+                }
+                
             } else {
                 // トークンがない、または空の場合（未ログイン）
                 let loginVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "ViewController")
-                window?.rootViewController = loginVC
+                window.rootViewController = loginVC
             }
 
-            window?.makeKeyAndVisible()
+            window.makeKeyAndVisible()
         }
         
     }

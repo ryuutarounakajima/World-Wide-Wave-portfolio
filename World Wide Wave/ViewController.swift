@@ -46,14 +46,15 @@ class ViewController: UIViewController, ASAuthorizationControllerDelegate {
     @IBAction func loginButton(_ sender: Any) {
         
         if isLoggedIn() {
+           
+            if let tabBarVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TabBarController") as? UITabBarController {
+                
+                tabBarVC.selectedIndex = 1
+                self.view.window?.rootViewController = tabBarVC
+                self.view.window?.makeKeyAndVisible()
+            }
             
             print("Already logged in")
-            
-            let tabBarVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TabBarController")
-            tabBarVC.tabBarController?.selectedIndex = 0
-            
-            self.view.window?.rootViewController = tabBarVC
-            self.view.window?.makeKeyAndVisible()
             
         } else {
             performAppleSingnIn()
@@ -163,13 +164,12 @@ class ViewController: UIViewController, ASAuthorizationControllerDelegate {
             print("login sucess!")
             
           
-            let tabBarVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TabBarController")
-            tabBarVC.tabBarController?.selectedIndex = 0
-            
-            self.view.window?.rootViewController = tabBarVC
-            self.view.window?.makeKeyAndVisible()
-            
-            
+            if let tabBarVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TabBarController") as? UITabBarController {
+                
+                tabBarVC.selectedIndex = 1
+                self.view.window?.rootViewController = tabBarVC
+                self.view.window?.makeKeyAndVisible()
+            }
         }
         
     }
