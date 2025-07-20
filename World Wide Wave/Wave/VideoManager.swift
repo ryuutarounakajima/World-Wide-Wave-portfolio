@@ -28,7 +28,7 @@ actor MicManager {
 class VideoPreviewViewController: UIViewController, AVCaptureFileOutputRecordingDelegate{
     
     func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Error)?) {
-        <#code#>
+        
     }
     
     

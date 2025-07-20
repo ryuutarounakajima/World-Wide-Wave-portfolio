@@ -16,8 +16,13 @@ class FormData: ObservableObject {
     @Published var selectedSize: String = ""
     @Published var selectedCondition: String = ""
     @Published var selectedSwell : String = ""
+    @Published var selectedBreaks: String = ""
     @Published var selectedWind: String = ""
     @Published var selectedWindStrengthValue: Double = 0
+    @Published var selectedTide: String = ""
+    @Published var selectedTideValue: Double = 0.0
+    @Published var selectedWax: String = ""
+    @Published var waterTemperatureValue: Double = 0.0
     @Published var capturedImage: UIImage?
     
     func isFormValid() -> Bool {
@@ -26,7 +31,7 @@ class FormData: ObservableObject {
     
     func submitForm() {
         
-        print("Form submitted with \(selectedSize), \(selectedCondition), \(selectedSwell), \(selectedWind), \(selectedWindStrengthValue)")
+        print("Form submitted with \(selectedSize), \(selectedCondition), \(selectedSwell),\(selectedBreaks),\(selectedWind), \(selectedWindStrengthValue),\(selectedTide), \(selectedTideValue)")
         
         if let image = capturedImage {
             print("image captured: \(image)")
@@ -95,8 +100,14 @@ struct CustomFormSection<Content: View>: View {
             formData.selectedCondition = selectedValue
         case "Swell":
             formData.selectedSwell = selectedValue
+        case "Break type":
+            formData.selectedBreaks = selectedValue
         case "Wind" :
             formData.selectedWind = selectedValue
+        case "Tide":
+            formData.selectedTide = selectedValue
+        case "Wax":
+            formData.selectedWax = selectedValue
         default:
             break
         }
@@ -119,12 +130,26 @@ struct FormViewModel: View {
     
     //swell
     @Binding var isSwellSelect: Bool
-    @State private var swells: [(key: String, value: String)] = [("", ""), ("Small", "Small"), ("Chest-high" , "Chest-high"), ("Head-high", "Head-high"), ("Overhead", "Overhead"), ("Double", "Double"), ("Triple over", "Triple over")
+    @State private var swells: [(key: String, value: String)] = [("", ""), ("N", "N"), ("NNE" , "NNE"), ("NE", "NE"), ("ENE", "ENE"), ("E", "E"), ("ESE", "ESE"), ("SE", "SE"), ("SSE", "SSE"), ("S", "S"), ("SSW", "SSW"), ("SW", "SW"), ("WSW", "WSW"), ("W", "W"), ("WNW", "WNW"), ("NW", "NW") , ("NNW", "NNW")
     ]
+    
+    //breaks
+    @Binding var isBreakSelect: Bool
+    @State private var breaks: [(key: String, value: String)] = [((""), ("")), ("ShoreBreak", "Shorebreak"), ("Beachbreak", "Beachbreak"), ("Poindbreak", "Pointbreak"), ("Sandbar", "Sandbar"), ("Reef", "Reef")]
     
     //wind
     @Binding var isWindSelect: Bool
     @State private var winds: [(key: String, value: String)] = [("", ""), ("Offshore", "Offshore"), ("Onshore" , "Onshore"), ("Side off", "Side off"), ("Side on", "Side on"), ("ClossShore", "ClossShore")]
+    
+    //Tide
+    @Binding  var isTideSelect: Bool
+    @State private var tides: [(key: String, value: String)] = [
+        ("", ""), ("Spring Tide", "Spring Tide"), ("Moderate Tide", "Moderate Tide"), ("Neap Tide", "Neap Tide"), ("Long Tide", "Long Tide"), ("Young Tide", "Young Tide")
+    ]
+    
+    //Wax
+    @Binding var isWaxSelect: Bool
+    @State private var waxes:[(key: String, value: String)] = [("", ""), ("Cold", "Cold"), ("Cool", "Cool"), ("Warm", "Warm"), ("Tropical", "Tropical")]
     
     var body: some View {
         //info form
@@ -146,6 +171,12 @@ struct FormViewModel: View {
                 Text(formData.selectedSwell)
                     .modifier(CustomFormTextModifier())
             }
+            
+            //Breaks
+            CustomFormSection(title: "Break type", isSelected: $isBreakSelect, selectedValue: $formData.selectedBreaks, options: breaks) {
+                Text(formData.selectedBreaks)
+                    .modifier(CustomFormTextModifier())
+            }
 
             //wind
             CustomFormSection(title: "Wind", isSelected: $isWindSelect, selectedValue: $formData.selectedWind, options: winds) {
@@ -160,12 +191,46 @@ struct FormViewModel: View {
                         
                         Spacer()
                         
-                        SliderModifier(value: $formData.selectedWindStrengthValue, range: 0...100, gradient: Gradient(colors:[.blue, .red]))
+                        SliderModifier(value: $formData.selectedWindStrengthValue, range: 0...20, gradient: Gradient(colors:[.cyan, .red]))
                         
                         
                     }
                 }
                 
+            }
+            //tide
+            CustomFormSection(title: "Tide", isSelected: $isTideSelect, selectedValue: $formData.selectedTide, options: tides) {
+                VStack {
+                    Text(formData.selectedTide)
+                        .modifier(CustomFormTextModifier())
+                    HStack {
+                        Text("High & Low")
+                            .font(.custom("AvenirNext-Bold",size: 14))
+                            .scaleEffect(0.8)
+                            .shadow(radius: 2)
+                        
+                        Spacer()
+                        
+                        SliderModifier(value: $formData.selectedTideValue, range: 0...3, gradient: Gradient(colors:[.brown,.yellow,.cyan,.blue]))
+                    }
+                }
+            }
+            //wax
+            CustomFormSection(title: "Wax", isSelected: $isWaxSelect, selectedValue: $formData.selectedWax, options: waxes) {
+                VStack {
+                    Text(formData.selectedWax)
+                        .modifier(CustomFormTextModifier())
+                    HStack {
+                        Text("Cold water??")
+                            .font(.custom("AvenirNext-Bold", size: 14))
+                            .scaleEffect(0.8)
+                            .shadow(radius: 2)
+                        
+                        Spacer()
+                        
+                        SliderModifier(value: $formData.waterTemperatureValue, range: -10...36, gradient: Gradient(colors: [.white, .cyan, .orange]))
+                    }
+                }
             }
           
         }
@@ -362,11 +427,15 @@ struct SliderModifier: View {
         @State private var isSizeSelect = false
         @State private var isConditionSelect = false
         @State private var isSwellSelect = false
+        @State private var isBreakSelect = false
         @State private var isWindSelect = false
+        @State private var isTideSelect = false
+        @State private var isWaveSelect = false
+        
         @StateObject private var formData = FormData()
 
         var body: some View {
-            FormViewModel(isSizeSelect: $isSizeSelect, isConditionSelect: $isConditionSelect, isSwellSelect: $isSwellSelect, isWindSelect: $isWindSelect)
+            FormViewModel(isSizeSelect: $isSizeSelect, isConditionSelect: $isConditionSelect, isSwellSelect: $isSwellSelect, isBreakSelect: $isBreakSelect, isWindSelect: $isWindSelect, isTideSelect: $isTideSelect, isWaxSelect: $isWaveSelect)
                 .environmentObject(formData)
         }
     }

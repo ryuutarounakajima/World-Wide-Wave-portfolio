@@ -37,32 +37,18 @@ struct WaveInfoSwiftUIView: View {
     @State private var isConditionSelect: Bool = false
     //Swell
     @State private var isSwellSelected: Bool = false
+    //break
+    @State private var isBreakSelected: Bool = false
     //Winds
     @State private var isWindSelected: Bool = false
-    
-    
     //Tide
-    @State private var tide: String = ""
-    @State private var selectedTide: String = ""
     @State private var isTideSelected: Bool = false
-    @State private var tides: [(key: String, value: String)] = [
-        ("", ""), ("Spring Tide", "Spring Tide"), ("Moderate Tide", "Moderate Tide"), ("Neap Tide", "Neap Tide"), ("Long Tide", "Long Tide"), ("Young Tide", "Young Tide")
-    ]
-    @State private var tideValue: Double = 0.0
-    
-    //Breaks and water depth
-    @State private var breakType: String = ""
-    @State private var selectedBreaks: String = ""
-    @State private var isBreaksSelected: Bool = false
-    @State private var breakTipes: [(key: String, value: String)] = [((""), ("")), ("ShoreBreak", "Shorebreak"), ("Beachbreak", "Beachbreak"), ("Poindbreak", "Pointbreak"), ("Sandbar", "Sandbar"), ("Reef", "Reef")]
-    @State private var waterDepthValue: Double = 0.0
-    
     //Wax
-    @State private var wax: String = ""
-    @State private var selectedWax: String = ""
-    @State private var isWaxSeleted = false
-    @State private var waterTemperaturevalue: Double = 0.0
-    @State private var waxes: [(key: String, value: String)] = [("", ""), ("Cold", "Cold"), ("Cool", "Cool"), ("Warm", "Warm"), ("Tropical", "Tropical")]
+    @State private var isWaxSeleted: Bool = false
+    
+    
+    
+    
     
     //Record button
     @State private var isRecordedButton = false
@@ -137,8 +123,9 @@ struct WaveInfoSwiftUIView: View {
                         
                         //info form
                         
-                            FormViewModel(isSizeSelect: $isSizeSelect, isConditionSelect: $isConditionSelect, isSwellSelect: $isSwellSelected, isWindSelect: $isWindSelected)
+                        FormViewModel(isSizeSelect: $isSizeSelect, isConditionSelect: $isConditionSelect, isSwellSelect: $isSwellSelected, isBreakSelect: $isBreakSelected, isWindSelect: $isWindSelected, isTideSelect: $isTideSelected, isWaxSelect: $isWaxSeleted)
                                 .environmentObject(formData)
+                        
                         
                         //.cornerRadius(20)
                         //.shadow(color: .black.opacity(0.2), radius: 9, x: 3, y: 6)
