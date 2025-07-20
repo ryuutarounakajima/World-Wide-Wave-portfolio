@@ -21,8 +21,6 @@
 		6C4633782CE1CBA5005EAD78 /* 60.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C4633772CE1CBA5005EAD78 /* 60.png */; };
 		6C46337A2CE1CBB0005EAD78 /* 76.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C4633792CE1CBB0005EAD78 /* 76.png */; };
 		6C46337C2CE1CBBF005EAD78 /* 80.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C46337B2CE1CBBF005EAD78 /* 80.png */; };
-		6C4AC1192CE4B7AB00A7DA9C /* MylogSwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4AC1182CE4B7AB00A7DA9C /* MylogSwiftUIView.swift */; };
-		6C50BE8A2CC799F1007C597A /* MylogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C50BE892CC799F1007C597A /* MylogViewController.swift */; };
 		6C8483FE2CA57D5300CE6B1E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8483FD2CA57D5300CE6B1E /* AppDelegate.swift */; };
 		6C8484002CA57D5300CE6B1E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8483FF2CA57D5300CE6B1E /* SceneDelegate.swift */; };
 		6C8484022CA57D5300CE6B1E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8484012CA57D5300CE6B1E /* ViewController.swift */; };
@@ -69,8 +67,6 @@
 		6C4633772CE1CBA5005EAD78 /* 60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 60.png; sourceTree = "<group>"; };
 		6C4633792CE1CBB0005EAD78 /* 76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 76.png; sourceTree = "<group>"; };
 		6C46337B2CE1CBBF005EAD78 /* 80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 80.png; sourceTree = "<group>"; };
-		6C4AC1182CE4B7AB00A7DA9C /* MylogSwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MylogSwiftUIView.swift; sourceTree = "<group>"; };
-		6C50BE892CC799F1007C597A /* MylogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MylogViewController.swift; sourceTree = "<group>"; };
 		6C8483FA2CA57D5300CE6B1E /* World Wide Wave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "World Wide Wave.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C8483FD2CA57D5300CE6B1E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6C8483FF2CA57D5300CE6B1E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -89,7 +85,8 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		6C7C520B2CEF38C500BF8328 /* Wave */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Wave; sourceTree = "<group>"; };
+		6CFF353E2E2CDAE400485B19 /* WaveMap */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = WaveMap; sourceTree = "<group>"; };
+		6CFF35492E2CDCBE00485B19 /* myLog */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = myLog; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,15 +135,6 @@
 			path = AppIconLogoAssets;
 			sourceTree = "<group>";
 		};
-		6C7C520A2CEF38B200BF8328 /* Mylog */ = {
-			isa = PBXGroup;
-			children = (
-				6C50BE892CC799F1007C597A /* MylogViewController.swift */,
-				6C4AC1182CE4B7AB00A7DA9C /* MylogSwiftUIView.swift */,
-			);
-			path = Mylog;
-			sourceTree = "<group>";
-		};
 		6C8483F12CA57D5300CE6B1E = {
 			isa = PBXGroup;
 			children = (
@@ -174,8 +162,8 @@
 				6C8483FD2CA57D5300CE6B1E /* AppDelegate.swift */,
 				6C8483FF2CA57D5300CE6B1E /* SceneDelegate.swift */,
 				6C8484012CA57D5300CE6B1E /* ViewController.swift */,
-				6C7C520A2CEF38B200BF8328 /* Mylog */,
-				6C7C520B2CEF38C500BF8328 /* Wave */,
+				6CFF35492E2CDCBE00485B19 /* myLog */,
+				6CFF353E2E2CDAE400485B19 /* WaveMap */,
 				6C8484032CA57D5300CE6B1E /* Main.storyboard */,
 				6C8484092CA57D5400CE6B1E /* Assets.xcassets */,
 				6C4633682CE0C2F4005EAD78 /* AppIconLogoAssets */,
@@ -220,7 +208,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				6C7C520B2CEF38C500BF8328 /* Wave */,
+				6CFF353E2E2CDAE400485B19 /* WaveMap */,
+				6CFF35492E2CDCBE00485B19 /* myLog */,
 			);
 			name = "World Wide Wave";
 			productName = "World Wide Wave";
@@ -352,8 +341,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C4AC1192CE4B7AB00A7DA9C /* MylogSwiftUIView.swift in Sources */,
-				6C50BE8A2CC799F1007C597A /* MylogViewController.swift in Sources */,
 				6C8484022CA57D5300CE6B1E /* ViewController.swift in Sources */,
 				6CCCD4DC2CBFD50300572E3C /* sampleCodeFlie.swift in Sources */,
 				6C8483FE2CA57D5300CE6B1E /* AppDelegate.swift in Sources */,
