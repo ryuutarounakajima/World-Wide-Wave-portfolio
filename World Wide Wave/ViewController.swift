@@ -39,6 +39,14 @@ class ViewController: UIViewController, ASAuthorizationControllerDelegate {
         
     }
     
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+
+    override var shouldAutorotate: Bool {
+        return false
+    }
+    
     @IBAction func SignUpWithAppleTapped(_ sender: Any) {
         performAppleSingnIn()
     }

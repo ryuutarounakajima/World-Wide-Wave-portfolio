@@ -67,6 +67,7 @@ class WaveViewController: UIViewController, CLLocationManagerDelegate, MKMapView
         
         
     }
+    
     // segue for another page when annotain is tapped
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         

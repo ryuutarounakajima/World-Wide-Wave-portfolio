@@ -18,12 +18,13 @@ class FormData: ObservableObject {
     @Published var selectedSwell : String = ""
     @Published var selectedBreaks: String = ""
     @Published var selectedWind: String = ""
-    @Published var selectedWindStrengthValue: Double = 0
+    @Published var selectedWindStrengthValue: Double = 0.0
     @Published var selectedTide: String = ""
     @Published var selectedTideValue: Double = 0.0
     @Published var selectedWax: String = ""
     @Published var waterTemperatureValue: Double = 0.0
     @Published var capturedImage: UIImage?
+    @Published var capturedVideoURL: URL?
     
     func isFormValid() -> Bool {
         return !selectedSize.isEmpty && !selectedCondition.isEmpty && !selectedSwell.isEmpty && !selectedWind.isEmpty
@@ -31,7 +32,7 @@ class FormData: ObservableObject {
     
     func submitForm() {
         
-        print("Form submitted with \(selectedSize), \(selectedCondition), \(selectedSwell),\(selectedBreaks),\(selectedWind), \(selectedWindStrengthValue),\(selectedTide), \(selectedTideValue)")
+        print("Form submitted with \(String(describing: coordinate)), \(String(describing: timestamp)),\(selectedSize), \(selectedCondition), \(selectedSwell),\(selectedBreaks),\(selectedWind), \(String(format: "%.1f", selectedWindStrengthValue)),\(selectedTide), \(String(format: "%.1f", selectedTideValue)), \(selectedWax),\(String(format: "%.1f", waterTemperatureValue))")
         
         if let image = capturedImage {
             print("image captured: \(image)")
@@ -405,7 +406,7 @@ struct SliderModifier: View {
                                 
                                 value = min(max(newValue, range.lowerBound), range.upperBound)
                                 
-                                print("\(value)")
+                                print(String(format: "%.1f", value))
                             }
                     )
                     .animation(.easeInOut(duration: 0.2), value: value)

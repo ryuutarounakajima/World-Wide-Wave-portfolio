@@ -98,7 +98,7 @@ struct WaveInfoSwiftUIView: View {
                                     
                                    // .modifier(MediaFrameModifier())
                                     
-                            } else if let videoURL = selectedVideoURL {
+                            } else if let videoURL = formData.capturedVideoURL {
                                 VideoPlayer(player: AVPlayer(url: videoURL))
                                    // .modifier(MediaFrameModifier())
                             } else {
@@ -175,7 +175,7 @@ struct WaveInfoSwiftUIView: View {
                                                                .animation(.spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0.5), value: isRecordedButton)
                                 }
                                 .alert("Are you an optimistionist?", isPresented: $showAlert) {
-                                    Button("Yes") {
+                                    Button("Yes,but not goona save my data") {
                                         print("Yes")
                                         print("You are optimistic person from now!!")
                                     }
