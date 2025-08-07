@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Login View Controller-->
         <scene sceneID="4Ps-tL-gpc">
             <objects>
-                <viewController storyboardIdentifier="ViewController" id="9GG-vv-SXR" customClass="ViewController" customModule="World_Wide_Wave" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ViewController" id="9GG-vv-SXR" customClass="LoginViewController" customModule="World_Wide_Wave" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Zf6-mB-w4C">
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -106,10 +106,10 @@
             </objects>
             <point key="canvasLocation" x="-1185.4961832061069" y="57.74647887323944"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Custom Tab Bar Controller-->
         <scene sceneID="1uE-9n-9wN">
             <objects>
-                <tabBarController storyboardIdentifier="TabBarController" id="7kh-zT-Uaw" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarController" id="7kh-zT-Uaw" customClass="CustomTabBarController" customModule="World_Wide_Wave" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" restorationIdentifier="TabBarController" insetsLayoutMarginsFromSafeArea="NO" id="p4o-qc-Z2E">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -127,10 +127,10 @@
             </objects>
             <point key="canvasLocation" x="-263" y="58"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Custom Navigation Controller-->
         <scene sceneID="nyy-XJ-EQh">
             <objects>
-                <navigationController id="wO8-Bk-ELC" sceneMemberID="viewController">
+                <navigationController id="wO8-Bk-ELC" customClass="CustomNavigationController" customModule="World_Wide_Wave" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" id="ZdU-A2-Mh2">
                         <imageReference key="image" image="book.pages" catalog="system" renderingMode="hierarchical" variableValue="1">
                             <hierarchicalColors>
@@ -152,10 +152,10 @@
             </objects>
             <point key="canvasLocation" x="590" y="58"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Custom Navigation Controller-->
         <scene sceneID="I6P-ee-9Cw">
             <objects>
-                <navigationController id="2rp-g0-JEC" sceneMemberID="viewController">
+                <navigationController id="2rp-g0-JEC" customClass="CustomNavigationController" customModule="World_Wide_Wave" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" id="X1U-9A-6ws">
                         <imageReference key="image" image="waveform.path.ecg.rectangle" catalog="system" renderingMode="hierarchical" variableValue="0.80000000000000004">
                             <hierarchicalColors>
@@ -177,10 +177,10 @@
             </objects>
             <point key="canvasLocation" x="589" y="785"/>
         </scene>
-        <!--Wave View Controller-->
+        <!--Wave Map View Controller-->
         <scene sceneID="17r-R1-LDP">
             <objects>
-                <viewController id="fug-rh-NQQ" customClass="WaveViewController" customModule="World_Wide_Wave" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="fug-rh-NQQ" customClass="WaveMapViewController" customModule="World_Wide_Wave" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ILV-gZ-hac">
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

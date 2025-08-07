@@ -23,7 +23,7 @@
 		6C46337C2CE1CBBF005EAD78 /* 80.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C46337B2CE1CBBF005EAD78 /* 80.png */; };
 		6C8483FE2CA57D5300CE6B1E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8483FD2CA57D5300CE6B1E /* AppDelegate.swift */; };
 		6C8484002CA57D5300CE6B1E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8483FF2CA57D5300CE6B1E /* SceneDelegate.swift */; };
-		6C8484022CA57D5300CE6B1E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8484012CA57D5300CE6B1E /* ViewController.swift */; };
+		6C8484022CA57D5300CE6B1E /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8484012CA57D5300CE6B1E /* LoginViewController.swift */; };
 		6C8484052CA57D5300CE6B1E /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 6C8484042CA57D5300CE6B1E /* Base */; };
 		6C8484082CA57D5300CE6B1E /* World_Wide_Wave.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6C8484062CA57D5300CE6B1E /* World_Wide_Wave.xcdatamodeld */; };
 		6C84840A2CA57D5400CE6B1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C8484092CA57D5400CE6B1E /* Assets.xcassets */; };
@@ -31,6 +31,8 @@
 		6C8484182CA57D5500CE6B1E /* World_Wide_WaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8484172CA57D5500CE6B1E /* World_Wide_WaveTests.swift */; };
 		6C8484222CA57D5500CE6B1E /* World_Wide_WaveUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8484212CA57D5500CE6B1E /* World_Wide_WaveUITests.swift */; };
 		6C8484242CA57D5500CE6B1E /* World_Wide_WaveUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8484232CA57D5500CE6B1E /* World_Wide_WaveUITestsLaunchTests.swift */; };
+		6CB288662E446A6F000D65B9 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB288652E446A6F000D65B9 /* CustomTabBarController.swift */; };
+		6CB288842E448164000D65B9 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB288832E448163000D65B9 /* CustomNavigationController.swift */; };
 		6CCCD4DC2CBFD50300572E3C /* sampleCodeFlie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCCD4DB2CBFD50300572E3C /* sampleCodeFlie.swift */; };
 /* End PBXBuildFile section */
 
@@ -70,7 +72,7 @@
 		6C8483FA2CA57D5300CE6B1E /* World Wide Wave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "World Wide Wave.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C8483FD2CA57D5300CE6B1E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6C8483FF2CA57D5300CE6B1E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		6C8484012CA57D5300CE6B1E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		6C8484012CA57D5300CE6B1E /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		6C8484042CA57D5300CE6B1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6C8484072CA57D5300CE6B1E /* World_Wide_Wave.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = World_Wide_Wave.xcdatamodel; sourceTree = "<group>"; };
 		6C8484092CA57D5400CE6B1E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -81,6 +83,8 @@
 		6C84841D2CA57D5500CE6B1E /* World Wide WaveUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "World Wide WaveUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C8484212CA57D5500CE6B1E /* World_Wide_WaveUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = World_Wide_WaveUITests.swift; sourceTree = "<group>"; };
 		6C8484232CA57D5500CE6B1E /* World_Wide_WaveUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = World_Wide_WaveUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		6CB288652E446A6F000D65B9 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
+		6CB288832E448163000D65B9 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		6CCCD4DB2CBFD50300572E3C /* sampleCodeFlie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sampleCodeFlie.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -161,7 +165,9 @@
 				6C0F9D912CB8FE27006BF12E /* World Wide Wave.entitlements */,
 				6C8483FD2CA57D5300CE6B1E /* AppDelegate.swift */,
 				6C8483FF2CA57D5300CE6B1E /* SceneDelegate.swift */,
-				6C8484012CA57D5300CE6B1E /* ViewController.swift */,
+				6C8484012CA57D5300CE6B1E /* LoginViewController.swift */,
+				6CB288652E446A6F000D65B9 /* CustomTabBarController.swift */,
+				6CB288832E448163000D65B9 /* CustomNavigationController.swift */,
 				6CFF35492E2CDCBE00485B19 /* myLog */,
 				6CFF353E2E2CDAE400485B19 /* WaveMap */,
 				6C8484032CA57D5300CE6B1E /* Main.storyboard */,
@@ -341,10 +347,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C8484022CA57D5300CE6B1E /* ViewController.swift in Sources */,
+				6C8484022CA57D5300CE6B1E /* LoginViewController.swift in Sources */,
+				6CB288662E446A6F000D65B9 /* CustomTabBarController.swift in Sources */,
 				6CCCD4DC2CBFD50300572E3C /* sampleCodeFlie.swift in Sources */,
 				6C8483FE2CA57D5300CE6B1E /* AppDelegate.swift in Sources */,
 				6C8484082CA57D5300CE6B1E /* World_Wide_Wave.xcdatamodeld in Sources */,
+				6CB288842E448164000D65B9 /* CustomNavigationController.swift in Sources */,
 				6C8484002CA57D5300CE6B1E /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

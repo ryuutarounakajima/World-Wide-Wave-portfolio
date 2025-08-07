@@ -28,8 +28,16 @@ class MylogViewController: UIViewController {
         hostingController.didMove(toParent: self)
     }
     
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
     
-
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.setNeedsUpdateOfSupportedInterfaceOrientations()
+    }
     
     @IBAction func logoutButtonPressed(_ sender: Any) {
         
@@ -37,7 +45,7 @@ class MylogViewController: UIViewController {
         UserDefaults.standard.removeObject(forKey: "useremail")
         UserDefaults.standard.synchronize()
         
-        if let viewController = storyboard?.instantiateViewController(withIdentifier: "ViewController") as? ViewController {
+        if let viewController = storyboard?.instantiateViewController(withIdentifier: "ViewController") as? LoginViewController {
             
             self.view.window?.rootViewController = viewController
             self.view.window?.makeKeyAndVisible()

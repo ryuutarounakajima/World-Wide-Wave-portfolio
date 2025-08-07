@@ -10,13 +10,17 @@ import UIKit
 import MapKit
 import SwiftUI
 
-class WaveViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate{
+class WaveMapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate{
     
     var mkMapView: MKMapView!
     var locationManager: CLLocationManager!
     var selectedLocation: CLLocationCoordinate2D?
     var isTransiting = false
     var formData = FormData()
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
     
     
     override func viewDidLoad() {
@@ -50,6 +54,8 @@ class WaveViewController: UIViewController, CLLocationManagerDelegate, MKMapView
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        self.setNeedsUpdateOfSupportedInterfaceOrientations()
         
         isTransiting = false
         

@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  loginViewController.swift
 //  World Wide Wave
 //
 //  Created by Ryutarou Nakajima on 2024/09/26.
@@ -9,7 +9,7 @@ import UIKit
 import AuthenticationServices
 import CoreData
 
-class ViewController: UIViewController, ASAuthorizationControllerDelegate {
+class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
     
     @IBOutlet weak var signUpImageView: UIImageView!
     
