@@ -14,6 +14,9 @@ class FormData: ObservableObject {
     @Published var timestamp: Date?
     
     @Published var selectedSize: String = ""
+    @Published var selectedSize1: String = ""
+    @Published var selectedSize2: String = ""
+    
     @Published var selectedCondition: String = ""
     @Published var selectedSwell : String = ""
     @Published var selectedBreaks: String = ""
@@ -32,7 +35,7 @@ class FormData: ObservableObject {
     
     func submitForm() {
         
-        print("Form submitted with \(String(describing: coordinate)), \(String(describing: timestamp)),\(selectedSize), \(selectedCondition), \(selectedSwell),\(selectedBreaks),\(selectedWind), \(String(format: "%.1f", selectedWindStrengthValue)),\(selectedTide), \(String(format: "%.1f", selectedTideValue)), \(selectedWax),\(String(format: "%.1f", waterTemperatureValue))")
+        print("Form submitted with \(String(describing: coordinate)), \(String(describing: timestamp)),\(selectedSize1),\(selectedSize2), \(selectedCondition), \(selectedSwell),\(selectedBreaks),\(selectedWind), \(String(format: "%.1f", selectedWindStrengthValue)),\(selectedTide), \(String(format: "%.1f", selectedTideValue)), \(selectedWax),\(String(format: "%.1f", waterTemperatureValue))")
         
         if let image = capturedImage {
             print("image captured: \(image)")
@@ -116,13 +119,95 @@ struct CustomFormSection<Content: View>: View {
     
 }
 
+struct CustomFormSection2<Content: View>: View {
+    
+       var title: String
+       var options: [(key: String, value: String)]
+       var content: () -> Content
+       
+       @Binding var isSelected: Bool
+       @Binding var selectedValue1: String
+       @Binding var selectedValue2: String
+       
+       @EnvironmentObject var formData: FormData
+       
+       init(
+           title: String,
+           isSelected: Binding<Bool>,
+           selectedValue1: Binding<String>,
+           selectedValue2: Binding<String>,
+           options: [(key: String, value: String)],
+           @ViewBuilder content: @escaping () -> Content
+       ) {
+           self.title = title
+           self._isSelected = isSelected
+           self._selectedValue1 = selectedValue1
+           self._selectedValue2 = selectedValue2
+           self.options = options
+           self.content = content
+       }
+    
+    var body: some View {
+        Section(header: Button(action: {
+                   withAnimation {
+                       isSelected.toggle()
+                   }
+               }) {
+                   Text(title)
+                       .headerProminence(.increased)
+                       .modifier(SectionButtonModifier(isSelected: $isSelected))
+               }) {
+                   if isSelected {
+                       HStack {
+                           Picker("", selection: $selectedValue1) {
+                               ForEach(options, id: \.key) { option in
+                                   Text(option.value).tag(option.key)
+                               }
+                           }
+                           .pickerStyle(.wheel)
+                           .labelsHidden()
+                           .onChange(of: selectedValue1) {
+                               upDateFormData()
+                           }
+                           
+                           Picker("", selection: $selectedValue2) {
+                               ForEach(options, id: \.key) { option in
+                                   Text(option.value).tag(option.key)
+                               }
+                           }
+                           .pickerStyle(.wheel)
+                           .labelsHidden()
+                           .onChange(of: selectedValue2) {
+                               
+                               upDateFormData()
+                               withAnimation {
+                                   isSelected = false
+                               }
+                           }
+                       }
+                       .frame(height: 150) // 必要に応じてPicker高さ調整してください
+                   }
+                   content()
+               }
+    }
+    
+    private func upDateFormData() {
+        switch title {
+              case "Size":
+                  formData.selectedSize1 = selectedValue1
+                  formData.selectedSize2 = selectedValue2
+              default:
+                  break
+              }    }
+    
+}
 //View model
 struct FormViewModel: View {
   
     @EnvironmentObject var formData: FormData
     //wave size select
     @Binding var isSizeSelect: Bool
-    @State private var waveSizes: [(key: String, value: String)] = [ ("" , ""), ("Small" , "Small"), ("Chest-high" , "Chest-high"), ("Head-high", "Head-high"), ("Overhead", "Overhead"), ("Double", "Double"), ("Triple over", "Triple over")
+    @State private var waveSizes: [(key: String, value: String)] = [ ("" , ""), ("go home" , "go home"), ("Chest-high" , "Chest-high"), ("Head-high", "Head-high"), ("Overhead", "Overhead"), ("Double", "Double"), ("Triple over", "Triple over")
     ]
     
     //wave conditon select
@@ -156,11 +241,11 @@ struct FormViewModel: View {
         //info form
         Form {
             //wave size section
-            CustomFormSection(title: "Size", isSelected: $isSizeSelect, selectedValue: $formData.selectedSize, options: waveSizes) {
-                Text(formData.selectedSize)
+            CustomFormSection2(title: "Size", isSelected: $isSizeSelect, selectedValue1: $formData.selectedSize1, selectedValue2: $formData.selectedSize2, options: waveSizes) {
+                Text("\(formData.selectedSize1) ~ \(formData.selectedSize2)")
                     .modifier(CustomFormTextModifier())
             }
-            
+        
             //wave condtion section
             CustomFormSection(title: "Conditon", isSelected: $isConditionSelect, selectedValue: $formData.selectedCondition, options: waveCondtions) {
                 Text(formData.selectedCondition)
