@@ -6,16 +6,20 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct VideoSwiftUIPreview: View {
     @State private var isPresented: Bool = false
     @State private var videoURL: URL?
     
+    private let captureSession = AVCaptureSession()
+    
     var body: some View {
-        ZStack {
-            
-        }
-        .ignoresSafeArea(.all)
+        VideoPreviewView(captureSession: captureSession)
+            .edgesIgnoringSafeArea(.all)
+            .onAppear {
+                
+            }
     }
 }
 
