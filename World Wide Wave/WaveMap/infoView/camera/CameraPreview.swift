@@ -24,6 +24,9 @@ struct CameraPreview: View {
             .navigationBarItems(leading: Button("Save photo") {
                 //presentationMode.wrappedValue.dismiss()
                 onCameraDismissed()
+            },
+                                trailing: Button ("back") {
+                presentationMode.wrappedValue.dismiss()
             })
         }
     }

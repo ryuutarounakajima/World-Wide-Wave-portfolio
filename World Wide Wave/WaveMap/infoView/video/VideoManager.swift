@@ -19,8 +19,19 @@ actor MicManager {
             return true
         case .notDetermined:
             return await AVCaptureDevice.requestAccess(for: .audio)
+        case .denied:
+            print("mic access denied")
+            try? await Task.sleep(nanoseconds: 5_000_000)
+            
+            let newStatus = AVCaptureDevice.authorizationStatus(for: .audio)
+           
+            if newStatus == .authorized {
+                return true
+            } else {
+                return false
+            }
         default:
-            return false
+            return true
         }
     }
 }

@@ -207,7 +207,7 @@ struct FormViewModel: View {
     @EnvironmentObject var formData: FormData
     //wave size select
     @Binding var isSizeSelect: Bool
-    @State private var waveSizes: [(key: String, value: String)] = [ ("" , ""), ("go home" , "go home"), ("Chest-high" , "Chest-high"), ("Head-high", "Head-high"), ("Overhead", "Overhead"), ("Double", "Double"), ("Triple over", "Triple over")
+    @State private var waveSizes: [(key: String, value: String)] = [ ("" , ""), ("go home" , "go home"), ("Waist-high", "Waist-high"), ("belly-high", "belly-high"), ("Chest-high" , "Chest-high"), ("Head-high", "Head-high"), ("Overhead", "Overhead"), ("Double", "Double"), ("Triple over", "Triple over")
     ]
     
     //wave conditon select

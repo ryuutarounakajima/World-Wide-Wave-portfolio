@@ -10,6 +10,163 @@ import Foundation
 
 
 /*
+//VideoManagerSampleCode
+ import UIKit
+ import AVFoundation
+ import AVKit
+
+ class VideoPreviewViewController: UIViewController, AVCaptureFileOutputRecordingDelegate {
+     
+     private let session = AVCaptureSession()
+     private let videoOutput = AVCaptureMovieFileOutput()
+     private var previewLayer: AVCaptureVideoPreviewLayer!
+     
+     private var playerLayer: AVPlayerLayer?
+     private var recordedVideoURL: URL?
+     private var isRecording: Bool = false
+     
+     private let previewSize: CGFloat = 120
+     private let margin: CGFloat = 20
+     
+     override func viewDidLoad() {
+         super.viewDidLoad()
+         setupVideoSession()
+         setupPreviewLayer()
+         setupRecordingButton()
+     }
+     
+     override func viewDidLayoutSubviews() {
+         super.viewDidLayoutSubviews()
+         updatePreviewLayerFrame()
+         updateRecordingButtonPosition()
+     }
+     
+     // 🎥 撮影開始 / 停止
+     @objc private func toggleRecording() {
+         if isRecording {
+             videoOutput.stopRecording()
+         } else {
+             let outputURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).mov")
+             videoOutput.startRecording(to: outputURL, recordingDelegate: self)
+         }
+         isRecording.toggle()
+     }
+     
+     // 📽 録画完了
+     func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
+         isRecording = false
+         
+         if let error = error {
+             print("❌ Recording failed: \(error.localizedDescription)")
+             return
+         }
+         
+         print("✅ Video saved at: \(outputFileURL)")
+         
+         DispatchQueue.main.async {
+             self.recordedVideoURL = outputFileURL
+             self.setupPlayerLayer(with: outputFileURL)
+         }
+     }
+     
+     // 🎞 撮影後の動画を正しい向きでプレビューに表示
+     private func setupPlayerLayer(with url: URL) {
+         let player = AVPlayer(url: url)
+         let playerLayer = AVPlayerLayer(player: player)
+         playerLayer.videoGravity = .resizeAspectFill
+         playerLayer.cornerRadius = 10
+         playerLayer.masksToBounds = true
+         
+         view.layer.addSublayer(playerLayer)
+         self.playerLayer = playerLayer
+         
+         updatePlayerLayerFrame(with: url)
+         player.play()
+     }
+     
+     // 📏 プレビューの位置と回転調整
+     private func updatePlayerLayerFrame(with url: URL) {
+         guard let playerLayer = playerLayer else { return }
+         
+         let transform = getVideoTransform(for: url)
+         let size = getVideoSize(for: url)
+         
+         let width = previewSize
+         let height = previewSize * (size.height / size.width)  // アスペクト比を保つ
+         
+         playerLayer.frame = CGRect(
+             x: view.bounds.width - width - margin,
+             y: view.bounds.height - height - margin,
+             width: width,
+             height: height
+         )
+         
+         playerLayer.setAffineTransform(transform)
+     }
+     
+     // 🎭 動画の向きを取得
+     private func getVideoTransform(for url: URL) -> CGAffineTransform {
+         let asset = AVAsset(url: url)
+         guard let track = asset.tracks(withMediaType: .video).first else { return .identity }
+         return track.preferredTransform
+     }
+     
+     // 📏 動画のサイズを取得
+     private func getVideoSize(for url: URL) -> CGSize {
+         let asset = AVAsset(url: url)
+         guard let track = asset.tracks(withMediaType: .video).first else { return .zero }
+         let size = track.naturalSize.applying(track.preferredTransform)
+         return CGSize(width: abs(size.width), height: abs(size.height))
+     }
+     
+     // 🎬 カメラ設定
+     private func setupVideoSession() {
+         session.sessionPreset = .high
+         
+         guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back),
+               let input = try? AVCaptureDeviceInput(device: camera) else {
+             print("❌ Error: Could not access camera")
+             return
+         }
+         
+         if session.canAddInput(input) { session.addInput(input) }
+         if session.canAddOutput(videoOutput) { session.addOutput(videoOutput) }
+         
+         let connection = videoOutput.connection(with: .video)
+         connection?.videoOrientation = .portrait  // 縦向きで録画
+     }
+     
+     // 📷 カメラプレビュー
+     private func setupPreviewLayer() {
+         previewLayer = AVCaptureVideoPreviewLayer(session: session)
+         previewLayer.videoGravity = .resizeAspectFill
+         view.layer.addSublayer(previewLayer)
+     }
+     
+     // 🎛 録画ボタン
+     private func setupRecordingButton() {
+         let button = UIButton(type: .system)
+         button.setTitle("●", for: .normal)
+         button.titleLabel?.font = UIFont.systemFont(ofSize: 40)
+         button.setTitleColor(.red, for: .normal)
+         button.addTarget(self, action: #selector(toggleRecording), for: .touchUpInside)
+         view.addSubview(button)
+         
+         button.frame = CGRect(x: (view.bounds.width - 60) / 2,
+                               y: view.bounds.height - 80,
+                               width: 60,
+                               height: 60)
+     }
+     
+     // 📏 プレビューのレイアウト更新
+     private func updatePreviewLayerFrame() {
+         previewLayer.frame = view.bounds
+     }
+     
+     private func updateRecordingButtonPosition() {
+         // ボタンの位置は固定なので特に変更不要
+     }
+ }
  
 //ITEncryption
  <key>ITSAppUsesNonExemptEncryption</key>
