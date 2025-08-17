@@ -38,37 +38,82 @@ actor MicManager {
 
 class VideoPreviewViewController: UIViewController {
     
-    var captureSession: AVCaptureSession?
+    private let session = AVCaptureSession()
     private var previewLayer: AVCaptureVideoPreviewLayer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .black
+        setupCamera()
+      
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+           
+       previewLayer?.frame = view.bounds
+     
+    }
+    
+}
+
+extension VideoPreviewViewController{
+    
+    private func setupCamera() {
         
-        if let session = captureSession {
-            previewLayer = AVCaptureVideoPreviewLayer(session: session)
-            previewLayer?.videoGravity = .resizeAspectFill
-            previewLayer?.frame = view.bounds
-            if let layer = previewLayer {
-                view.layer.addSublayer(layer)
-            }
+        AVCaptureDevice.requestAccess(for: .video) { granted in
+           if granted {
+                DispatchQueue.main.async {
+                    self.configureSession()
+               }
+           } else {
+               print("Camera access denied")
+           }
         }
     }
     
-       override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-       previewLayer?.frame = view.bounds
+    private func configureSession() {
+        
+        session.beginConfiguration()
+        
+        guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
+            
+            print("No camera exists")
+            session.commitConfiguration()
+            return
+        }
+        
+        do {
+            let input = try AVCaptureDeviceInput(device: camera)
+            if session.canAddInput(input) {
+                session.addInput(input)
+            }
+        } catch {
+            print("camera input error: \(error)")
+        }
+        
+        let previewLayer = AVCaptureVideoPreviewLayer(session: session)
+        previewLayer.videoGravity = .resizeAspectFill
+        previewLayer.frame = view.bounds
+        view.layer.addSublayer(previewLayer)
+        
+        session.commitConfiguration()
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.session.startRunning()
+        }
     }
+    
+   
 }
 
 struct VideoPreviewView: UIViewControllerRepresentable {
     let captureSession: AVCaptureSession
     
     func makeUIViewController(context: Context) -> VideoPreviewViewController {
-        let controller = VideoPreviewViewController()
-        controller.captureSession = captureSession
-        return controller
+       
+        return VideoPreviewViewController()
     }
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
         
