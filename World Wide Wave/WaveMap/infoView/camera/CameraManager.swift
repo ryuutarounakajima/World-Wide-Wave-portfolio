@@ -128,6 +128,16 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
         setupCapturedImageView()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        videoPreviewLayer.frame = view.bounds
+        //updatePreviewLayerFrame()
+        updateButtonPosition()
+        updateBackButtonPosition()
+        updateExposureSliderPosition()
+        updateImagePreviewPosition()
+    }
+    
     private func setupCameraSession() {
         guard let device = AVCaptureDevice.default(for: .video),
               let input = try? AVCaptureDeviceInput(device: device) else {
@@ -163,7 +173,7 @@ extension CameraPreviewController {
     private func setupCaptureButton() {
         captureButton = UIButton(type: .system)
         captureButton.setTitle("", for: .normal)
-        captureButton.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+        captureButton.backgroundColor = UIColor.white.withAlphaComponent(1.0)
         
         let buttonSize: CGFloat = 50
         // let screenWidth = UIScreen.main.bounds.width
@@ -354,9 +364,7 @@ extension CameraPreviewController {
 
 //updateUIPlacement
 extension CameraPreviewController {
-    private func updatePreviewLayerFrame() {
-        videoPreviewLayer.frame = view.bounds
-    }
+  
     private func updateButtonPosition() {
         let buttonsize: CGFloat = 50
         let xPosition = (view.bounds.width - buttonsize) / 2
@@ -390,14 +398,7 @@ extension CameraPreviewController {
         let yPosition = (view.bounds.height - previewSize) - 40
         capturedImageView.frame = CGRect(x: xPosition, y: yPosition, width: previewSize, height: previewSize)
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        updatePreviewLayerFrame()
-        updateButtonPosition()
-        updateBackButtonPosition()
-        updateExposureSliderPosition()
-        updateImagePreviewPosition()
-    }
+
 }
 
 //rotationAngle
