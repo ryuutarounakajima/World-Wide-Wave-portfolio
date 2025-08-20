@@ -40,12 +40,17 @@ class VideoPreviewViewController: UIViewController {
     
     private let session = AVCaptureSession()
     private var previewLayer: AVCaptureVideoPreviewLayer?
+    private var videoOutput: AVCaptureVideoDataOutput?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .black
         setupCamera()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceOenrationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
+        
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications( )
       
     }
     
@@ -93,18 +98,56 @@ extension VideoPreviewViewController{
             print("camera input error: \(error)")
         }
         
+        let output = AVCaptureVideoDataOutput()
+        if session.canAddOutput(output) {
+            session.addOutput(output)
+            videoOutput = output
+        }
+        
         let previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.videoGravity = .resizeAspectFill
         previewLayer.frame = view.bounds
         view.layer.addSublayer(previewLayer)
+        self.previewLayer = previewLayer
         
         session.commitConfiguration()
         
         DispatchQueue.global(qos: .userInitiated).async {
+            
             self.session.startRunning()
+            DispatchQueue.main.async {
+                self.updateVideoOrientation()
+            }
         }
     }
     
+    private func updateVideoOrientation() {
+        
+        guard let connection  = previewLayer?.connection else { return }
+        
+        let angle: CGFloat
+        
+        switch UIDevice.current.orientation {
+        case .portrait:
+            angle = 90
+        case .landscapeLeft:
+            angle = 0
+        case .landscapeRight:
+            angle = 180
+        case .portraitUpsideDown:
+            angle = 270
+        default:
+            return
+        }
+        
+        if connection.isVideoRotationAngleSupported(angle) {
+            connection.videoRotationAngle = angle
+        }
+    }
+    
+    @objc private func deviceOenrationDidChange() {
+        updateVideoOrientation()
+    }
    
 }
 
