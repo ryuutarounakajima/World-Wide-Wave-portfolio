@@ -128,6 +128,11 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
         setupCapturedImageView()
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+        UIDevice.current.endGeneratingDeviceOrientationNotifications()
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         videoPreviewLayer.frame = view.bounds
@@ -329,7 +334,6 @@ extension CameraPreviewController {
         present(hostController, animated: true)
     }
 }
-
 
 //zoom
 extension CameraPreviewController {

@@ -54,6 +54,13 @@ class VideoPreviewViewController: UIViewController {
       
     }
     
+    deinit {
+        
+        NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
+        UIDevice.current.endGeneratingDeviceOrientationNotifications()
+        
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
            
@@ -144,10 +151,11 @@ extension VideoPreviewViewController{
             connection.videoRotationAngle = angle
         }
     }
-    
     @objc private func deviceOenrationDidChange() {
         updateVideoOrientation()
     }
+    
+    
    
 }
 
