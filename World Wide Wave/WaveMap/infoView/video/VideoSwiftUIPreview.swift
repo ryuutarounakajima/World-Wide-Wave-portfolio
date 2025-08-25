@@ -9,13 +9,12 @@ import SwiftUI
 import AVFoundation
 
 struct VideoSwiftUIPreview: View {
-    @State private var isPresented: Bool = false
-    @State private var videoURL: URL?
     
     private let captureSession = AVCaptureSession()
+    @Binding var captureVideoURL: URL?
     
     var body: some View {
-        VideoPreviewView(captureSession: captureSession)
+        VideoPreviewView(captureVideoURL: $captureVideoURL)
             .edgesIgnoringSafeArea(.all)
             .onAppear {
                 
@@ -24,5 +23,11 @@ struct VideoSwiftUIPreview: View {
 }
 
 #Preview {
-    VideoSwiftUIPreview()
+    let dummyURL = Bundle.main.url(forResource: "SampleVideo", withExtension: "mov")
+        ?? URL(fileURLWithPath: "/tmp/dummy.mov")
+    let formData = FormData()
+    
+    return VideoSwiftUIPreview(
+        captureVideoURL: .constant(dummyURL)
+    ).environmentObject(formData)
 }

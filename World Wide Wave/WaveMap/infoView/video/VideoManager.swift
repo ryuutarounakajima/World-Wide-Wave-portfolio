@@ -48,6 +48,8 @@ class VideoPreviewViewController: UIViewController {
     private var captureButton: UIButton!
     private var isRcording = false
     
+    var onVideoCaptured: ((URL) -> Void)?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -223,7 +225,7 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate {
             print("Recoding error: \(error)")
         } else {
             print("Recording complete: \(outputFileURL)")
-            
+            onVideoCaptured?(outputFileURL)
         }
     }
     private func upDateButtonPosition() {
@@ -239,11 +241,20 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate {
 }
 
 struct VideoPreviewView: UIViewControllerRepresentable {
-    let captureSession: AVCaptureSession
+  //  let captureSession: AVCaptureSession
+    @Binding var captureVideoURL: URL?
     
     func makeUIViewController(context: Context) -> VideoPreviewViewController {
        
-        return VideoPreviewViewController()
+        let controller = VideoPreviewViewController()
+        
+        controller.onVideoCaptured = { url in
+            DispatchQueue.main.async {
+                self.captureVideoURL = url
+            }
+        }
+        
+        return controller
     }
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
         

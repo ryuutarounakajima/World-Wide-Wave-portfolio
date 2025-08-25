@@ -10,7 +10,7 @@ import SwiftUI
 struct CameraSwiftUIPreview: View {
     
     private let micManager = MicManager()
-  //  @EnvironmentObject var formData : FormData
+    @EnvironmentObject var formData : FormData
     @Binding var isCameraPresented: Bool
     @Binding var captureImage: UIImage?
     //@State private var cameraController: CameraPreviewController?
@@ -110,7 +110,7 @@ struct CameraSwiftUIPreview: View {
             }
             .ignoresSafeArea(.all)
             .navigationDestination(isPresented: $isSwiped) {
-                VideoSwiftUIPreview()
+                VideoSwiftUIPreview(captureVideoURL: $formData.capturedVideoURL)
             }
         }
       
@@ -121,5 +121,6 @@ struct CameraSwiftUIPreview: View {
 
 #Preview {
     let image = UIImage(systemName: "star.fill")
-    CameraSwiftUIPreview(isCameraPresented: .constant(false), captureImage: .constant(image))
+    let formData = FormData()
+    CameraSwiftUIPreview(isCameraPresented: .constant(false), captureImage: .constant(image)).environmentObject(formData)
 }
