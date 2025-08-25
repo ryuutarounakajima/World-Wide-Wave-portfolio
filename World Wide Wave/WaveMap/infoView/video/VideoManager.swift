@@ -38,15 +38,24 @@ actor MicManager {
 
 class VideoPreviewViewController: UIViewController {
     
+
+            
+    
     private let session = AVCaptureSession()
     private var previewLayer: AVCaptureVideoPreviewLayer?
-    private var videoOutput: AVCaptureVideoDataOutput?
+    private var videoDataOutoput: AVCaptureVideoDataOutput?
+    private var videoFileOutput: AVCaptureFileOutput?
+    private var captureButton: UIButton!
+    private var isRcording = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .black
+        
         setupCamera()
+        setupPreviewLayer()
+        setupCaptureBuuton()
         
         NotificationCenter.default.addObserver(self, selector: #selector(deviceOenrationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
         
@@ -65,12 +74,17 @@ class VideoPreviewViewController: UIViewController {
         super.viewDidLayoutSubviews()
            
        previewLayer?.frame = view.bounds
+       upDateButtonPosition()
      
     }
     
+   
+   
+    
 }
 
-extension VideoPreviewViewController{
+extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate {
+    
     
     private func setupCamera() {
         
@@ -105,11 +119,31 @@ extension VideoPreviewViewController{
             print("camera input error: \(error)")
         }
         
-        let output = AVCaptureVideoDataOutput()
-        if session.canAddOutput(output) {
-            session.addOutput(output)
-            videoOutput = output
+        let videoDataOutput = AVCaptureVideoDataOutput()
+        if session.canAddOutput(videoDataOutput) {
+            session.addOutput(videoDataOutput)
+            videoDataOutoput = videoDataOutput
         }
+        
+        let videoFileOutput = AVCaptureMovieFileOutput()
+        if session.canAddOutput(videoFileOutput) {
+            session.addOutput(videoFileOutput)
+            self.videoFileOutput = videoFileOutput
+        }
+   
+        session.commitConfiguration()
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            
+            self.session.startRunning()
+            
+            DispatchQueue.main.async {
+                self.updateVideoOrientation()
+            }
+        }
+    }
+    
+    private func setupPreviewLayer() {
         
         let previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.videoGravity = .resizeAspectFill
@@ -117,15 +151,6 @@ extension VideoPreviewViewController{
         view.layer.addSublayer(previewLayer)
         self.previewLayer = previewLayer
         
-        session.commitConfiguration()
-        
-        DispatchQueue.global(qos: .userInitiated).async {
-            
-            self.session.startRunning()
-            DispatchQueue.main.async {
-                self.updateVideoOrientation()
-            }
-        }
     }
     
     private func updateVideoOrientation() {
@@ -155,6 +180,61 @@ extension VideoPreviewViewController{
         updateVideoOrientation()
     }
     
+    private func setupCaptureBuuton() {
+        
+        captureButton = UIButton(type: .system)
+        captureButton.setTitle("", for: .normal)
+        captureButton.backgroundColor = UIColor.white.withAlphaComponent(1.0)
+        
+        let buttonSize: CGFloat = 50
+        captureButton.layer.cornerRadius = buttonSize / 2
+        captureButton.clipsToBounds = true
+        
+        view.addSubview(captureButton)
+    }
+    private func captureButtonTapped() {
+        guard let videoFileOutput = self.videoFileOutput else { return }
+        
+        if !isRcording {
+            
+            let outputPath = NSTemporaryDirectory() + "output.mp4"
+            let fileURL = URL(fileURLWithPath: outputPath)
+            
+            do {
+                try FileManager.default.removeItem(at: fileURL)
+            } catch {
+                print("Error removing existing file: \(error)")
+            }
+            
+            videoFileOutput.startRecording(to: fileURL, recordingDelegate: self)
+            isRcording = true
+            captureButton.backgroundColor = UIColor.red
+        } else {
+            videoFileOutput.stopRecording()
+            isRcording = false
+            captureButton.backgroundColor = UIColor.white.withAlphaComponent(1.0)
+        }
+        
+        
+    }
+    func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Error)?) {
+        
+        if let error = error {
+            print("Recoding error: \(error)")
+        } else {
+            print("Recording complete: \(outputFileURL)")
+            
+        }
+    }
+
+    private func upDateButtonPosition() {
+        
+        let buttonSize: CGFloat = 50
+        let xPosition = (view.bounds.width - buttonSize) / 2
+        let yPosition = (view.bounds.height - buttonSize) - 50
+        
+        captureButton.frame = CGRect(x: xPosition, y: yPosition, width: buttonSize, height: buttonSize)
+    }
     
    
 }
