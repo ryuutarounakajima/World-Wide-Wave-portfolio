@@ -189,10 +189,10 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate {
         let buttonSize: CGFloat = 50
         captureButton.layer.cornerRadius = buttonSize / 2
         captureButton.clipsToBounds = true
-        
+        captureButton.addTarget(self, action: #selector(captureButtonTapped), for: .touchUpInside)
         view.addSubview(captureButton)
     }
-    private func captureButtonTapped() {
+    @objc private func captureButtonTapped() {
         guard let videoFileOutput = self.videoFileOutput else { return }
         
         if !isRcording {
