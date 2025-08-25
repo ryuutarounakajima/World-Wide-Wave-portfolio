@@ -226,7 +226,6 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate {
             
         }
     }
-
     private func upDateButtonPosition() {
         
         let buttonSize: CGFloat = 50

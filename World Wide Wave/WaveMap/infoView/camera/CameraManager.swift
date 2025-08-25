@@ -128,7 +128,7 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
         setupCapturedImageView()
     }
     
-    deinit {
+   deinit {
         NotificationCenter.default.removeObserver(self)
         UIDevice.current.endGeneratingDeviceOrientationNotifications()
     }
@@ -224,10 +224,6 @@ extension CameraPreviewController {
         
         
         capturedImageView.image = image
-        UIView.animate(withDuration: 0.3) {
-            self.captureButton.alpha = 0
-        }
-        
         onPhotoCaptured?(image)
         //onCameraDismissed?()
     }
