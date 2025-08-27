@@ -49,10 +49,11 @@ class VideoPreviewViewController: UIViewController {
     private var isRecording = false
     private var progressLayer: CAShapeLayer?
     private var maxRecordingDuration: TimeInterval = 31
-    private var gradiengLayer: CAGradientLayer?
+    private var gradientLayer: CAGradientLayer?
     private var animationStartTime: CFTimeInterval = 0
-    private var pauseTime: CFTimeInterval = 0
+    private var pausedTime: CGFloat = 0
     private var isPaused: Bool = false
+    private var ringBackground : CAGradientLayer?
     
     var onVideoCaptured: ((URL) -> Void)?
     var onFinishRecording: (() -> Void)?
@@ -65,6 +66,7 @@ class VideoPreviewViewController: UIViewController {
         setupCamera()
         setupPreviewLayer()
         setupCaptureBuuton()
+        
         
         NotificationCenter.default.addObserver(self, selector: #selector(deviceOenrationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
         
@@ -82,9 +84,9 @@ class VideoPreviewViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
            
-       previewLayer?.frame = view.bounds
-       upDateButtonPosition()
-     
+    previewLayer?.frame = view.bounds
+    upDateButtonPosition()
+    
     }
     
    
@@ -207,6 +209,14 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         captureButton.addTarget(self, action: #selector(captureButtonTapped), for: .touchUpInside)
         view.addSubview(captureButton)
     }
+    private func upDateButtonPosition() {
+        
+        let buttonSize: CGFloat = 50
+        let xPosition = (view.bounds.width - buttonSize) / 2
+        let yPosition = (view.bounds.height - buttonSize) - 50
+        
+        captureButton.frame = CGRect(x: xPosition, y: yPosition, width: buttonSize, height: buttonSize)
+    }
     @objc private func captureButtonTapped() {
         guard let videoFileOutput = self.videoFileOutput else { return }
         
@@ -223,7 +233,7 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
             
             videoFileOutput.startRecording(to: fileURL, recordingDelegate: self)
             isRecording = true
-            captureButton.backgroundColor = UIColor.red
+            captureButton.backgroundColor = UIColor(red: 0.0, green: 0.7, blue: 1.0, alpha: 1.0)
             
             startProgressRing()
             
@@ -240,28 +250,10 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
             isRecording = false
             captureButton.backgroundColor = UIColor.white.withAlphaComponent(1.0)
             
-            
+            pauseProgressRing()
         }
         
         
-    }
-    func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Error)?) {
-        
-        if let error = error {
-            print("Recoding error: \(error)")
-        } else {
-            print("Recording complete: \(outputFileURL)")
-            onVideoCaptured?(outputFileURL)
-           // onFinishRecording?()
-        }
-    }
-    private func upDateButtonPosition() {
-        
-        let buttonSize: CGFloat = 50
-        let xPosition = (view.bounds.width - buttonSize) / 2
-        let yPosition = (view.bounds.height - buttonSize) - 50
-        
-        captureButton.frame = CGRect(x: xPosition, y: yPosition, width: buttonSize, height: buttonSize)
     }
     private func startRecording() {
         let outputPath = NSTemporaryDirectory() + "output.mp4"
@@ -276,12 +268,14 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         videoFileOutput?.startRecording(to: fileURL, recordingDelegate: self)
         isRecording = true
         captureButton.backgroundColor = UIColor.red
+        startProgressRing()
     }
     private func stopRecording() {
         videoFileOutput?.stopRecording()
         isRecording = false
         captureButton.backgroundColor = UIColor.white.withAlphaComponent(1.0)
-        removeProgressRing()
+        pauseProgressRing()
+        //removeProgressRing()
     }
     
     private func startProgressRing() {
@@ -296,11 +290,19 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         shapeLayer.strokeColor = UIColor.white.cgColor
         shapeLayer.lineWidth = 6
         shapeLayer.fillColor = UIColor.clear.cgColor
-        shapeLayer.strokeEnd = 1
+        shapeLayer.strokeEnd = isPaused ? pausedTime : 0
         
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = view.bounds
-        gradientLayer.colors = [UIColor.red.cgColor, UIColor.blue.cgColor, UIColor.white]
+        gradientLayer.colors = [
+               UIColor.red.cgColor,
+               UIColor.orange.cgColor,
+               UIColor.yellow.cgColor,
+               UIColor.green.cgColor,
+               UIColor.blue.cgColor,
+               UIColor.purple.cgColor,
+               UIColor.red.cgColor
+           ]
         view.layer.addSublayer(shapeLayer)
         gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
@@ -308,12 +310,12 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         gradientLayer.mask = shapeLayer
         
         view.layer.addSublayer(gradientLayer)
-        progressLayer = shapeLayer
-        self.gradiengLayer = gradientLayer
+        self.progressLayer = shapeLayer
+        self.gradientLayer = gradientLayer
         
         let animation = CABasicAnimation(keyPath: "strokeEnd")
         animation.duration = maxRecordingDuration
-        animation.fromValue = 0
+        animation.fromValue = isPaused ? pausedTime : 0
         animation.toValue = 1
         animation.fillMode = .forwards
         animation.isRemovedOnCompletion = false
@@ -321,19 +323,44 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         shapeLayer.add(animation, forKey: "progressAnimation")
         
       
+        animationStartTime = CACurrentMediaTime() - (isPaused ? Double(pausedTime) * maxRecordingDuration : 0)
+        isPaused = false
+    }
+    private func pauseProgressRing() {
+        guard let progressLayer = progressLayer else { return }
+        
+        let elapsed = CACurrentMediaTime() - animationStartTime
+        pausedTime = CGFloat(elapsed / maxRecordingDuration)
+        
+        progressLayer.removeAllAnimations()
+        gradientLayer?.removeAnimation(forKey: "rotation")
+        
+        progressLayer.strokeEnd = pausedTime
+        isPaused = true
     }
     private func removeProgressRing() {
-        gradiengLayer?.removeFromSuperlayer()
+        gradientLayer?.removeFromSuperlayer()
         progressLayer?.removeFromSuperlayer()
-        gradiengLayer = nil
+        gradientLayer = nil
         progressLayer = nil
     }
-            func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        if flag, isRecording {
-                   stopRecording()
-                }
+    
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+    if flag, isRecording {
+                stopRecording()
+            }
+}
+    
+    func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Error)?) {
+        
+        if let error = error {
+            print("Recoding error: \(error)")
+        } else {
+            print("Recording complete: \(outputFileURL)")
+            onVideoCaptured?(outputFileURL)
+           // onFinishRecording?()
+        }
     }
-   
 }
 
 struct VideoPreviewView: UIViewControllerRepresentable {
