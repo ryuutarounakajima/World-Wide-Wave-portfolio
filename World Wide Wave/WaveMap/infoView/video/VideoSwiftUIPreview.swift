@@ -10,11 +10,16 @@ import AVFoundation
 
 struct VideoSwiftUIPreview: View {
     
-    private let captureSession = AVCaptureSession()
+    //private let captureSession = AVCaptureSession()
+    @EnvironmentObject var formData: FormData
+    
     @Binding var captureVideoURL: URL?
+    @Binding var isVideoPresented: Bool
+    
+    
     
     var body: some View {
-        VideoPreviewView(captureVideoURL: $captureVideoURL)
+        VideoPreviewView(captureVideoURL: $captureVideoURL, isVideoCaptured: $isVideoPresented)
             .edgesIgnoringSafeArea(.all)
             .onAppear {
                 
@@ -27,7 +32,7 @@ struct VideoSwiftUIPreview: View {
         ?? URL(fileURLWithPath: "/tmp/dummy.mov")
     let formData = FormData()
     
-    return VideoSwiftUIPreview(
-        captureVideoURL: .constant(dummyURL)
+    VideoSwiftUIPreview(
+        captureVideoURL: .constant(dummyURL), isVideoPresented: .constant(true)
     ).environmentObject(formData)
 }
