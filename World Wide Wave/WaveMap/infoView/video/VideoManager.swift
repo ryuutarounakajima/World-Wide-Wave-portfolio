@@ -54,6 +54,7 @@ class VideoPreviewViewController: UIViewController {
     private var pausedTime: CGFloat = 0
     private var isPaused: Bool = false
     private var ringBackground : CAGradientLayer?
+    private var progressLayer2 : CAShapeLayer?
     
     var onVideoCaptured: ((URL) -> Void)?
     var onFinishRecording: (() -> Void)?
@@ -86,7 +87,8 @@ class VideoPreviewViewController: UIViewController {
            
     previewLayer?.frame = view.bounds
     upDateButtonPosition()
-    
+    addCircleAroundButton()
+        
     }
     
    
@@ -233,7 +235,7 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
             
             videoFileOutput.startRecording(to: fileURL, recordingDelegate: self)
             isRecording = true
-            captureButton.backgroundColor = UIColor(red: 0.0, green: 0.7, blue: 1.0, alpha: 1.0)
+            //captureButton.backgroundColor = UIColor.red
             
             startProgressRing()
             
@@ -241,6 +243,7 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
                 
                 if self.isRecording {
                     self.stopRecording()
+                   
                 }
             }
             
@@ -249,8 +252,8 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
             videoFileOutput.stopRecording()
             isRecording = false
             captureButton.backgroundColor = UIColor.white.withAlphaComponent(1.0)
-            
-            pauseProgressRing()
+            removeProgressRing()
+            //pauseProgressRing()
         }
         
         
@@ -274,10 +277,34 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         videoFileOutput?.stopRecording()
         isRecording = false
         captureButton.backgroundColor = UIColor.white.withAlphaComponent(1.0)
-        pauseProgressRing()
-        //removeProgressRing()
+        //pauseProgressRing()
+        removeProgressRing()
     }
-    
+    private func addCircleAroundButton() {
+        let buttonSize: CGFloat = 50
+        let margin: CGFloat = 10
+        let radius = (buttonSize / 2) + margin
+        let center = captureButton.center
+
+        // 円のパス
+        let circularPath = UIBezierPath(
+            arcCenter: center,
+            radius: radius,
+            startAngle: -CGFloat.pi / 2,
+            endAngle: 1.5 * CGFloat.pi,
+            clockwise: true
+        )
+
+        // 円のレイヤー
+        let circleLayer = CAShapeLayer()
+        circleLayer.path = circularPath.cgPath
+        circleLayer.strokeColor = UIColor.black.cgColor
+        circleLayer.fillColor = UIColor.clear.cgColor
+        circleLayer.lineWidth = 6
+
+        // view.layer に追加
+        view.layer.addSublayer(circleLayer)
+    }
     private func startProgressRing() {
         let buttonSize: CGFloat = 50
         let margin: CGFloat = 6
