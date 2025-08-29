@@ -115,12 +115,19 @@ extension VideoPreviewViewController {
         
     }
     
+    
     private func updateVideoPreviewPosition() {
         let previewSize: CGFloat = 60
         let xPosition = (view.bounds.width - previewSize) - 10
         let yPosition = (view.bounds.height - previewSize) - 40
         
         videoPlayerLayer?.frame = CGRect(x: xPosition, y: yPosition, width: previewSize, height: previewSize)
+    }
+    
+    private func playVideo(url: URL) {
+        let player  = AVPlayer(url: url)
+        videoPlayerLayer?.player = player
+        player.play()
     }
 }
 extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAnimationDelegate {
@@ -411,8 +418,9 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
             print("Recoding error: \(error)")
         } else {
             print("Recording complete: \(outputFileURL)")
-            UISaveVideoAtPathToSavedPhotosAlbum(outputFileURL.path, nil, nil, nil)
+            //UISaveVideoAtPathToSavedPhotosAlbum(outputFileURL.path, nil, nil, nil)
             onVideoCaptured?(outputFileURL)
+            playVideo(url: outputFileURL)
            // onFinishRecording?()
         }
     }
