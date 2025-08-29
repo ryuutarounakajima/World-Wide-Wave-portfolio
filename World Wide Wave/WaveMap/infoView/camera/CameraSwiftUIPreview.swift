@@ -33,7 +33,7 @@ struct CameraSwiftUIPreview: View {
                 
                 ZStack {
                     
-                    Color.black.opacity(0.6)
+                    Color.black.opacity(0.7)
                         .ignoresSafeArea(.all)
                     
                     

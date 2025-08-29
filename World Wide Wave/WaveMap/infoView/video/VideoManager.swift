@@ -55,6 +55,7 @@ class VideoPreviewViewController: UIViewController {
     private var isPaused: Bool = false
     private var ringBackground : CAGradientLayer?
     private var progressLayer2 : CAShapeLayer?
+    private var videoPlayerLayer : AVPlayerLayer?
     
     var onVideoCaptured: ((URL) -> Void)?
     var onFinishRecording: (() -> Void)?
@@ -62,11 +63,12 @@ class VideoPreviewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .black
+        view.backgroundColor = .black.withAlphaComponent(0.7)
         
         setupCamera()
         setupPreviewLayer()
         setupCaptureBuuton()
+        setupVideoPreviewLayer()
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(deviceOenrationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
@@ -87,7 +89,7 @@ class VideoPreviewViewController: UIViewController {
            
     previewLayer?.frame = view.bounds
     upDateButtonPosition()
-    addCircleAroundButton()
+    updateVideoPreviewPosition()
         
     }
     
@@ -96,6 +98,31 @@ class VideoPreviewViewController: UIViewController {
     
 }
 
+extension VideoPreviewViewController {
+    private func setupVideoPreviewLayer() {
+        let previewSize: CGFloat = 60
+        let xPosition = (view.bounds.width - previewSize) - 10
+        let yPosition = (view.bounds.height - previewSize) - 40
+        
+        videoPlayerLayer = AVPlayerLayer()
+        videoPlayerLayer?.backgroundColor = UIColor.black.withAlphaComponent(0.6).cgColor
+        videoPlayerLayer?.frame = CGRect(x: xPosition, y: yPosition, width: previewSize, height: previewSize)
+        videoPlayerLayer?.cornerRadius = 10
+        videoPlayerLayer?.masksToBounds = true
+        videoPlayerLayer?.videoGravity = .resizeAspectFill
+        
+        view.layer.addSublayer(videoPlayerLayer!)
+        
+    }
+    
+    private func updateVideoPreviewPosition() {
+        let previewSize: CGFloat = 60
+        let xPosition = (view.bounds.width - previewSize) - 10
+        let yPosition = (view.bounds.height - previewSize) - 40
+        
+        videoPlayerLayer?.frame = CGRect(x: xPosition, y: yPosition, width: previewSize, height: previewSize)
+    }
+}
 extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAnimationDelegate {
     
     
@@ -235,7 +262,7 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
             
             videoFileOutput.startRecording(to: fileURL, recordingDelegate: self)
             isRecording = true
-            //captureButton.backgroundColor = UIColor.red
+            captureButton.backgroundColor = UIColor.red
             
             startProgressRing()
             
@@ -258,7 +285,8 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         
         
     }
-    private func startRecording() {
+    
+    /*private func startRecording() {
         let outputPath = NSTemporaryDirectory() + "output.mp4"
         let fileURL = URL(fileURLWithPath: outputPath)
         
@@ -273,37 +301,37 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         captureButton.backgroundColor = UIColor.red
         startProgressRing()
     }
+     private func addCircleAroundButton() {
+         let buttonSize: CGFloat = 50
+         let margin: CGFloat = 10
+         let radius = (buttonSize / 2) + margin
+         let center = captureButton.center
+
+         // 円のパス
+         let circularPath = UIBezierPath(
+             arcCenter: center,
+             radius: radius,
+             startAngle: -CGFloat.pi / 2,
+             endAngle: 1.5 * CGFloat.pi,
+             clockwise: true
+         )
+
+         // 円のレイヤー
+         let circleLayer = CAShapeLayer()
+         circleLayer.path = circularPath.cgPath
+         circleLayer.strokeColor = UIColor.black.cgColor
+         circleLayer.fillColor = UIColor.clear.cgColor
+         circleLayer.lineWidth = 6
+
+         // view.layer に追加
+         view.layer.addSublayer(circleLayer)
+     }*/
     private func stopRecording() {
         videoFileOutput?.stopRecording()
         isRecording = false
         captureButton.backgroundColor = UIColor.white.withAlphaComponent(1.0)
         //pauseProgressRing()
         removeProgressRing()
-    }
-    private func addCircleAroundButton() {
-        let buttonSize: CGFloat = 50
-        let margin: CGFloat = 10
-        let radius = (buttonSize / 2) + margin
-        let center = captureButton.center
-
-        // 円のパス
-        let circularPath = UIBezierPath(
-            arcCenter: center,
-            radius: radius,
-            startAngle: -CGFloat.pi / 2,
-            endAngle: 1.5 * CGFloat.pi,
-            clockwise: true
-        )
-
-        // 円のレイヤー
-        let circleLayer = CAShapeLayer()
-        circleLayer.path = circularPath.cgPath
-        circleLayer.strokeColor = UIColor.black.cgColor
-        circleLayer.fillColor = UIColor.clear.cgColor
-        circleLayer.lineWidth = 6
-
-        // view.layer に追加
-        view.layer.addSublayer(circleLayer)
     }
     private func startProgressRing() {
         let buttonSize: CGFloat = 50
@@ -315,7 +343,7 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = circularPath.cgPath
         shapeLayer.strokeColor = UIColor.white.cgColor
-        shapeLayer.lineWidth = 6
+        shapeLayer.lineWidth = 7
         shapeLayer.fillColor = UIColor.clear.cgColor
         shapeLayer.strokeEnd = isPaused ? pausedTime : 0
         
@@ -371,7 +399,6 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         gradientLayer = nil
         progressLayer = nil
     }
-    
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
     if flag, isRecording {
                 stopRecording()
@@ -384,6 +411,7 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
             print("Recoding error: \(error)")
         } else {
             print("Recording complete: \(outputFileURL)")
+            UISaveVideoAtPathToSavedPhotosAlbum(outputFileURL.path, nil, nil, nil)
             onVideoCaptured?(outputFileURL)
            // onFinishRecording?()
         }
