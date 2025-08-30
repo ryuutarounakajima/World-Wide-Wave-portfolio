@@ -180,7 +180,7 @@
         <!--Wave Map View Controller-->
         <scene sceneID="17r-R1-LDP">
             <objects>
-                <viewController id="fug-rh-NQQ" customClass="WaveMapViewController" customModule="World_Wide_Wave" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WaveMapViewController" id="fug-rh-NQQ" customClass="WaveMapViewController" customModule="World_Wide_Wave" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ILV-gZ-hac">
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -193,10 +193,10 @@
             </objects>
             <point key="canvasLocation" x="1479" y="785"/>
         </scene>
-        <!--Wave Info View Contrroler-->
+        <!--Wave Info View Controller-->
         <scene sceneID="oJY-1c-f7J">
             <objects>
-                <viewController storyboardIdentifier="WaveInfoViewController" id="YUG-eP-pah" customClass="WaveInfoViewContrroler" customModule="World_Wide_Wave" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WaveInfoViewController" id="YUG-eP-pah" customClass="waveInfoViewController" customModule="World_Wide_Wave" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8wk-eW-2B4">
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

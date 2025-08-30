@@ -12,8 +12,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
     
+    let isDevelopmentMode = true
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        
+       
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
@@ -24,6 +27,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         self.window = UIWindow(windowScene: windowScene)
         
+        if isDevelopmentMode {
+            let waveInfoVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "WaveInfoViewController")
+            waveInfoVC.view.backgroundColor = .yellow
+            self.window?.rootViewController = waveInfoVC
+            self.window?.makeKeyAndVisible()
+            return
+        }
         // cheking if user logeed in or not
         if let appleAuthToken = UserDefaults.standard.string(forKey: "appleAuthToken"), !appleAuthToken.isEmpty {
             // トークンが存在し、ログイン済みの場合
@@ -55,7 +65,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
         } else {
             // トークンがない、または空の場合（未ログイン）
-            let loginVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "ViewController")
+            let loginVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "LoginViewController")
             self.window?.rootViewController = loginVC
         }
         

@@ -10,18 +10,26 @@ import UIKit
 import CoreLocation
 import SwiftUI
 
-class WaveInfoViewContrroler: UIViewController {
+class waveInfoViewController: UIViewController {
     
     var coordinate: CLLocationCoordinate2D?
     var timestamp: Date?
     var formData: FormData?
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let coordinate = coordinate, let timestamp = timestamp else {return}
+        //test
+        let safeCoordinate  =  coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
+        let safeTimeStamp = timestamp ?? Date()
+        let formDataToUse = formData ?? FormData()
         
-        let swiftUIView = WaveInfoSwiftUIView( coordinate: coordinate, timestamp: timestamp).environmentObject(formData!)
+        //production
+       /* guard let coordinate = coordinate, let timestamp = timestamp else {return}
+        */
+        
+        let swiftUIView = WaveInfoSwiftUIView( coordinate: safeCoordinate, timestamp: safeTimeStamp).environmentObject(formDataToUse)
         let hostingController = UIHostingController(rootView: swiftUIView)
         
         addChild(hostingController)

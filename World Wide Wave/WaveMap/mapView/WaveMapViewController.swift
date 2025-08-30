@@ -175,7 +175,7 @@ class WaveMapViewController: UIViewController, CLLocationManagerDelegate, MKMapV
     
        func navigateToWaveInfoViewController() {
         
-        let waveInfoVC = WaveInfoViewContrroler()
+        let waveInfoVC = waveInfoViewController()
         waveInfoVC.coordinate = selectedLocation!
            waveInfoVC.timestamp = Date()
            

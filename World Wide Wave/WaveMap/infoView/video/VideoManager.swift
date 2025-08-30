@@ -38,9 +38,6 @@ actor MicManager {
 
 class VideoPreviewViewController: UIViewController {
     
-
-            
-    
     private let session = AVCaptureSession()
     private var previewLayer: AVCaptureVideoPreviewLayer?
     private var videoDataOutoput: AVCaptureVideoDataOutput?
@@ -56,6 +53,11 @@ class VideoPreviewViewController: UIViewController {
     private var ringBackground : CAGradientLayer?
     private var progressLayer2 : CAShapeLayer?
     private var videoPlayerLayer : AVPlayerLayer?
+    
+    private var rotationCoordinator: AVCaptureDevice.RotationCoordinator?
+    private var previewAngleObserver: NSKeyValueObservation?
+    private var captureAngleObserver: NSKeyValueObservation?
+    private var currentDeviceAngle: AVCaptureDevice?
     
     var onVideoCaptured: ((URL) -> Void)?
     var onFinishRecording: (() -> Void)?
@@ -186,6 +188,7 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
    
         session.commitConfiguration()
         
+        
         DispatchQueue.global(qos: .userInitiated).async {
             
             self.session.startRunning()
@@ -233,6 +236,7 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         updateVideoOrientation()
     }
     
+    
     private func setupCaptureBuuton() {
         
         captureButton = UIButton(type: .system)
@@ -267,6 +271,8 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
                 print("Error removing existing file: \(error)")
             }
             
+          
+            
             videoFileOutput.startRecording(to: fileURL, recordingDelegate: self)
             isRecording = true
             captureButton.backgroundColor = UIColor.red
@@ -292,47 +298,7 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         
         
     }
-    
-    /*private func startRecording() {
-        let outputPath = NSTemporaryDirectory() + "output.mp4"
-        let fileURL = URL(fileURLWithPath: outputPath)
-        
-        do {
-            try FileManager.default.removeItem(at: fileURL)
-        } catch {
-            print("Error removing existing file: \(error)")
-        }
-        
-        videoFileOutput?.startRecording(to: fileURL, recordingDelegate: self)
-        isRecording = true
-        captureButton.backgroundColor = UIColor.red
-        startProgressRing()
-    }
-     private func addCircleAroundButton() {
-         let buttonSize: CGFloat = 50
-         let margin: CGFloat = 10
-         let radius = (buttonSize / 2) + margin
-         let center = captureButton.center
-
-         // 円のパス
-         let circularPath = UIBezierPath(
-             arcCenter: center,
-             radius: radius,
-             startAngle: -CGFloat.pi / 2,
-             endAngle: 1.5 * CGFloat.pi,
-             clockwise: true
-         )
-
-         // 円のレイヤー
-         let circleLayer = CAShapeLayer()
-         circleLayer.path = circularPath.cgPath
-         circleLayer.strokeColor = UIColor.black.cgColor
-         circleLayer.fillColor = UIColor.clear.cgColor
-         circleLayer.lineWidth = 6
-
-         // view.layer に追加
-         view.layer.addSublayer(circleLayer)
-     }*/
+   
     private func stopRecording() {
         videoFileOutput?.stopRecording()
         isRecording = false
@@ -340,6 +306,7 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         //pauseProgressRing()
         removeProgressRing()
     }
+  
     private func startProgressRing() {
         let buttonSize: CGFloat = 50
         let margin: CGFloat = 6
@@ -424,6 +391,47 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
            // onFinishRecording?()
         }
     }
+    
+    /*private func startRecording() {
+        let outputPath = NSTemporaryDirectory() + "output.mp4"
+        let fileURL = URL(fileURLWithPath: outputPath)
+        
+        do {
+            try FileManager.default.removeItem(at: fileURL)
+        } catch {
+            print("Error removing existing file: \(error)")
+        }
+        
+        videoFileOutput?.startRecording(to: fileURL, recordingDelegate: self)
+        isRecording = true
+        captureButton.backgroundColor = UIColor.red
+        startProgressRing()
+    }
+     private func addCircleAroundButton() {
+         let buttonSize: CGFloat = 50
+         let margin: CGFloat = 10
+         let radius = (buttonSize / 2) + margin
+         let center = captureButton.center
+
+         // 円のパス
+         let circularPath = UIBezierPath(
+             arcCenter: center,
+             radius: radius,
+             startAngle: -CGFloat.pi / 2,
+             endAngle: 1.5 * CGFloat.pi,
+             clockwise: true
+         )
+
+         // 円のレイヤー
+         let circleLayer = CAShapeLayer()
+         circleLayer.path = circularPath.cgPath
+         circleLayer.strokeColor = UIColor.black.cgColor
+         circleLayer.fillColor = UIColor.clear.cgColor
+         circleLayer.lineWidth = 6
+
+         // view.layer に追加
+         view.layer.addSublayer(circleLayer)
+     }*/
 }
 
 struct VideoPreviewView: UIViewControllerRepresentable {
