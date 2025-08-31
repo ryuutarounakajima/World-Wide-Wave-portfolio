@@ -99,41 +99,8 @@ class VideoPreviewViewController: UIViewController {
    
     
 }
-
+//MARK: - setup
 extension VideoPreviewViewController {
-    private func setupVideoPreviewLayer() {
-        let previewSize: CGFloat = 60
-        let xPosition = (view.bounds.width - previewSize) - 10
-        let yPosition = (view.bounds.height - previewSize) - 40
-        
-        videoPlayerLayer = AVPlayerLayer()
-        videoPlayerLayer?.backgroundColor = UIColor.black.withAlphaComponent(0.6).cgColor
-        videoPlayerLayer?.frame = CGRect(x: xPosition, y: yPosition, width: previewSize, height: previewSize)
-        videoPlayerLayer?.cornerRadius = 10
-        videoPlayerLayer?.masksToBounds = true
-        videoPlayerLayer?.videoGravity = .resizeAspectFill
-        
-        view.layer.addSublayer(videoPlayerLayer!)
-        
-    }
-    
-    
-    private func updateVideoPreviewPosition() {
-        let previewSize: CGFloat = 60
-        let xPosition = (view.bounds.width - previewSize) - 10
-        let yPosition = (view.bounds.height - previewSize) - 40
-        
-        videoPlayerLayer?.frame = CGRect(x: xPosition, y: yPosition, width: previewSize, height: previewSize)
-    }
-    
-    private func playVideo(url: URL) {
-        let player  = AVPlayer(url: url)
-        videoPlayerLayer?.player = player
-        player.play()
-    }
-}
-extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAnimationDelegate {
-    
     
     private func setupCamera() {
         
@@ -163,6 +130,8 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
             let videoInput = try AVCaptureDeviceInput(device: camera)
             if session.canAddInput(videoInput) {
                 session.addInput(videoInput)
+                
+                self.currentDeviceAngle = camera
             }
             
             let audioInput = try AVCaptureDeviceInput(device: mic)
@@ -236,7 +205,74 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         updateVideoOrientation()
     }
     
+}
+//MARK: - movie preview layer
+extension VideoPreviewViewController {
+    private func setupVideoPreviewLayer() {
+        let previewSize: CGFloat = 60
+        let xPosition = (view.bounds.width - previewSize) - 10
+        let yPosition = (view.bounds.height - previewSize) - 40
+        
+        videoPlayerLayer = AVPlayerLayer()
+        videoPlayerLayer?.backgroundColor = UIColor.black.withAlphaComponent(0.6).cgColor
+        videoPlayerLayer?.frame = CGRect(x: xPosition, y: yPosition, width: previewSize, height: previewSize)
+        videoPlayerLayer?.cornerRadius = 10
+        videoPlayerLayer?.masksToBounds = true
+        videoPlayerLayer?.videoGravity = .resizeAspectFill
+        
+        view.layer.addSublayer(videoPlayerLayer!)
+        
+    }
     
+    
+    private func updateVideoPreviewPosition() {
+        let previewSize: CGFloat = 60
+        let xPosition = (view.bounds.width - previewSize) - 10
+        let yPosition = (view.bounds.height - previewSize) - 40
+        
+        videoPlayerLayer?.frame = CGRect(x: xPosition, y: yPosition, width: previewSize, height: previewSize)
+    }
+    
+    private func playVideo(url: URL) {
+        let player  = AVPlayer(url: url)
+        videoPlayerLayer?.player = player
+        player.play()
+    }
+}
+
+extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAnimationDelegate {
+    
+    private func setupRoationCoorinateorIfNeed() {
+        
+        guard let device = currentDeviceAngle, let previewLayer = previewLayer else { return }
+        
+        let coordinator = AVCaptureDevice.RotationCoordinator(device: device, previewLayer: previewLayer)
+        self.rotationCoordinator = coordinator
+
+        previewAngleObserver = coordinator.observe(\.videoRotationAngleForHorizonLevelPreview, options: [.initial, .new])  { [weak self] coordinator,_ in
+            
+            guard let connection = self?.previewLayer?.connection else {
+                return }
+            let angle = coordinator.videoRotationAngleForHorizonLevelPreview
+            if connection.isVideoRotationAngleSupported(angle) {
+                connection.videoRotationAngle = angle
+            }
+        }
+        
+        captureAngleObserver = coordinator.observe(\.videoRotationAngleForHorizonLevelCapture, options: [.initial, .new]) { [weak self] coordinator,_ in
+            
+            guard let connection = self?.videoFileOutput?.connection(with: .video) else {
+                return }
+            let angle = coordinator.videoRotationAngleForHorizonLevelPreview
+            if connection.isVideoRotationAngleSupported(angle) {
+                connection.videoRotationAngle = angle
+            }
+        }
+        
+        
+        
+        
+    }
     private func setupCaptureBuuton() {
         
         captureButton = UIButton(type: .system)
@@ -298,7 +334,6 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         
         
     }
-   
     private func stopRecording() {
         videoFileOutput?.stopRecording()
         isRecording = false
@@ -306,7 +341,6 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         //pauseProgressRing()
         removeProgressRing()
     }
-  
     private func startProgressRing() {
         let buttonSize: CGFloat = 50
         let margin: CGFloat = 6
