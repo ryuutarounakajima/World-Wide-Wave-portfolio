@@ -69,11 +69,11 @@ class VideoPreviewViewController: UIViewController {
         
         setupCamera()
         setupPreviewLayer()
-        setupCaptureBuuton()
+        setupCaptureButton()
         setupVideoPreviewLayer()
         
         
-        NotificationCenter.default.addObserver(self, selector: #selector(deviceOenrationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
+        //NotificationCenter.default.addObserver(self, selector: #selector(deviceOenrationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
         
         UIDevice.current.beginGeneratingDeviceOrientationNotifications( )
       
@@ -114,7 +114,6 @@ extension VideoPreviewViewController {
            }
         }
     }
-    
     private func configureSession() {
         
         session.beginConfiguration()
@@ -163,11 +162,11 @@ extension VideoPreviewViewController {
             self.session.startRunning()
             
             DispatchQueue.main.async {
-                self.updateVideoOrientation()
+                self.setupRotationCoordinator()
+                //self.updateVideoOrientation()
             }
         }
     }
-    
     private func setupPreviewLayer() {
         
         let previewLayer = AVCaptureVideoPreviewLayer(session: session)
@@ -177,6 +176,39 @@ extension VideoPreviewViewController {
         self.previewLayer = previewLayer
         
     }
+    private func setupRotationCoordinator() {
+        
+        guard let device = currentDeviceAngle, let previewLayer = previewLayer else { return }
+        
+        let coordinator = AVCaptureDevice.RotationCoordinator(device: device, previewLayer: previewLayer)
+        self.rotationCoordinator = coordinator
+
+        previewAngleObserver = coordinator.observe(\.videoRotationAngleForHorizonLevelPreview, options: [.initial, .new])  { [weak self] coordinator,_ in
+            
+            guard let connection = self?.previewLayer?.connection else {
+                return }
+            let angle = coordinator.videoRotationAngleForHorizonLevelPreview
+            if connection.isVideoRotationAngleSupported(angle) {
+                connection.videoRotationAngle = angle
+            }
+        }
+        
+        captureAngleObserver = coordinator.observe(\.videoRotationAngleForHorizonLevelCapture, options: [.initial, .new]) { [weak self] coordinator,_ in
+            
+            guard let connection = self?.videoFileOutput?.connection(with: .video) else {
+                return }
+            let angle = coordinator.videoRotationAngleForHorizonLevelCapture
+            if connection.isVideoRotationAngleSupported(angle) {
+                connection.videoRotationAngle = angle
+            }
+        }
+        
+        
+        
+        
+    }
+    
+    
     
     private func updateVideoOrientation() {
         
@@ -223,8 +255,6 @@ extension VideoPreviewViewController {
         view.layer.addSublayer(videoPlayerLayer!)
         
     }
-    
-    
     private func updateVideoPreviewPosition() {
         let previewSize: CGFloat = 60
         let xPosition = (view.bounds.width - previewSize) - 10
@@ -232,48 +262,17 @@ extension VideoPreviewViewController {
         
         videoPlayerLayer?.frame = CGRect(x: xPosition, y: yPosition, width: previewSize, height: previewSize)
     }
-    
     private func playVideo(url: URL) {
         let player  = AVPlayer(url: url)
         videoPlayerLayer?.player = player
         player.play()
     }
 }
-
+//MARK: - capture button
 extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAnimationDelegate {
     
-    private func setupRoationCoorinateorIfNeed() {
-        
-        guard let device = currentDeviceAngle, let previewLayer = previewLayer else { return }
-        
-        let coordinator = AVCaptureDevice.RotationCoordinator(device: device, previewLayer: previewLayer)
-        self.rotationCoordinator = coordinator
-
-        previewAngleObserver = coordinator.observe(\.videoRotationAngleForHorizonLevelPreview, options: [.initial, .new])  { [weak self] coordinator,_ in
-            
-            guard let connection = self?.previewLayer?.connection else {
-                return }
-            let angle = coordinator.videoRotationAngleForHorizonLevelPreview
-            if connection.isVideoRotationAngleSupported(angle) {
-                connection.videoRotationAngle = angle
-            }
-        }
-        
-        captureAngleObserver = coordinator.observe(\.videoRotationAngleForHorizonLevelCapture, options: [.initial, .new]) { [weak self] coordinator,_ in
-            
-            guard let connection = self?.videoFileOutput?.connection(with: .video) else {
-                return }
-            let angle = coordinator.videoRotationAngleForHorizonLevelPreview
-            if connection.isVideoRotationAngleSupported(angle) {
-                connection.videoRotationAngle = angle
-            }
-        }
-        
-        
-        
-        
-    }
-    private func setupCaptureBuuton() {
+    
+    private func setupCaptureButton() {
         
         captureButton = UIButton(type: .system)
         captureButton.setTitle("", for: .normal)
@@ -334,6 +333,20 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         
         
     }
+    
+    func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Error)?) {
+        
+        if let error = error {
+            print("Recoding error: \(error)")
+        } else {
+            print("Recording complete: \(outputFileURL)")
+            //UISaveVideoAtPathToSavedPhotosAlbum(outputFileURL.path, nil, nil, nil)
+            onVideoCaptured?(outputFileURL)
+            playVideo(url: outputFileURL)
+           // onFinishRecording?()
+        }
+    }
+    
     private func stopRecording() {
         videoFileOutput?.stopRecording()
         isRecording = false
@@ -413,18 +426,6 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
             }
 }
     
-    func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Error)?) {
-        
-        if let error = error {
-            print("Recoding error: \(error)")
-        } else {
-            print("Recording complete: \(outputFileURL)")
-            //UISaveVideoAtPathToSavedPhotosAlbum(outputFileURL.path, nil, nil, nil)
-            onVideoCaptured?(outputFileURL)
-            playVideo(url: outputFileURL)
-           // onFinishRecording?()
-        }
-    }
     
     /*private func startRecording() {
         let outputPath = NSTemporaryDirectory() + "output.mp4"
