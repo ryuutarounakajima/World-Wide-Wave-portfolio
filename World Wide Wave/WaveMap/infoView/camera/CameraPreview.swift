@@ -14,6 +14,8 @@ struct CameraPreview: View {
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
+        
+       
         NavigationView {
             VStack {
                 Image(uiImage: image)

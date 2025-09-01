@@ -6,13 +6,39 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct VideoPreview: View {
+    
+    let player: AVPlayer
+    @Environment(\.presentationMode) var presentationMode
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
+        NavigationView {
+            VStack {
+                
+                VideoPlayer(player: player)
+                    .edgesIgnoringSafeArea(.all)
+                    .onAppear(
+                        perform: player.play
+                    )
+            }
+            .navigationBarItems(leading: Button("back") {
+                presentationMode.wrappedValue.dismiss()
+            }, trailing: Button("save video") {
+                
+            })
+
+        }
+           
+            
+            
+        
+     
     }
 }
 
 #Preview {
-    VideoPreview()
+    VideoPreview(player: AVPlayer(url: URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!))
 }

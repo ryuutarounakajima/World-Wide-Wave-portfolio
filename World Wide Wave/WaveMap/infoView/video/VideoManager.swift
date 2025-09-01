@@ -53,6 +53,7 @@ class VideoPreviewViewController: UIViewController {
     private var ringBackground : CAGradientLayer?
     private var progressLayer2 : CAShapeLayer?
     private var videoPlayerLayer : AVPlayerLayer?
+    private var videoPreviewButton: UIButton?
     
     private var rotationCoordinator: AVCaptureDevice.RotationCoordinator?
     private var previewAngleObserver: NSKeyValueObservation?
@@ -210,7 +211,7 @@ extension VideoPreviewViewController {
     
     
     
-    private func updateVideoOrientation() {
+   /* private func updateVideoOrientation() {
         
         guard let connection  = previewLayer?.connection else { return }
         
@@ -235,7 +236,7 @@ extension VideoPreviewViewController {
     }
     @objc private func deviceOenrationDidChange() {
         updateVideoOrientation()
-    }
+    }*/
     
 }
 //MARK: - movie preview layer
@@ -254,13 +255,31 @@ extension VideoPreviewViewController {
         
         view.layer.addSublayer(videoPlayerLayer!)
         
+        let button = UIButton(frame: videoPlayerLayer!.frame)
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(videoPreviewTapped), for: .touchUpInside)
+        view.addSubview(button)
+        videoPreviewButton = button
+        
+    }
+    @objc private func videoPreviewTapped() {
+        guard let player = videoPlayerLayer?.player else { return }
+        
+        let videoView = VideoPreview(player: player)
+        
+        let hostingConltroller = UIHostingController(rootView: videoView)
+        hostingConltroller.modalPresentationStyle = .fullScreen
+        present(hostingConltroller, animated: true)
+         
     }
     private func updateVideoPreviewPosition() {
         let previewSize: CGFloat = 60
         let xPosition = (view.bounds.width - previewSize) - 10
         let yPosition = (view.bounds.height - previewSize) - 40
+        let newFrame = CGRect(x: xPosition, y: yPosition, width: previewSize, height: previewSize)
         
-        videoPlayerLayer?.frame = CGRect(x: xPosition, y: yPosition, width: previewSize, height: previewSize)
+        videoPlayerLayer?.frame = newFrame
+        videoPreviewButton?.frame = newFrame
     }
     private func playVideo(url: URL) {
         let player  = AVPlayer(url: url)

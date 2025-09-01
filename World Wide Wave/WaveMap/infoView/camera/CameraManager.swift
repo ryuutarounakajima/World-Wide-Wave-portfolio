@@ -315,7 +315,6 @@ extension CameraPreviewController {
         
         
     }
-    
     @objc private func previewImageTapped() {
         
         guard let image = capturedImageView.image else { return }
