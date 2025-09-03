@@ -110,7 +110,7 @@ struct CameraSwiftUIPreview: View {
             }
             .ignoresSafeArea(.all)
             .navigationDestination(isPresented: $isSwiped) {
-                VideoSwiftUIPreview(captureVideoURL: $formData.capturedVideoURL, isVideoPresented: $isSwiped)
+                VideoSwiftUIPreview(captureVideoURL: $formData.capturedVideoURL, isVideoPresented: $isSwiped).environmentObject(formData)
             }
         }
       

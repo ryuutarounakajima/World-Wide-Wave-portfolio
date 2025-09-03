@@ -12,7 +12,8 @@ struct VideoPreview: View {
     
     let player: AVPlayer
     @Environment(\.presentationMode) var presentationMode
-    
+    @EnvironmentObject var formData: FormData
+    @State private var navigateToInfo = false
     var body: some View {
         
         NavigationView {
@@ -28,8 +29,25 @@ struct VideoPreview: View {
                 presentationMode.wrappedValue.dismiss()
             }, trailing: Button("save video") {
                 
-            })
+                if let currentItem = player.currentItem, let asset = currentItem.asset as? AVURLAsset {
+                    formData.capturedVideoURL = asset.url
+                    
+                    
+                    //Dispatchqueue??
+                    
+                    //presentationMode.wrappedValue.dismiss()
+                    
+                    navigateToInfo = true
 
+                } else {
+                    print("no url found")
+                }
+            })
+            .navigationDestination(isPresented: $navigateToInfo) {
+                    
+            
+        }
+     
         }
            
             

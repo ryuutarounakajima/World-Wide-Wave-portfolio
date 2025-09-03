@@ -38,6 +38,8 @@ actor MicManager {
 
 class VideoPreviewViewController: UIViewController {
     
+    var formData: FormData?
+
     private let session = AVCaptureSession()
     private var previewLayer: AVCaptureVideoPreviewLayer?
     private var videoDataOutoput: AVCaptureVideoDataOutput?
@@ -266,6 +268,7 @@ extension VideoPreviewViewController {
         guard let player = videoPlayerLayer?.player else { return }
         
         let videoView = VideoPreview(player: player)
+            .environmentObject(formData!)
         
         let hostingConltroller = UIHostingController(rootView: videoView)
         hostingConltroller.modalPresentationStyle = .fullScreen
@@ -494,6 +497,7 @@ struct VideoPreviewView: UIViewControllerRepresentable {
   //  let captureSession: AVCaptureSession
     @Binding var captureVideoURL: URL?
     @Binding var isVideoCaptured: Bool
+    var formData: FormData
     
     class Coordinator: NSObject {
         var parent: VideoPreviewView
@@ -510,6 +514,8 @@ struct VideoPreviewView: UIViewControllerRepresentable {
        
         let controller = VideoPreviewViewController()
         
+        
+        controller.formData = formData
         controller.onVideoCaptured = { url in
             DispatchQueue.main.async {
                 self.captureVideoURL = url

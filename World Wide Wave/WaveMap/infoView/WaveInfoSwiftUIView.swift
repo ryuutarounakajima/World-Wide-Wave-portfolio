@@ -111,7 +111,7 @@ struct WaveInfoSwiftUIView: View {
                             }
                         }
                         .fullScreenCover(isPresented: $isPickerVisable) {
-                            CameraSwiftUIPreview(isCameraPresented: $isPickerVisable, captureImage: $formData.capturedImage)
+                            CameraSwiftUIPreview(isCameraPresented: $isPickerVisable, captureImage: $formData.capturedImage).environmentObject(formData)
                         }
                         /*.sheet(isPresented: $isPickerVisable) {
                             MediaPicker(selectedImage: $selectedImage, selectedVideoURL: $selectedVideoURL)

@@ -28,7 +28,7 @@ struct VideoSwiftUIPreview: View {
             let yPosition: CGFloat = sreenHeight - 40 - (buttonSize / 2)
             
             ZStack {
-                VideoPreviewView(captureVideoURL: $captureVideoURL, isVideoCaptured: $isVideoPresented).overlay(
+                VideoPreviewView(captureVideoURL: $captureVideoURL, isVideoCaptured: $isVideoPresented, formData: formData).overlay(
                     Circle()
                     .stroke(
                         LinearGradient(
