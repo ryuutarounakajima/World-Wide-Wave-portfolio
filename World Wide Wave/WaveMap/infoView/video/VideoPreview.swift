@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AVKit
+import CoreLocation
 
 struct VideoPreview: View {
     
@@ -16,7 +17,7 @@ struct VideoPreview: View {
     @State private var navigateToInfo = false
     var body: some View {
         
-        NavigationView {
+        NavigationStack {
             VStack {
                 
                 VideoPlayer(player: player)
@@ -25,38 +26,41 @@ struct VideoPreview: View {
                         perform: player.play
                     )
             }
-            .navigationBarItems(leading: Button("back") {
-                presentationMode.wrappedValue.dismiss()
-            }, trailing: Button("save video") {
-                
-                if let currentItem = player.currentItem, let asset = currentItem.asset as? AVURLAsset {
-                    formData.capturedVideoURL = asset.url
-                    
-                    
-                    //Dispatchqueue??
-                    
-                    //presentationMode.wrappedValue.dismiss()
-                    
-                    navigateToInfo = true
-
-                } else {
-                    print("no url found")
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("back") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 }
-            })
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Save video") {
+                        
+                        if let currentItem = player.currentItem,
+                           let asset = currentItem.asset as? AVURLAsset {
+                            formData.capturedVideoURL = asset.url
+                            navigateToInfo = true
+                            
+                        }
+                    }
+                }
+            }
             .navigationDestination(isPresented: $navigateToInfo) {
-                    
+                WaveInfoSwiftUIView(
+                    coordinate: formData.coordinate ?? .init(latitude: 0, longitude: 0),
+                    timestamp: formData.timestamp ?? Date()
+                )
+                .environmentObject(formData)
+                
+                
+                
+                
+                
+            }
             
         }
-     
-        }
-           
-            
-            
-        
-     
     }
 }
-
 #Preview {
-    VideoPreview(player: AVPlayer(url: URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!))
+    VideoPreview(player: AVPlayer(url: URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!)).environmentObject(FormData())
+    
 }
