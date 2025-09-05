@@ -75,7 +75,7 @@ struct WaveInfoSwiftUIView: View {
   
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
            
                 GeometryReader { geometry in
                     VStack{
@@ -100,6 +100,9 @@ struct WaveInfoSwiftUIView: View {
                                     
                             } else if let videoURL = formData.capturedVideoURL {
                                 VideoPlayer(player: AVPlayer(url: videoURL))
+                                    .scaledToFill()
+                                    .frame(width: geometry.size.width, height: geometry.size.height * 0.4)
+                                    .clipped()
                                    // .modifier(MediaFrameModifier())
                             } else {
                                 Image("Logo")
@@ -207,6 +210,27 @@ struct WaveInfoSwiftUIView: View {
                    
                     }
                     .ignoresSafeArea()
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(action: {
+                                Task {
+                                    
+                                    print("camera open")
+                                    
+                                    cameraAutorized = await cameraManager.requestCameraAccess()
+                                    
+                                    if cameraAutorized {
+                                        isPickerVisable.toggle()
+                                    }
+                                }
+                            }) {
+                                Image(systemName: "camera").bold()
+                            }
+                        }
+                    }
+                    .fullScreenCover(isPresented: $isPickerVisable) {
+                        CameraSwiftUIPreview(isCameraPresented: $isPickerVisable, captureImage: $formData.capturedImage).environmentObject(formData)
+                    }
                     
             
                // .ignoresSafeArea()
