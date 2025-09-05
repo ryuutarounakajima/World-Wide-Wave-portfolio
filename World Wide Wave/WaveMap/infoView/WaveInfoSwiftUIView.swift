@@ -80,6 +80,20 @@ struct WaveInfoSwiftUIView: View {
                 GeometryReader { geometry in
                     VStack{
                         
+                        let mediaHeight = geometry.size.height * 0.4
+                        let mediaWidth =
+                        geometry.size.width
+                        
+                        ScrollView(.horizontal, showsIndicators: true) {
+                            HStack(spacing: 0) {
+                                Image("Logo")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: mediaWidth, height: mediaHeight)
+                                    .modifier(MediaFrameModifier())
+                            }
+                        }.frame(width: mediaWidth,height: mediaHeight)
+                        /*
                         //Image select button
                         Button(action: {
                             Task {
@@ -116,6 +130,9 @@ struct WaveInfoSwiftUIView: View {
                         .fullScreenCover(isPresented: $isPickerVisable) {
                             CameraSwiftUIPreview(isCameraPresented: $isPickerVisable, captureImage: $formData.capturedImage).environmentObject(formData)
                         }
+                    */
+                        
+                        
                         /*.sheet(isPresented: $isPickerVisable) {
                             MediaPicker(selectedImage: $selectedImage, selectedVideoURL: $selectedVideoURL)
                                 .presentationDetents([.fraction(0.25)])
