@@ -72,7 +72,7 @@ struct WaveInfoSwiftUIView: View {
     @State var selectedImage: UIImage?
     @State var selectedVideoURL: URL?
     
-  
+    @State var isCameraButtonRotating = false
     
     var body: some View {
         NavigationStack {
@@ -233,7 +233,11 @@ struct WaveInfoSwiftUIView: View {
                                 Task {
                                     
                                     print("camera open")
-                                    
+                                   
+                                    withAnimation(.spring()) {
+                                        
+                                     isCameraButtonRotating.toggle()
+                                    }
                                     cameraAutorized = await cameraManager.requestCameraAccess()
                                     
                                     if cameraAutorized {
@@ -241,7 +245,10 @@ struct WaveInfoSwiftUIView: View {
                                     }
                                 }
                             }) {
-                                Image(systemName: "camera").bold()
+                                Image(systemName: "camera")
+                                    .bold()
+                                    .foregroundStyle(.cyan)
+                                    .rotationEffect(.degrees(isCameraButtonRotating ? 360 : 0))
                             }
                         }
                     }
