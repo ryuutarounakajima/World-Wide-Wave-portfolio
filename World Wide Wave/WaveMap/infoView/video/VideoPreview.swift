@@ -50,7 +50,7 @@ struct VideoPreview: View {
                     timestamp: formData.timestamp ?? Date()
                 )
                 .environmentObject(formData)
-                
+                .navigationBarBackButtonHidden(true)
                 
                 
                 

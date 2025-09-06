@@ -104,13 +104,7 @@ struct WaveInfoSwiftUIView: View {
                                         .scaledToFill()
                                         .frame(width: mediaWidth, height: mediaHeight)
                                         .clipped()
-                                        .contentShape(Rectangle())
-                                        .onTapGesture {
-                                            selectedImage = image
-                                            selectedVideoURL = nil
-                                            showPreview = true
-                                            print("iamge tapped")
-                                        }
+                                        
                                 }
                                 
                                 if let videoURL = formData.capturedVideoURL {
@@ -118,68 +112,18 @@ struct WaveInfoSwiftUIView: View {
                                         .scaledToFill()
                                         .frame(width: mediaWidth, height: mediaHeight)
                                         .clipped()
-                                        .contentShape(Rectangle())
-                                        .onTapGesture {
-                                            selectedImage = nil
-                                            selectedVideoURL = videoURL
-                                            showPreview = true
-                                            print("image tapped")
-                                        }
+                                        
                                 }
                                 
                             }
                         }.frame(width: mediaWidth,height: mediaHeight)
-                           
-                        /*
-                        //Image select button
-                        Button(action: {
-                            Task {
-                                cameraAutorized  = await cameraManager.requestCameraAccess()
-                                if cameraAutorized {
-                                    isPickerVisable.toggle()
-                                }
-                            }
-                        }) {
-                            if let image = formData.capturedImage{
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: geometry.size.width, height: geometry.size.height * 0.4)
-                                    .clipped()
-                                    
-                                   // .modifier(MediaFrameModifier())
-                                    
-                            } else if let videoURL = formData.capturedVideoURL {
-                                VideoPlayer(player: AVPlayer(url: videoURL))
-                                    .scaledToFill()
-                                    .frame(width: geometry.size.width, height: geometry.size.height * 0.4)
-                                    .clipped()
-                                   // .modifier(MediaFrameModifier())
-                            } else {
-                                Image("Logo")
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: geometry.size.width, height: geometry.size.height * 0.4)
-                                    
-                                    .modifier(MediaFrameModifier())
-                            }
-                        }
-                        .fullScreenCover(isPresented: $isPickerVisable) {
-                            CameraSwiftUIPreview(isCameraPresented: $isPickerVisable, captureImage: $formData.capturedImage).environmentObject(formData)
-                        }
-                    */
-                        
-                        
+                    
                         /*.sheet(isPresented: $isPickerVisable) {
                             MediaPicker(selectedImage: $selectedImage, selectedVideoURL: $selectedVideoURL)
                                 .presentationDetents([.fraction(0.25)])
                                 .presentationDragIndicator(.visible)
                         */
-                            
-
-                        
                         //info form
-                        
                         FormViewModel(isSizeSelect: $isSizeSelect, isConditionSelect: $isConditionSelect, isSwellSelect: $isSwellSelected, isBreakSelect: $isBreakSelected, isWindSelect: $isWindSelected, isTideSelect: $isTideSelected, isWaxSelect: $isWaxSeleted)
                                 .environmentObject(formData)
                         
@@ -192,8 +136,8 @@ struct WaveInfoSwiftUIView: View {
                             
                             HStack {
                                 
-                                
                                 Spacer()
+                                
                                 VStack {
                                     
                                     Text("latitude: \(formData.coordinate? .latitude ?? 0.0)")
@@ -203,16 +147,14 @@ struct WaveInfoSwiftUIView: View {
                                 Spacer()
                                 //Recorded button
                                 Button(action: {
-                                    withAnimation(.easeInOut(duration: 0.2)){
+                                    withAnimation(.easeInOut(duration: 1.2)){
                                         isRecordedButton.toggle()
                                        
                                     }
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                         withAnimation(.easeInOut(duration: 0.2)){
                                             isRecordedButton.toggle()
-                                            
                                         }
-                                        
                                         showAlert = true
                                     } 
                                 }) {
@@ -224,12 +166,11 @@ struct WaveInfoSwiftUIView: View {
                                         .clipShape(Circle())
                                         .shadow(radius: 3, x: 5, y: 5)
                                         .overlay(
-                                                                   Circle()
-                                                                       .stroke(Color.white, lineWidth: 2)
-                                                               )
-                                                               .shadow(color: .gray.opacity(0.6), radius: 5, x: 5, y: 5)
-                                                               .scaleEffect(isRecordedButton ? 0.9 : 1.0) // ボタン押下時のアニメーション
-                                                               .animation(.spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0.5), value: isRecordedButton)
+                                            Circle()
+                                                .stroke(Color.white, lineWidth: 2))
+                                        .shadow(color: .gray.opacity(0.6), radius: 5, x: 5, y: 5)
+                                        .scaleEffect(isRecordedButton ? 1.5 : 1.0) //
+                                    
                                 }
                                 .alert("Are you an optimistionist?", isPresented: $showAlert) {
                                     Button("Yes,but not goona save my data") {
