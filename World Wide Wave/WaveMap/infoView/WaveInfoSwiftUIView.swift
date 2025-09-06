@@ -62,17 +62,19 @@ struct WaveInfoSwiftUIView: View {
                                     
     
     //Photo picker visible
+    private let cameraManager = CameraManager()
     @State private var isPickerVisable: Bool = false
     @State private var cameraAutorized: Bool = false
-   // @State private var captuteImage: UIImage?
-    private let cameraManager = CameraManager()
+    
     
     var coordinate: CLLocationCoordinate2D
     var timestamp: Date
-    @State var selectedImage: UIImage?
-    @State var selectedVideoURL: URL?
+    @State private var selectedImage: UIImage?
+    @State private var selectedVideoURL: URL?
+    @State private var showPreview = false
     
-    @State var isCameraButtonRotating = false
+    //@State var isCameraButtonRotating = false
+    @State var cameraButtonColoring = false
     
     var body: some View {
         NavigationStack {
@@ -86,13 +88,48 @@ struct WaveInfoSwiftUIView: View {
                         
                         ScrollView(.horizontal, showsIndicators: true) {
                             HStack(spacing: 0) {
-                                Image("Logo")
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: mediaWidth, height: mediaHeight)
-                                    .modifier(MediaFrameModifier())
+                                if formData.capturedImage == nil && formData.capturedVideoURL == nil {
+                                    
+                                    Image("Logo")
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: mediaWidth, height: mediaHeight)
+                                        .modifier(MediaFrameModifier())
+                                    
+                                }
+                                
+                                if let image = formData.capturedImage {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: mediaWidth, height: mediaHeight)
+                                        .clipped()
+                                        .contentShape(Rectangle())
+                                        .onTapGesture {
+                                            selectedImage = image
+                                            selectedVideoURL = nil
+                                            showPreview = true
+                                            print("iamge tapped")
+                                        }
+                                }
+                                
+                                if let videoURL = formData.capturedVideoURL {
+                                    VideoPlayer(player: AVPlayer(url: videoURL))
+                                        .scaledToFill()
+                                        .frame(width: mediaWidth, height: mediaHeight)
+                                        .clipped()
+                                        .contentShape(Rectangle())
+                                        .onTapGesture {
+                                            selectedImage = nil
+                                            selectedVideoURL = videoURL
+                                            showPreview = true
+                                            print("image tapped")
+                                        }
+                                }
+                                
                             }
                         }.frame(width: mediaWidth,height: mediaHeight)
+                           
                         /*
                         //Image select button
                         Button(action: {
@@ -236,8 +273,9 @@ struct WaveInfoSwiftUIView: View {
                                    
                                     withAnimation(.spring()) {
                                         
-                                     isCameraButtonRotating.toggle()
+                                     //isCameraButtonRotating.toggle()
                                     }
+                                    
                                     cameraAutorized = await cameraManager.requestCameraAccess()
                                     
                                     if cameraAutorized {
@@ -245,16 +283,23 @@ struct WaveInfoSwiftUIView: View {
                                     }
                                 }
                             }) {
-                                Image(systemName: "camera")
+                                Image(systemName: "camera.circle")
                                     .bold()
-                                    .foregroundStyle(.cyan)
-                                    .rotationEffect(.degrees(isCameraButtonRotating ? 360 : 0))
+                                    .font(.system(size: 36))
+                                    .foregroundStyle(cameraButtonColoring ? .cyan : .indigo)
+                                    .rotationEffect(.degrees(cameraButtonColoring ? 360 : 0))
+                                    .onAppear {
+                                        withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)){
+                                            cameraButtonColoring.toggle()
+                                        }
+                                    }
                             }
                         }
                     }
                     .fullScreenCover(isPresented: $isPickerVisable) {
                         CameraSwiftUIPreview(isCameraPresented: $isPickerVisable, captureImage: $formData.capturedImage).environmentObject(formData)
                     }
+                    
                     
             
                // .ignoresSafeArea()
