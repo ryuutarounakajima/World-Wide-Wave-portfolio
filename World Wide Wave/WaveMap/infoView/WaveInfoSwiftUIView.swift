@@ -53,6 +53,9 @@ struct WaveInfoSwiftUIView: View {
     //Record button
     @State private var isRecordedButton = false
     @State private var showAlert: Bool = false
+    private var shouldBlink: Bool {
+        formData.capturedImage != nil || formData.capturedVideoURL != nil
+    }
     
     @State private var overviewText: String = ""
     @State private var overviewTextHeight: CGFloat = 40
@@ -75,6 +78,7 @@ struct WaveInfoSwiftUIView: View {
     
     //@State var isCameraButtonRotating = false
     @State var cameraButtonColoring = false
+    
     
     var body: some View {
         NavigationStack {
@@ -169,7 +173,9 @@ struct WaveInfoSwiftUIView: View {
                                             Circle()
                                                 .stroke(Color.white, lineWidth: 2))
                                         .shadow(color: .gray.opacity(0.6), radius: 5, x: 5, y: 5)
-                                        .scaleEffect(isRecordedButton ? 1.5 : 1.0) //
+                                        .scaleEffect(isRecordedButton ? 1.5 : 1.0)
+                                        .opacity(shouldBlink ? 0.2 : 1.0)
+                                        .animation(shouldBlink ? .easeInOut(duration: 0.8).repeatForever(autoreverses: true) : .default, value: shouldBlink)
                                     
                                 }
                                 .alert("Are you an optimistionist?", isPresented: $showAlert) {
@@ -240,14 +246,6 @@ struct WaveInfoSwiftUIView: View {
                     .fullScreenCover(isPresented: $isPickerVisable) {
                         CameraSwiftUIPreview(isCameraPresented: $isPickerVisable, captureImage: $formData.capturedImage).environmentObject(formData)
                     }
-                    
-                    
-            
-               // .ignoresSafeArea()
-                
-             
-          
-    
         }
         
     }

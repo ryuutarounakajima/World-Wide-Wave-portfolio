@@ -23,12 +23,12 @@ struct CameraPreview: View {
                     .scaledToFit()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .navigationBarItems(leading: Button("Save photo") {
-                //presentationMode.wrappedValue.dismiss()
-                onCameraDismissed()
-            },
-                                trailing: Button ("back") {
+            .navigationBarItems(leading: Button("back") {
                 presentationMode.wrappedValue.dismiss()
+                
+            },
+                                trailing: Button ("save photo") {
+                onCameraDismissed()
             })
         }
     }
