@@ -156,8 +156,10 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
             session.addOutput(photoOutPut)
         }
         
+       
         DispatchQueue.global(qos: .userInitiated).async {
             self.session.startRunning()
+            print("camera session started.")
         }
     }
     
@@ -168,7 +170,12 @@ class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
         view.layer.addSublayer(videoPreviewLayer)
     }
   
-
+    private func stopCameraSession() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.session.stopRunning()
+            print("camera session stopped.")
+        }
+    }
 }
 
 //setupUI
@@ -253,6 +260,7 @@ extension CameraPreviewController {
         view.addSubview(backButton)
     }
     @objc private func didTapBackButton() {
+        stopCameraSession()
         onCameraDismissed?()
         dismiss(animated: true, completion: nil)
     }
@@ -321,6 +329,7 @@ extension CameraPreviewController {
         
         let previewView = CameraPreview(image: image, onCameraDismissed: {
             self.dismiss(animated: true) {
+                self.stopCameraSession()
                 self.onCameraDismissed?()
             }
         })

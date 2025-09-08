@@ -13,6 +13,7 @@ struct CameraPreview: View {
     var onCameraDismissed: () -> Void
     @Environment(\.presentationMode) var presentationMode
     
+    
     var body: some View {
         
        
@@ -24,10 +25,12 @@ struct CameraPreview: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .navigationBarItems(leading: Button("back") {
-                presentationMode.wrappedValue.dismiss()
+                onCameraDismissed()
+               // presentationMode.wrappedValue.dismiss()
                 
             },
                                 trailing: Button ("save photo") {
+               
                 onCameraDismissed()
             })
         }
