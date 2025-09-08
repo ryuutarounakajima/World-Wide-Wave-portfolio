@@ -53,9 +53,8 @@ struct WaveInfoSwiftUIView: View {
     //Record button
     @State private var isRecordedButton = false
     @State private var showAlert: Bool = false
-    private var shouldBlink: Bool {
-        formData.capturedImage != nil || formData.capturedVideoURL != nil
-    }
+    @State private var isBlinking = false
+    
     
     @State private var overviewText: String = ""
     @State private var overviewTextHeight: CGFloat = 40
@@ -174,9 +173,13 @@ struct WaveInfoSwiftUIView: View {
                                                 .stroke(Color.white, lineWidth: 2))
                                         .shadow(color: .gray.opacity(0.6), radius: 5, x: 5, y: 5)
                                         .scaleEffect(isRecordedButton ? 1.5 : 1.0)
-                                        .opacity(shouldBlink ? 0.2 : 1.0)
-                                        .animation(shouldBlink ? .easeInOut(duration: 0.8).repeatForever(autoreverses: true) : .default, value: shouldBlink)
+                                        .opacity(isBlinking ? 0.2 : 1.0)
                                     
+                                }
+                                .onReceive(formData.$capturedImage) {_ in updateBlinking()}
+                                .onReceive(formData.$capturedVideoURL) {_ in updateBlinking()}
+                                .onAppear {
+                                    updateBlinking()
                                 }
                                 .alert("Are you an optimistionist?", isPresented: $showAlert) {
                                     Button("Yes,but not goona save my data") {
@@ -250,6 +253,18 @@ struct WaveInfoSwiftUIView: View {
         
     }
     
+    private func updateBlinking() {
+        
+        if formData.capturedImage != nil || formData.capturedVideoURL != nil {
+            withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
+                isBlinking = true
+            }
+        } else {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isBlinking = false
+            }
+        }
+    }
 }
 
 #Preview {

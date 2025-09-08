@@ -16,7 +16,7 @@ struct CameraPreview: View {
     var body: some View {
         
        
-        NavigationView {
+        NavigationStack {
             VStack {
                 Image(uiImage: image)
                     .resizable()
