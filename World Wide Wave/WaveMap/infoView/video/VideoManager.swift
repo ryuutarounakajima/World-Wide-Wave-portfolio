@@ -163,7 +163,7 @@ extension VideoPreviewViewController {
         DispatchQueue.global(qos: .userInitiated).async {
             
             self.session.startRunning()
-            
+            print("video session started")
             DispatchQueue.main.async {
                 self.setupRotationCoordinator()
                 //self.updateVideoOrientation()
@@ -210,9 +210,19 @@ extension VideoPreviewViewController {
         
         
     }
-    
-    
-    
+            func stopVideoSession() {
+    DispatchQueue.global(qos: .userInitiated).async {
+        
+        if self.session.isRunning {
+            self.session.stopRunning()
+            print("video session stop")
+        }
+    }
+    DispatchQueue.main.async {
+        self.previewLayer?.removeFromSuperlayer()
+        self.previewLayer = nil
+    }
+}
    /* private func updateVideoOrientation() {
         
         guard let connection  = previewLayer?.connection else { return }
@@ -267,7 +277,11 @@ extension VideoPreviewViewController {
     @objc private func videoPreviewTapped() {
         guard let player = videoPlayerLayer?.player else { return }
         
-        let videoView = VideoPreview(player: player)
+        let videoView = VideoPreview(player: player, onDismiss: {
+            [weak self] in
+            self?.videoPlayerLayer?.player = nil
+            self?.stopVideoSession()
+        })
             .environmentObject(formData!)
         
         let hostingConltroller = UIHostingController(rootView: videoView)
@@ -522,9 +536,12 @@ struct VideoPreviewView: UIViewControllerRepresentable {
             }
         }
         
-        controller.onFinishRecording = {
+        controller.onFinishRecording = { [weak controller] in 
             DispatchQueue.main.async {
-                self.isVideoCaptured = false
+                self.isVideoCaptured = true
+                controller?.stopVideoSession()
+                controller?.onFinishRecording = nil
+                controller?.onVideoCaptured = nil
             }
         }
         

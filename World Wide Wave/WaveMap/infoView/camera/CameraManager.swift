@@ -99,6 +99,9 @@ struct CameraPreviewView: UIViewControllerRepresentable {
 }
 
 class CameraPreviewController: UIViewController, AVCapturePhotoCaptureDelegate {
+    
+    var formData: FormData?
+    
     public let session = AVCaptureSession()
     private let videoPreviewLayer = AVCaptureVideoPreviewLayer()
     private let photoOutPut = AVCapturePhotoOutput()
@@ -261,8 +264,20 @@ extension CameraPreviewController {
     }
     @objc private func didTapBackButton() {
         stopCameraSession()
-        onCameraDismissed?()
-        dismiss(animated: true, completion: nil)
+        onCameraDismissed = nil
+        
+        
+        guard let formData  = self.formData else {
+            dismiss(animated: true, completion: nil)
+            return
+        }
+        
+        let waveInfoView = WaveInfoSwiftUIView(coordinate: formData.coordinate ?? .init(latitude: 0, longitude: 0), timestamp: formData.timestamp ?? Date())
+            .environmentObject(formData)
+        
+        let hostingController = UIHostingController(rootView: waveInfoView)
+        navigationController?.pushViewController(hostingController, animated: true)
+        
     }
     
     //exposure slider

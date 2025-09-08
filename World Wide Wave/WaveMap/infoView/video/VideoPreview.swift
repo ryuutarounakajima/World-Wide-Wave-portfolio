@@ -12,6 +12,7 @@ import CoreLocation
 struct VideoPreview: View {
     
     let player: AVPlayer
+    var onDismiss: (() -> Void)?
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var formData: FormData
     @State private var navigateToInfo = false
@@ -30,6 +31,7 @@ struct VideoPreview: View {
                 ToolbarItem(placement: .topBarLeading) {
                     Button("back") {
                         presentationMode.wrappedValue.dismiss()
+                        //onDismiss?()
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
@@ -39,7 +41,7 @@ struct VideoPreview: View {
                            let asset = currentItem.asset as? AVURLAsset {
                             formData.capturedVideoURL = asset.url
                             navigateToInfo = true
-                            
+                            onDismiss?()
                         }
                     }
                 }
