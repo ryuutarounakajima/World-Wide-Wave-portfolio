@@ -10,6 +10,266 @@ import Foundation
 
 
 /*
+//unified camera code
+ import UIKit
+ import AVFoundation
+ import SwiftUI
+
+ final class UnifiedCameraViewController: UIViewController {
+
+     enum Mode { case photo, video }
+
+     // MARK: - Callbacks
+     var onPhotoCaptured: ((UIImage) -> Void)?
+     var onVideoCaptured: ((URL) -> Void)?
+     var onDismiss: (() -> Void)?
+
+     // MARK: - AV properties
+     private let session = AVCaptureSession()
+     private let sessionQueue = DispatchQueue(label: "com.example.camera.session")
+     private var previewLayer: AVCaptureVideoPreviewLayer!
+
+     private let photoOutput = AVCapturePhotoOutput()
+     private let movieOutput = AVCaptureMovieFileOutput()
+
+     // UI
+     private var captureButton: UIButton!
+     private var modeControl: UISegmentedControl!
+
+     // state
+     private(set) var mode: Mode = .photo
+     private var isSessionRunning = false
+
+     // temp file url for recording
+     private var currentRecordingURL: URL?
+
+     // MARK: - Lifecycle
+     override func viewDidLoad() {
+         super.viewDidLoad()
+         view.backgroundColor = .black
+
+         setupPreviewLayer()
+         setupUI()
+         configureSessionAsync()
+     }
+
+     deinit {
+         stopSession()
+     }
+
+     override func viewDidLayoutSubviews() {
+         super.viewDidLayoutSubviews()
+         previewLayer.frame = view.bounds
+         layoutUI()
+     }
+
+     // MARK: - Session config
+     private func configureSessionAsync() {
+         sessionQueue.async { [weak self] in
+             guard let self = self else { return }
+             self.session.beginConfiguration()
+             self.session.sessionPreset = .high
+
+             // inputs
+             do {
+                 if let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) {
+                     let videoInput = try AVCaptureDeviceInput(device: videoDevice)
+                     if self.session.canAddInput(videoInput) { self.session.addInput(videoInput) }
+                 }
+                 if let audioDevice = AVCaptureDevice.default(for: .audio) {
+                     let audioInput = try AVCaptureDeviceInput(device: audioDevice)
+                     if self.session.canAddInput(audioInput) { self.session.addInput(audioInput) }
+                 }
+             } catch {
+                 print("error creating inputs: \(error)")
+             }
+
+             // outputs
+             if self.session.canAddOutput(self.photoOutput) {
+                 self.session.addOutput(self.photoOutput)
+             }
+             if self.session.canAddOutput(self.movieOutput) {
+                 self.session.addOutput(self.movieOutput)
+             }
+
+             self.session.commitConfiguration()
+
+             // start running
+             self.session.startRunning()
+             self.isSessionRunning = true
+             DispatchQueue.main.async {
+                 self.previewLayer.session = self.session
+             }
+         }
+     }
+
+     func stopSession() {
+         sessionQueue.async { [weak self] in
+             guard let self = self else { return }
+             if self.session.isRunning {
+                 self.session.stopRunning()
+                 self.isSessionRunning = false
+             }
+         }
+         DispatchQueue.main.async {
+             self.previewLayer.session = nil
+             self.previewLayer.removeFromSuperlayer()
+         }
+     }
+
+     // MARK: - Preview Layer + UI
+     private func setupPreviewLayer() {
+         previewLayer = AVCaptureVideoPreviewLayer(session: session)
+         previewLayer.videoGravity = .resizeAspectFill
+         previewLayer.frame = view.bounds
+         view.layer.insertSublayer(previewLayer, at: 0)
+     }
+
+     private func setupUI() {
+         // segmented control for mode
+         modeControl = UISegmentedControl(items: ["Photo", "Video"])
+         modeControl.selectedSegmentIndex = 0
+         modeControl.addTarget(self, action: #selector(modeChanged(_:)), for: .valueChanged)
+         view.addSubview(modeControl)
+
+         // capture button
+         captureButton = UIButton(type: .system)
+         captureButton.backgroundColor = .white
+         captureButton.layer.cornerRadius = 35
+         captureButton.addTarget(self, action: #selector(capturePressed(_:)), for: .touchUpInside)
+         view.addSubview(captureButton)
+
+         // dismiss button
+         let close = UIButton(type: .system)
+         close.setTitle("Close", for: .normal)
+         close.setTitleColor(.white, for: .normal)
+         close.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
+         view.addSubview(close)
+         close.frame = CGRect(x: 16, y: 44, width: 80, height: 30)
+     }
+
+     private func layoutUI() {
+         let safe = view.safeAreaLayoutGuide
+         modeControl.translatesAutoresizingMaskIntoConstraints = false
+         captureButton.translatesAutoresizingMaskIntoConstraints = false
+
+         NSLayoutConstraint.activate([
+             modeControl.centerXAnchor.constraint(equalTo: safe.centerXAnchor),
+             modeControl.topAnchor.constraint(equalTo: safe.topAnchor, constant: 10),
+             modeControl.widthAnchor.constraint(equalToConstant: 200),
+
+             captureButton.centerXAnchor.constraint(equalTo: safe.centerXAnchor),
+             captureButton.bottomAnchor.constraint(equalTo: safe.bottomAnchor, constant: -40),
+             captureButton.widthAnchor.constraint(equalToConstant: 70),
+             captureButton.heightAnchor.constraint(equalToConstant: 70),
+         ])
+     }
+
+     // MARK: - Actions
+     @objc private func modeChanged(_ seg: UISegmentedControl) {
+         mode = seg.selectedSegmentIndex == 0 ? .photo : .video
+     }
+
+     @objc private func capturePressed(_ sender: UIButton) {
+         switch mode {
+         case .photo:
+             capturePhoto()
+         case .video:
+             if movieOutput.isRecording {
+                 stopRecording()
+             } else {
+                 startRecording()
+             }
+         }
+     }
+
+     @objc private func closeTapped() {
+         stopSession()
+         onDismiss?()
+         dismiss(animated: true, completion: nil)
+     }
+
+     // MARK: - Photo
+     private func capturePhoto() {
+         let settings = AVCapturePhotoSettings()
+         settings.isHighResolutionPhotoEnabled = true
+         photoOutput.capturePhoto(with: settings, delegate: self)
+     }
+
+     // MARK: - Video
+     private func startRecording() {
+         sessionQueue.async { [weak self] in
+             guard let self = self, !self.movieOutput.isRecording else { return }
+             let tmp = URL(fileURLWithPath: NSTemporaryDirectory())
+             let fileURL = tmp.appendingPathComponent(UUID().uuidString).appendingPathExtension("mov")
+             self.currentRecordingURL = fileURL
+
+             if let connection = self.movieOutput.connection(with: .video) {
+                 connection.videoOrientation = self.currentVideoOrientation()
+             }
+             self.movieOutput.startRecording(to: fileURL, recordingDelegate: self)
+             DispatchQueue.main.async {
+                 // maybe animate UI to indicate recording
+                 self.captureButton.backgroundColor = .red
+             }
+         }
+     }
+
+     private func stopRecording() {
+         sessionQueue.async { [weak self] in
+             guard let self = self, self.movieOutput.isRecording else { return }
+             self.movieOutput.stopRecording()
+             DispatchQueue.main.async {
+                 self.captureButton.backgroundColor = .white
+             }
+         }
+     }
+
+     private func currentVideoOrientation() -> AVCaptureVideoOrientation {
+         switch UIDevice.current.orientation {
+         case .landscapeLeft: return .landscapeRight
+         case .landscapeRight: return .landscapeLeft
+         case .portraitUpsideDown: return .portraitUpsideDown
+         default: return .portrait
+         }
+     }
+ }
+
+ // MARK: - AVCapturePhotoCaptureDelegate
+ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate {
+     func photoOutput(_ output: AVCapturePhotoOutput,
+                      didFinishProcessingPhoto photo: AVCapturePhoto,
+                      error: Error?) {
+
+         guard let data = photo.fileDataRepresentation(),
+               var image = UIImage(data: data) else {
+             print("photo convert failed")
+             return
+         }
+
+         // fix orientation if needed (optional)
+         DispatchQueue.main.async { [weak self] in
+             self?.onPhotoCaptured?(image)
+             // keep session running or stop depending on UX
+         }
+     }
+ }
+
+ // MARK: - AVCaptureFileOutputRecordingDelegate
+ extension UnifiedCameraViewController: AVCaptureFileOutputRecordingDelegate {
+     func fileOutput(_ output: AVCaptureFileOutput,
+                     didFinishRecordingTo outputFileURL: URL,
+                     from connections: [AVCaptureConnection],
+                     error: Error?) {
+         if let err = error {
+             print("recording error: \(err)")
+         } else {
+             DispatchQueue.main.async { [weak self] in
+                 self?.onVideoCaptured?(outputFileURL)
+             }
+         }
+     }
+ }
 //VideoManagerSampleCode
  import UIKit
  import AVFoundation

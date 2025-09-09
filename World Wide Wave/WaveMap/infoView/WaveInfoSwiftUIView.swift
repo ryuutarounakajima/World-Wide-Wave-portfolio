@@ -65,8 +65,10 @@ struct WaveInfoSwiftUIView: View {
     
     //Photo picker visible
     private let cameraManager = CameraManager()
+    private let micManager = MicManager()
     @State private var isPickerVisable: Bool = false
     @State private var cameraAutorized: Bool = false
+    @State private var micAutorized: Bool = false
     
     
     var coordinate: CLLocationCoordinate2D
@@ -228,8 +230,13 @@ struct WaveInfoSwiftUIView: View {
                                     
                                     cameraAutorized = await cameraManager.requestCameraAccess()
                                     
-                                    if cameraAutorized {
+                                    micAutorized = await
+                                    micManager.requestMicAccess()
+                                    
+                                    if cameraAutorized && micAutorized {
                                         isPickerVisable.toggle()
+                                    } else {
+                                        print("permission denied")
                                     }
                                 }
                             }) {
