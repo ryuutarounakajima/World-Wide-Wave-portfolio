@@ -69,7 +69,7 @@ struct WaveInfoSwiftUIView: View {
     @State private var isPickerVisable: Bool = false
     @State private var cameraAutorized: Bool = false
     @State private var micAutorized: Bool = false
-    
+    @State private var mode: captureMode = .photo
     
     var coordinate: CLLocationCoordinate2D
     var timestamp: Date
@@ -254,7 +254,8 @@ struct WaveInfoSwiftUIView: View {
                         }
                     }
                     .fullScreenCover(isPresented: $isPickerVisable) {
-                        CameraSwiftUIPreview(isCameraPresented: $isPickerVisable, captureImage: $formData.capturedImage).environmentObject(formData)
+                        UnifiedCameraSwiftUIView()
+                        // CameraSwiftUIPreview(isCameraPresented: $isPickerVisable, captureImage: $formData.capturedImage).environmentObject(formData)
                     }
         }
         

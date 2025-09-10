@@ -14,32 +14,31 @@ struct UnifiedCameraSwiftUIView: View {
     var body: some View {
         ZStack {
             UnifiedCameraView(mode: $mode)
-                .edgesIgnoringSafeArea(.all)
-            
-            VStack {
-                Spacer()
-                HStack {
-                    Button("Photo") {
-                        mode = .photo
-                    }
-                    .padding()
-                    .background(Color.white.opacity(0.7))
-                    .cornerRadius(8)
-                    
-                    Button("Photo") {
-                        mode = .photo
-                    }
-                    .padding()
-                    .background(Color.white.opacity(0.7))
-                    .cornerRadius(8)
-                }
-                .padding()
-            }
+                .ignoresSafeArea()
+                .gesture(
+                    DragGesture()
+                        .onEnded {
+                            value in
+                            if value.translation.width  < -50 {
+                                mode = .video
+                            } else if value.translation.width  > 50 {
+                                mode = .photo
+                            }
+                        }
+                )
         }
     }
 }
 
+
 #Preview {
-    
-    UnifiedCameraSwiftUIView()
+    // プレビューではカメラを起動しない
+    if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
+        Text("📸 Camera Preview not available in Xcode")
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.white)
+    } else {
+        UnifiedCameraSwiftUIView()
+    }
 }
+
