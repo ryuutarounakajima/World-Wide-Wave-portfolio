@@ -63,19 +63,20 @@ struct WaveInfoSwiftUIView: View {
     @State private var journalTextHeight: CGFloat = 40
                                     
     
-    //Photo picker visible
+    //camera actiive properties
     private let cameraManager = CameraManager()
     private let micManager = MicManager()
-    @State private var isPickerVisable: Bool = false
     @State private var cameraAutorized: Bool = false
     @State private var micAutorized: Bool = false
     @State private var mode: captureMode = .photo
+    @State private var isCameraVsiable: Bool = false
     
+    //formData properties
     var coordinate: CLLocationCoordinate2D
     var timestamp: Date
     @State private var selectedImage: UIImage?
     @State private var selectedVideoURL: URL?
-    @State private var showPreview = false
+    //@State private var showPreview = false
     
     //@State var isCameraButtonRotating = false
     @State var cameraButtonColoring = false
@@ -234,7 +235,10 @@ struct WaveInfoSwiftUIView: View {
                                     micManager.requestMicAccess()
                                     
                                     if cameraAutorized && micAutorized {
-                                        isPickerVisable.toggle()
+                                       // isPickerVisable.toggle()
+                                       
+                                        isCameraVsiable = true
+                                        
                                     } else {
                                         print("permission denied")
                                     }
@@ -253,11 +257,16 @@ struct WaveInfoSwiftUIView: View {
                             }
                         }
                     }
-                    .fullScreenCover(isPresented: $isPickerVisable) {
+                    .navigationDestination(isPresented: $isCameraVsiable) {
+                        UnifiedCameraSwiftUIView()
+                            .environmentObject(formData)
+                    }
+                   /* .fullScreenCover(isPresented: $isPickerVisable) {
                         UnifiedCameraSwiftUIView()
                         // CameraSwiftUIPreview(isCameraPresented: $isPickerVisable, captureImage: $formData.capturedImage).environmentObject(formData)
-                    }
+                    }*/
         }
+        
         
     }
     
