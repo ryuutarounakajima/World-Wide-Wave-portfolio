@@ -22,6 +22,10 @@ class UnifiedCameraViewController : UIViewController {
     private var photoOutput: AVCapturePhotoOutput?
     private var videoOutPut: AVCaptureMovieFileOutput?
     
+    private var currentDeviceAngle: AVCaptureDevice?
+    private var previewAngleObserver: NSKeyValueObservation?
+    private var rotationCoordinator: AVCaptureDevice.RotationCoordinator?
+    
     var mode: captureMode = .photo {
         didSet {switchCamera(mode)}
     }
@@ -64,6 +68,8 @@ extension UnifiedCameraViewController {
             return
         }
         session.addInput(input)
+       
+        self.currentDeviceAngle = device
         
         let photoOut = AVCapturePhotoOutput()
         if session.canAddOutput(photoOut) {
@@ -80,12 +86,14 @@ extension UnifiedCameraViewController {
         
         session.commitConfiguration()
     
-        DispatchQueue.main.async { [self] in
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             previewLayer?.removeFromSuperlayer()
-            previewLayer = AVCaptureVideoPreviewLayer(session: session)
-            previewLayer?.frame = view.bounds
-            previewLayer?.videoGravity = .resizeAspectFill
-            view.layer.addSublayer(previewLayer!)
+            let layer = AVCaptureVideoPreviewLayer(session: self.session)
+            layer.frame = self.view.bounds
+            layer.videoGravity = .resizeAspectFill
+            self.view.layer.addSublayer(layer)
+            self.previewLayer = layer
         }
        
         
@@ -93,14 +101,22 @@ extension UnifiedCameraViewController {
     
     private func startSession() {
         DispatchQueue.global(qos: .userInitiated).async {
+            [weak self] in guard let self = self else { return }
+            
             if !self.session.isRunning {
                 self.session.startRunning()
+                
+                DispatchQueue.main.async {
+                    self.setupRotationCoordinator()
+                }
+               
             }
         }
     }
     
     private func stopSession() {
         DispatchQueue.global(qos: .userInitiated).async {
+            [weak self] in guard let self = self else { return }
             if self.session.isRunning {
                 self.session.stopRunning()
             }
@@ -129,6 +145,49 @@ extension UnifiedCameraViewController {
         }
         
         session.commitConfiguration()
+        updateCaptureConnections()
+    }
+    
+    private func setupRotationCoordinator() {
+        
+        guard let device =
+                currentDeviceAngle, let previewLayer = previewLayer else { return }
+        
+        let coordinator =
+        AVCaptureDevice.RotationCoordinator(device: device, previewLayer: previewLayer)
+        
+        self.rotationCoordinator = coordinator
+        
+        previewAngleObserver = coordinator.observe(\.videoRotationAngleForHorizonLevelPreview, options: [.initial, .new]) { [weak self] coordinator, _ in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                
+                if let connection = self.previewLayer?.connection {
+                    let previewAngle = coordinator.videoRotationAngleForHorizonLevelPreview
+                    if connection.isVideoRotationAngleSupported(previewAngle) {
+                        connection.videoRotationAngle = previewAngle
+                    }
+                }
+                
+                self.updateCaptureConnections()
+            }
+            
+        }
+       
+    }
+    
+    private func updateCaptureConnections() {
+        guard let coordinator = rotationCoordinator else { return }
+        let captureAngle = coordinator.videoRotationAngleForHorizonLevelCapture
+        
+        if let connection = photoOutput?.connection(with: .video),
+           connection.isVideoRotationAngleSupported(captureAngle) {
+            connection.videoRotationAngle = captureAngle
+        }
+        
+        if let connection = videoOutPut?.connection(with: .video), connection.isVideoRotationAngleSupported(captureAngle) {
+            connection.videoRotationAngle = captureAngle
+        }
     }
 }
 
