@@ -36,7 +36,7 @@ struct UnifiedCameraSwiftUIView: View {
     if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
         Text("📸 Camera Preview not available in Xcode")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.white)
+            .background(Color.gray)
     } else {
         UnifiedCameraSwiftUIView()
     }

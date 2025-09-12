@@ -15,25 +15,30 @@ enum captureMode {
 }
 
 class UnifiedCameraViewController : UIViewController {
-    
+    //setup
     private let session = AVCaptureSession()
     private var previewLayer: AVCaptureVideoPreviewLayer?
     
+    //.photo .video
     private var photoOutput: AVCapturePhotoOutput?
     private var videoOutPut: AVCaptureMovieFileOutput?
+    var mode: captureMode = .photo {
+        didSet {switchCamera(mode)}
+    }
     
+    //rotation angle
     private var currentDeviceAngle: AVCaptureDevice?
     private var previewAngleObserver: NSKeyValueObservation?
     private var rotationCoordinator: AVCaptureDevice.RotationCoordinator?
     
-    var mode: captureMode = .photo {
-        didSet {switchCamera(mode)}
-    }
+   //button
+    private  var captureButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
         setupSession()
+        setupCaptureButton()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -41,6 +46,7 @@ class UnifiedCameraViewController : UIViewController {
         
         switchCamera(mode)
         startSession()
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -51,6 +57,9 @@ class UnifiedCameraViewController : UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         previewLayer?.frame = view.bounds
+        
+        upDateButtonPosition()
+        view.bringSubviewToFront(captureButton)
     }
     
     
@@ -58,6 +67,32 @@ class UnifiedCameraViewController : UIViewController {
 
 extension UnifiedCameraViewController {
     
+    //MARK: - button
+    private func setupCaptureButton() {
+        
+        captureButton = UIButton(type: .system)
+        captureButton.setTitle("", for: .normal)
+        captureButton.backgroundColor = UIColor.white.withAlphaComponent(1.0)
+        
+        let buttonSize: CGFloat = 50
+        captureButton.layer.cornerRadius = buttonSize / 2
+        captureButton.clipsToBounds = true
+        //captureButton.addTarget(self, action: #selector(captureButtonTapped), for: .touchUpInside)
+        view.addSubview(captureButton)
+        
+        upDateButtonPosition()
+        //view.bringSubviewToFront(captureButton)
+    }
+    
+    private func upDateButtonPosition() {
+        
+        let buttonSize: CGFloat = 50
+        let xPosition = (view.bounds.width - buttonSize) / 2
+        let yPosition = (view.bounds.height - buttonSize) - 50
+        
+        captureButton.frame = CGRect(x: xPosition, y: yPosition, width: buttonSize, height: buttonSize)
+    }
+    //MARK: - setup
     private func setupSession() {
         session.beginConfiguration()
         session.sessionPreset = .high
@@ -94,11 +129,12 @@ extension UnifiedCameraViewController {
             layer.videoGravity = .resizeAspectFill
             self.view.layer.addSublayer(layer)
             self.previewLayer = layer
+            
+            self.view.bringSubviewToFront(self.captureButton)
         }
        
         
     }
-    
     private func startSession() {
         DispatchQueue.global(qos: .userInitiated).async {
             [weak self] in guard let self = self else { return }
@@ -113,7 +149,6 @@ extension UnifiedCameraViewController {
             }
         }
     }
-    
     private func stopSession() {
         DispatchQueue.global(qos: .userInitiated).async {
             [weak self] in guard let self = self else { return }
@@ -122,7 +157,6 @@ extension UnifiedCameraViewController {
             }
         }
     }
-
     func switchCamera(_ mode: captureMode) {
         session.beginConfiguration()
         
@@ -145,9 +179,10 @@ extension UnifiedCameraViewController {
         }
         
         session.commitConfiguration()
-        updateCaptureConnections()
+            //updateRoationCoordinator()
     }
     
+    //MARK: - rotation coordinate
     private func setupRotationCoordinator() {
         
         guard let device =
@@ -169,14 +204,13 @@ extension UnifiedCameraViewController {
                     }
                 }
                 
-                self.updateCaptureConnections()
+                self.updateRoationCoordinator()
             }
             
         }
        
     }
-    
-    private func updateCaptureConnections() {
+    private func updateRoationCoordinator() {
         guard let coordinator = rotationCoordinator else { return }
         let captureAngle = coordinator.videoRotationAngleForHorizonLevelCapture
         
@@ -189,6 +223,10 @@ extension UnifiedCameraViewController {
             connection.videoRotationAngle = captureAngle
         }
     }
+    
+    
+  
+    
 }
 
 struct UnifiedCameraView: UIViewControllerRepresentable {
