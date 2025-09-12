@@ -12,31 +12,62 @@ struct UnifiedCameraSwiftUIView: View {
     @State private var mode: captureMode = .photo
     
     var body: some View {
-        ZStack {
-            UnifiedCameraView(mode: $mode)
-                .ignoresSafeArea()
-                .gesture(
-                    DragGesture()
-                        .onEnded {
-                            value in
-                            if value.translation.width  < -50 {
-                                mode = .video
-                            } else if value.translation.width  > 50 {
-                                mode = .photo
+        GeometryReader { geo in
+            ZStack {
+                UnifiedCameraView(mode: $mode)
+                    .ignoresSafeArea()
+                    .gesture(
+                        DragGesture()
+                            .onEnded {
+                                value in
+                                if value.translation.width  < -50 {
+                                    mode = .video
+                                } else if value.translation.width  > 50 {
+                                    mode = .photo
+                                }
                             }
-                        }
-                )
+                    )
+                
+                Button(action: {
+                    print("tapped")
+                    NotificationCenter().post(name: .captureButtonTapped, object: nil)
+                }) {
+                    Circle()
+                        .fill(Color.white)
+                        .frame(width: 50, height: 50)
+                       
+                }
+                .position(x: geo.size.width / 2, y: geo.size.height - 50 - 25)
+              
+            }
         }
+       
     }
 }
-
+extension Notification.Name {
+    static let captureButtonTapped = Notification.Name("captureButtontapped")
+}
 
 #Preview {
-    // プレビューではカメラを起動しない
     if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
-        Text("📸 Camera Preview not available in Xcode")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.gray)
+        // カメラ代わりのダミー背景
+        GeometryReader { geo in
+            ZStack {
+                
+                Color.gray.ignoresSafeArea()
+                
+                Text("📸 Camera Preview not available")
+                    .foregroundColor(.black)
+                    .position(x: geo.size.width / 2, y: geo.size.height / 2)
+               
+                Circle()
+                    .fill(Color.white)
+                    .frame(width: 50, height: 50)
+                    .position(x: geo.size.width / 2, y: geo.size.height - 50 - 25)
+                
+                
+            }
+        }
     } else {
         UnifiedCameraSwiftUIView()
     }

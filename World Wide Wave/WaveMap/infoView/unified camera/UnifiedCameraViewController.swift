@@ -32,13 +32,13 @@ class UnifiedCameraViewController : UIViewController {
     private var rotationCoordinator: AVCaptureDevice.RotationCoordinator?
     
    //button
-    private  var captureButton: UIButton!
+    //private  var captureButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
         setupSession()
-        setupCaptureButton()
+       // setupCaptureButton()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -58,8 +58,8 @@ class UnifiedCameraViewController : UIViewController {
         super.viewDidLayoutSubviews()
         previewLayer?.frame = view.bounds
         
-        upDateButtonPosition()
-        view.bringSubviewToFront(captureButton)
+       // upDateButtonPosition()
+        //view.bringSubviewToFront(captureButton)
     }
     
     
@@ -67,7 +67,7 @@ class UnifiedCameraViewController : UIViewController {
 
 extension UnifiedCameraViewController {
     
-    //MARK: - button
+    /*   //MARK: - button
     private func setupCaptureButton() {
         
         captureButton = UIButton(type: .system)
@@ -77,9 +77,15 @@ extension UnifiedCameraViewController {
         let buttonSize: CGFloat = 50
         captureButton.layer.cornerRadius = buttonSize / 2
         captureButton.clipsToBounds = true
-        //captureButton.addTarget(self, action: #selector(captureButtonTapped), for: .touchUpInside)
+       
+        let xPosition = (view.bounds.width - buttonSize) / 2
+        let yPosition = (view.bounds.height - buttonSize) - 50
+     
+     captureButton.frame = CGRect(x: xPosition, y: yPosition, width: buttonSize, height: buttonSize)
         view.addSubview(captureButton)
-        
+     
+     
+     //captureButton.addTarget(self, action: #selector(captureButtonTapped), for: .touchUpInside)
         upDateButtonPosition()
         //view.bringSubviewToFront(captureButton)
     }
@@ -92,6 +98,7 @@ extension UnifiedCameraViewController {
         
         captureButton.frame = CGRect(x: xPosition, y: yPosition, width: buttonSize, height: buttonSize)
     }
+    */
     //MARK: - setup
     private func setupSession() {
         session.beginConfiguration()
@@ -130,7 +137,7 @@ extension UnifiedCameraViewController {
             self.view.layer.addSublayer(layer)
             self.previewLayer = layer
             
-            self.view.bringSubviewToFront(self.captureButton)
+           // self.view.bringSubviewToFront(self.captureButton)
         }
        
         
