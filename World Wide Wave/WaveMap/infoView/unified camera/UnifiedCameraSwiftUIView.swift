@@ -37,6 +37,22 @@ struct UnifiedCameraSwiftUIView: View {
                         .frame(width: 50, height: 50)
                        
                 }
+                .overlay(Circle().stroke(
+                    mode == .photo ? LinearGradient(
+                        colors: [Color.red.opacity(1.0), Color.blue.opacity(0.9)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                      )
+                    : LinearGradient(
+                        colors: [Color.blue.opacity(1.0), Color.red.opacity(0.9)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                      ),
+                    lineWidth: 6
+                )
+                    .padding(-10)
+                )
+                
                 .position(x: geo.size.width / 2, y: geo.size.height - 50 - 25)
               
             }
@@ -62,10 +78,20 @@ extension Notification.Name {
                
                 Circle()
                     .fill(Color.white)
-                    .frame(width: 50, height: 50)
+                    .frame(width: 60, height: 60)
+                    .overlay( // 枠線を追加したいときは overlay が便利
+                            Circle().stroke(
+                                LinearGradient(
+                                    colors: [Color.red.opacity(1.0), Color.blue.opacity(0.9)],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                ),
+                                lineWidth: 6
+                            )
+                            .padding(-12)
+                        )
                     .position(x: geo.size.width / 2, y: geo.size.height - 50 - 25)
-                
-                
+                    
             }
         }
     } else {

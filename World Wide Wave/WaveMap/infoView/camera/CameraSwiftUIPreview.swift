@@ -56,6 +56,7 @@ struct CameraSwiftUIPreview: View {
                                 .allowsHitTesting(false)
                         )
                     
+                    
                     if showHint {
                         
                         HStack(spacing: 5)  {
