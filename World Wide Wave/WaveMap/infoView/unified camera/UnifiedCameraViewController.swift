@@ -15,6 +15,10 @@ enum captureMode {
 }
 
 class UnifiedCameraViewController : UIViewController {
+    
+    var formData: FormData?
+    var onPhotoCaptured: ((UIImage) -> Void)?
+    
     //setup
     private let session = AVCaptureSession()
     private var previewLayer: AVCaptureVideoPreviewLayer?
@@ -69,7 +73,7 @@ class UnifiedCameraViewController : UIViewController {
 
 extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate {
     
-  //MARK: - photo capture
+//MARK: - photo capture
     private func takePhoto() {
         guard let photoOutput = photoOutput else {
             print("Photo output is nil")
@@ -96,9 +100,14 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate {
         
        print("photo captured")
         print("image:\(image)")
+        
+        formData?.capturedImage = image
+        onPhotoCaptured?(image) // <- send image to swiftui
+        
+        
     }
     
-    //MARK: - setup
+//MARK: - setup
     private func setupSession() {
         session.beginConfiguration()
         session.sessionPreset = .high
@@ -187,6 +196,8 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate {
         session.commitConfiguration()
             //updateRoationCoordinator()
     }
+    
+    //capture setup
     private func captueButtonNotication() {
         NotificationCenter.default.addObserver(self, selector: #selector(captureButtonTapped), name: .captureButtonTapped, object: nil)
     }
@@ -198,7 +209,8 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate {
             
         }
     }
-    //MARK: - rotation coordinate
+    
+//MARK: - rotation coordinate
     private func setupRotationCoordinator() {
         
         guard let device =
@@ -246,15 +258,19 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate {
 }
 
 struct UnifiedCameraView: UIViewControllerRepresentable {
-   
-   @Binding var mode: captureMode
-   
-   func makeUIViewController(context: Context) -> UnifiedCameraViewController {
-       
-       let vc = UnifiedCameraViewController()
-       vc.mode = mode
-       return vc
-   }
+    
+    @Binding var mode: captureMode
+    @Binding var captureImage: UIImage?
+    
+    func makeUIViewController(context: Context) -> UnifiedCameraViewController {
+        
+        let vc = UnifiedCameraViewController()
+        vc.mode = mode
+        vc.onPhotoCaptured = { image in
+            captureImage = image
+        }
+        return vc
+    }
    
    func updateUIViewController(_ uiViewController: UnifiedCameraViewController, context: Context) {
        

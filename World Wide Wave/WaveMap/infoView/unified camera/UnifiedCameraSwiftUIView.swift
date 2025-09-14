@@ -6,15 +6,18 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct UnifiedCameraSwiftUIView: View {
     
     @State private var mode: captureMode = .photo
+    @State private var captureImage: UIImage?
+    @State private var captureVideoURL: URL?
     
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                UnifiedCameraView(mode: $mode)
+                UnifiedCameraView(mode: $mode, captureImage: $captureImage)
                     .ignoresSafeArea()
                     .gesture(
                         DragGesture()
@@ -28,10 +31,15 @@ struct UnifiedCameraSwiftUIView: View {
                             }
                     )
                 
+                //capture button
                 Button(action: {
+                    
                     print("tapped")
                     NotificationCenter.default.post(name: .captureButtonTapped, object: nil)
-                }) {
+                    
+                    
+                })
+                {
                     Circle()
                         .fill(Color.white)
                         .frame(width: 50, height: 50)
@@ -52,8 +60,41 @@ struct UnifiedCameraSwiftUIView: View {
                 )
                     .padding(-10)
                 )
-                
                 .position(x: geo.size.width / 2, y: geo.size.height - 50 - 25)
+                
+                //capture preview
+                Group{
+                    if mode == .photo {
+                        if let image = captureImage {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFill()
+                                
+                        } else {
+                            Color.black
+                        }
+                    } else {
+                        if let videoURL = captureVideoURL {
+                            VideoPlayer(player: AVPlayer(url: videoURL))
+                                .scaledToFill()
+                        } else {
+                            Color.black
+                        }
+                    }
+                   
+                }
+                    .frame(width: 60, height: 60)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .overlay(
+                                   RoundedRectangle(cornerRadius: 8)
+                                       .stroke(Color.black, lineWidth: 2)
+                               )
+                    .position(
+                                x: geo.size.width - 60/2 - 10, // UIKit の xPosition 相当
+                                y: geo.size.height - 60/2 - 40 // UIKit の yPosition 相当
+                            )
+                
+                   
               
             }
         }
@@ -92,6 +133,20 @@ extension Notification.Name {
                         )
                     .position(x: geo.size.width / 2, y: geo.size.height - 50 - 25)
                     
+                
+                Image("logo")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 60, height: 60)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .overlay(
+                                   RoundedRectangle(cornerRadius: 8)
+                                       .stroke(Color.black, lineWidth: 2)
+                               )
+                               .position(
+                                   x: geo.size.width - 60/2 - 10, // UIKit の xPosition 相当
+                                   y: geo.size.height - 60/2 - 40 // UIKit の yPosition 相当
+                               )
             }
         }
     } else {
