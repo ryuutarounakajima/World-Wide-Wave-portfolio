@@ -11,8 +11,11 @@ import AVKit
 struct UnifiedCameraSwiftUIView: View {
     
     @State private var mode: captureMode = .photo
+    
     @State private var captureImage: UIImage?
     @State private var captureVideoURL: URL?
+    
+    @State private var showPhotoSheet = false
     
     var body: some View {
         GeometryReader { geo in
@@ -61,6 +64,7 @@ struct UnifiedCameraSwiftUIView: View {
                     .padding(-10)
                 )
                 .position(x: geo.size.width / 2, y: geo.size.height - 50 - 25)
+              
                 
                 //capture preview
                 Group{
@@ -69,6 +73,8 @@ struct UnifiedCameraSwiftUIView: View {
                             Image(uiImage: image)
                                 .resizable()
                                 .scaledToFill()
+                            
+                            
                                 
                         } else {
                             Color.black
@@ -93,9 +99,24 @@ struct UnifiedCameraSwiftUIView: View {
                                 x: geo.size.width - 60/2 - 10, // UIKit の xPosition 相当
                                 y: geo.size.height - 60/2 - 40 // UIKit の yPosition 相当
                             )
+                    .onTapGesture(perform: {
+                        if mode == .photo {
+                            showPhotoSheet = true
+                        } else {
+                            
+                        }
+                    })
+                 
                 
                    
               
+            }
+            .sheet(isPresented: $showPhotoSheet) {
+                if let image = captureImage {
+                    PhotoSheetView(image: image)
+                        .presentationDetents([.fraction(1.0)])
+                    
+                }
             }
         }
        
