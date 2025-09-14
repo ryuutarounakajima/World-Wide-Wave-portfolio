@@ -38,6 +38,8 @@ class UnifiedCameraViewController : UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .black
         setupSession()
+        captueButtonNotication()
+        
        // setupCaptureButton()
     }
     
@@ -65,40 +67,37 @@ class UnifiedCameraViewController : UIViewController {
     
 }
 
-extension UnifiedCameraViewController {
+extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate {
     
-    /*   //MARK: - button
-    private func setupCaptureButton() {
+  //MARK: - photo capture
+    private func takePhoto() {
+        guard let photoOutput = photoOutput else {
+            print("Photo output is nil")
+            return
+        }
+        print("take photo called ")
+        let setting = AVCapturePhotoSettings()
+        setting.flashMode = .auto
         
-        captureButton = UIButton(type: .system)
-        captureButton.setTitle("", for: .normal)
-        captureButton.backgroundColor = UIColor.white.withAlphaComponent(1.0)
+        photoOutput.capturePhoto(with: setting, delegate: self)
+    }
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Error)?) {
         
-        let buttonSize: CGFloat = 50
-        captureButton.layer.cornerRadius = buttonSize / 2
-        captureButton.clipsToBounds = true
-       
-        let xPosition = (view.bounds.width - buttonSize) / 2
-        let yPosition = (view.bounds.height - buttonSize) - 50
-     
-     captureButton.frame = CGRect(x: xPosition, y: yPosition, width: buttonSize, height: buttonSize)
-        view.addSubview(captureButton)
-     
-     
-     //captureButton.addTarget(self, action: #selector(captureButtonTapped), for: .touchUpInside)
-        upDateButtonPosition()
-        //view.bringSubviewToFront(captureButton)
+        print("delegaet called")
+        if let error = error {
+            print("Photo capture failed: \(error)")
+            return
+        }
+        
+        guard let data = photo.fileDataRepresentation(),
+              let image = UIImage(data: data)
+        else { return }
+        
+        
+       print("photo captured")
+        print("image:\(image)")
     }
     
-    private func upDateButtonPosition() {
-        
-        let buttonSize: CGFloat = 50
-        let xPosition = (view.bounds.width - buttonSize) / 2
-        let yPosition = (view.bounds.height - buttonSize) - 50
-        
-        captureButton.frame = CGRect(x: xPosition, y: yPosition, width: buttonSize, height: buttonSize)
-    }
-    */
     //MARK: - setup
     private func setupSession() {
         session.beginConfiguration()
@@ -188,7 +187,17 @@ extension UnifiedCameraViewController {
         session.commitConfiguration()
             //updateRoationCoordinator()
     }
-    
+    private func captueButtonNotication() {
+        NotificationCenter.default.addObserver(self, selector: #selector(captureButtonTapped), name: .captureButtonTapped, object: nil)
+    }
+    @objc func captureButtonTapped() {
+        print("captureButtonTapped received!")
+        if mode == .photo {
+            takePhoto()
+        } else {
+            
+        }
+    }
     //MARK: - rotation coordinate
     private func setupRotationCoordinator() {
         
@@ -254,3 +263,37 @@ struct UnifiedCameraView: UIViewControllerRepresentable {
        }
    }
 }
+
+//set up button
+/*
+private func setupCaptureButton() {
+    
+    captureButton = UIButton(type: .system)
+    captureButton.setTitle("", for: .normal)
+    captureButton.backgroundColor = UIColor.white.withAlphaComponent(1.0)
+    
+    let buttonSize: CGFloat = 50
+    captureButton.layer.cornerRadius = buttonSize / 2
+    captureButton.clipsToBounds = true
+   
+    let xPosition = (view.bounds.width - buttonSize) / 2
+    let yPosition = (view.bounds.height - buttonSize) - 50
+ 
+ captureButton.frame = CGRect(x: xPosition, y: yPosition, width: buttonSize, height: buttonSize)
+    view.addSubview(captureButton)
+ 
+ 
+ //captureButton.addTarget(self, action: #selector(captureButtonTapped), for: .touchUpInside)
+    upDateButtonPosition()
+    //view.bringSubviewToFront(captureButton)
+}
+
+private func upDateButtonPosition() {
+    
+    let buttonSize: CGFloat = 50
+    let xPosition = (view.bounds.width - buttonSize) / 2
+    let yPosition = (view.bounds.height - buttonSize) - 50
+    
+    captureButton.frame = CGRect(x: xPosition, y: yPosition, width: buttonSize, height: buttonSize)
+}
+*/

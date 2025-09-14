@@ -30,7 +30,7 @@ struct UnifiedCameraSwiftUIView: View {
                 
                 Button(action: {
                     print("tapped")
-                    NotificationCenter().post(name: .captureButtonTapped, object: nil)
+                    NotificationCenter.default.post(name: .captureButtonTapped, object: nil)
                 }) {
                     Circle()
                         .fill(Color.white)
@@ -61,7 +61,7 @@ struct UnifiedCameraSwiftUIView: View {
     }
 }
 extension Notification.Name {
-    static let captureButtonTapped = Notification.Name("captureButtontapped")
+    static let captureButtonTapped = Notification.Name("captureButtonTapped")
 }
 
 #Preview {
