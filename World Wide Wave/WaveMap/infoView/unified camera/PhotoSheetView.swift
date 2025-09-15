@@ -11,9 +11,18 @@ struct PhotoSheetView: View {
     
     var image: UIImage
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var formData: FormData
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
+        ZStack {
+            Color.black.ignoresSafeArea()
+            
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+        }
     }
 }
 

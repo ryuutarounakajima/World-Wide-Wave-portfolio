@@ -9,6 +9,7 @@ import SwiftUI
 import AVKit
 
 struct UnifiedCameraSwiftUIView: View {
+    @EnvironmentObject var formData: FormData
     
     @State private var mode: captureMode = .photo
     
@@ -114,6 +115,7 @@ struct UnifiedCameraSwiftUIView: View {
             .sheet(isPresented: $showPhotoSheet) {
                 if let image = captureImage {
                     PhotoSheetView(image: image)
+                        .environmentObject(formData)
                         .presentationDetents([.fraction(1.0)])
                     
                 }
@@ -127,6 +129,7 @@ extension Notification.Name {
 }
 
 #Preview {
+    
     if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
         // カメラ代わりのダミー背景
         GeometryReader { geo in
@@ -155,8 +158,9 @@ extension Notification.Name {
                     .position(x: geo.size.width / 2, y: geo.size.height - 50 - 25)
                     
                 
-                Image("logo")
+                Image(systemName: "camera")
                     .resizable()
+                    .foregroundStyle(.white)
                     .scaledToFill()
                     .frame(width: 60, height: 60)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
