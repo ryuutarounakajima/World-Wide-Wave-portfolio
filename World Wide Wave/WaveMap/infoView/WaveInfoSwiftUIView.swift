@@ -258,7 +258,7 @@ struct WaveInfoSwiftUIView: View {
                         }
                     }
                     .navigationDestination(isPresented: $isCameraVsiable) {
-                        UnifiedCameraSwiftUIView()
+                        UnifiedCameraSwiftUIView( isCameraPresented: $isCameraVsiable)
                             .environmentObject(formData)
                     }
                    /* .fullScreenCover(isPresented: $isPickerVisable) {

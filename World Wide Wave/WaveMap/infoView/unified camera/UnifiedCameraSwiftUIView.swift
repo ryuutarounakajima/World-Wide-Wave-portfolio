@@ -10,6 +10,7 @@ import AVKit
 
 struct UnifiedCameraSwiftUIView: View {
     @EnvironmentObject var formData: FormData
+    @Binding var isCameraPresented: Bool
     
     @State private var mode: captureMode = .photo
     
@@ -114,7 +115,7 @@ struct UnifiedCameraSwiftUIView: View {
             }
             .sheet(isPresented: $showPhotoSheet) {
                 if let image = captureImage {
-                    PhotoSheetView(image: image)
+                    PhotoSheetView(image: image, isCameraPresented: $isCameraPresented)
                         .environmentObject(formData)
                         .presentationDetents([.fraction(1.0)])
                     
@@ -175,7 +176,7 @@ extension Notification.Name {
             }
         }
     } else {
-        UnifiedCameraSwiftUIView()
+        UnifiedCameraSwiftUIView( isCameraPresented: .constant(true))
     }
 }
 

@@ -12,21 +12,39 @@ struct PhotoSheetView: View {
     var image: UIImage
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var formData: FormData
+    @Binding var isCameraPresented: Bool
     
     var body: some View {
-        
-        ZStack {
-            Color.black.ignoresSafeArea()
-            
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-        }
+        NavigationStack {
+            ZStack {
+                Color.white.ignoresSafeArea()
+                
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .ignoresSafeArea()
+                
+                
+                
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Save") {
+                        formData.capturedImage = image
+                        dismiss()
+                        isCameraPresented = false
+                    }
+                    .font(.headline)
+                    .bold()
+                    .foregroundStyle(.brown)
+                }
+            }
+                    }
+       
     }
+    
 }
-
 #Preview {
     let image = UIImage(systemName: "photo")!
-    PhotoSheetView(image: image)
+    PhotoSheetView(image: image, isCameraPresented: .constant(true))
 }
