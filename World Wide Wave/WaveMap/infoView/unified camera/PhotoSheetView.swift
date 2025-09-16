@@ -16,17 +16,23 @@ struct PhotoSheetView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                Color.white.ignoresSafeArea()
-                
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .ignoresSafeArea()
-                
-                
-                
+            GeometryReader {
+                geo in
+                ZStack {
+                    Color.white.ignoresSafeArea()
+                    
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: geo.size.width, height: geo.size.height)
+                        .clipped()
+                    
+                    
+                    
+                    
+                }
             }
+           
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
