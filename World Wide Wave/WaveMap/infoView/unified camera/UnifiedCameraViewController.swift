@@ -156,7 +156,7 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate {
             
             if !self.session.isRunning {
                 self.session.startRunning()
-                
+                print("Session started in mode: \(self.mode)")
                 DispatchQueue.main.async {
                     self.setupRotationCoordinator()
                 }
@@ -169,6 +169,7 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate {
             [weak self] in guard let self = self else { return }
             if self.session.isRunning {
                 self.session.stopRunning()
+                print("Session stopped in mode: \(self.mode)")
             }
         }
     }
