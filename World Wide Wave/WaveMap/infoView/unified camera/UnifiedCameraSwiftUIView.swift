@@ -17,12 +17,14 @@ struct UnifiedCameraSwiftUIView: View {
     @State private var captureImage: UIImage?
     @State private var captureVideoURL: URL?
     
+    @State private var isRecording = false
+    
     @State private var showPhotoSheet = false
     
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                UnifiedCameraView(mode: $mode, captureImage: $captureImage)
+                UnifiedCameraView(mode: $mode, captureImage: $captureImage, capterVideoURL: $captureVideoURL)
                     .ignoresSafeArea()
                     .gesture(
                         DragGesture()
@@ -39,8 +41,21 @@ struct UnifiedCameraSwiftUIView: View {
                 //capture button
                 Button(action: {
                     
-                    print("tapped")
-                    NotificationCenter.default.post(name: .captureButtonTapped, object: nil)
+                    if mode == .photo {
+                        print("tapped")
+                        NotificationCenter.default.post(name: .captureButtonTapped, object: nil)
+                        
+                    } else if mode == .video {
+                      
+                        if isRecording {
+                            print("Video capture started")
+                            NotificationCenter.default.post(name: .startVideoCapture, object: nil)
+                        } else {
+                            print("Video capture stopped")
+                            NotificationCenter.default.post(name: .stopVideoCapture, object: nil)
+                        }
+                    }
+                   
                     
                     
                 })
@@ -127,6 +142,8 @@ struct UnifiedCameraSwiftUIView: View {
 }
 extension Notification.Name {
     static let captureButtonTapped = Notification.Name("captureButtonTapped")
+    static let startVideoCapture = Notification.Name("startVideoCapture")
+    static let stopVideoCapture = Notification.Name("stopVideoCapture")
 }
 
 #Preview {

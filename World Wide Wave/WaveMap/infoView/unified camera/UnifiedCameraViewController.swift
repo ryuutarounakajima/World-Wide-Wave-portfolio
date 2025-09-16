@@ -18,7 +18,7 @@ class UnifiedCameraViewController : UIViewController {
     
     var formData: FormData?
     var onPhotoCaptured: ((UIImage) -> Void)?
-    
+    var onVideoCaptured: ((URL) -> Void)?
     //setup
     private let session = AVCaptureSession()
     private var previewLayer: AVCaptureVideoPreviewLayer?
@@ -29,6 +29,7 @@ class UnifiedCameraViewController : UIViewController {
     var mode: captureMode = .photo {
         didSet {switchCamera(mode)}
     }
+    private var isRecording = false
     
     //rotation angle
     private var currentDeviceAngle: AVCaptureDevice?
@@ -71,7 +72,63 @@ class UnifiedCameraViewController : UIViewController {
     
 }
 
-extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate {
+extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate, AVCaptureFileOutputRecordingDelegate {
+  
+    //capture setup
+    private func captueButtonNotication() {
+        //photo capture
+        NotificationCenter.default.addObserver(self, selector: #selector(captureButtonTapped), name: .captureButtonTapped, object: nil)
+        //video capture start
+        NotificationCenter.default.addObserver(self, selector: #selector(startVideoCapture), name: .stopVideoCapture, object: nil)
+        //video capture stop
+        NotificationCenter.default.addObserver(self, selector: #selector(stopVideoCapture), name: .stopVideoCapture, object: nil)
+    }
+    @objc func captureButtonTapped() {
+        print("captureButtonTapped received!")
+        if mode == .photo {
+            takePhoto()
+        } else if mode == .video {
+            if isRecording {
+                stopVideoCapture()
+                isRecording = false
+            } else {
+                startVideoCapture()
+                isRecording = true
+            }
+        }
+    }
+//MARK: - video capture
+    func newVideoURL() -> URL {
+        let fm = FileManager.default
+        let tempDir = fm.temporaryDirectory
+        let fileName = "output-\(UUID().uuidString).mp4"
+        return  tempDir.appendingPathComponent(fileName)
+        
+    }
+    @objc func startVideoCapture() {
+        guard let videoOut = videoOutPut else {return}
+        
+        let outputURL = newVideoURL()
+        
+        videoOut.startRecording(to: outputURL, recordingDelegate: self)
+        print("Video Recording Started: \(outputURL)")
+    }
+    @objc func stopVideoCapture() {
+        guard let videoOut = videoOutPut, videoOut.isRecording else {return}
+        videoOut.stopRecording()
+        print("Video Recording Stopped")
+    }
+    func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Error)?) {
+        
+        if let error = error {
+            print("Video capture failed: \(error)")
+            return
+        }
+        
+        print("Video save: \(outputFileURL)")
+        //formData?.capturedVideoURL = outputFileURL
+        onVideoCaptured?(outputFileURL)
+    }
     
 //MARK: - photo capture
     private func takePhoto() {
@@ -198,18 +255,7 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate {
             //updateRoationCoordinator()
     }
     
-    //capture setup
-    private func captueButtonNotication() {
-        NotificationCenter.default.addObserver(self, selector: #selector(captureButtonTapped), name: .captureButtonTapped, object: nil)
-    }
-    @objc func captureButtonTapped() {
-        print("captureButtonTapped received!")
-        if mode == .photo {
-            takePhoto()
-        } else {
-            
-        }
-    }
+    
     
 //MARK: - rotation coordinate
     private func setupRotationCoordinator() {
@@ -262,6 +308,7 @@ struct UnifiedCameraView: UIViewControllerRepresentable {
     
     @Binding var mode: captureMode
     @Binding var captureImage: UIImage?
+    @Binding var capterVideoURL: URL?
     
     func makeUIViewController(context: Context) -> UnifiedCameraViewController {
         
@@ -269,6 +316,9 @@ struct UnifiedCameraView: UIViewControllerRepresentable {
         vc.mode = mode
         vc.onPhotoCaptured = { image in
             captureImage = image
+        }
+        vc.onVideoCaptured = { url in
+            capterVideoURL = url
         }
         return vc
     }
