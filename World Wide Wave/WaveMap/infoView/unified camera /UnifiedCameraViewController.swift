@@ -79,24 +79,11 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate, AVCaptureF
         //photo capture
         NotificationCenter.default.addObserver(self, selector: #selector(captureButtonTapped), name: .captureButtonTapped, object: nil)
         //video capture start
-        NotificationCenter.default.addObserver(self, selector: #selector(startVideoCapture), name: .stopVideoCapture, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(startVideoCapture), name: .startVideoCapture, object: nil)
         //video capture stop
         NotificationCenter.default.addObserver(self, selector: #selector(stopVideoCapture), name: .stopVideoCapture, object: nil)
     }
-    @objc func captureButtonTapped() {
-        print("captureButtonTapped received!")
-        if mode == .photo {
-            takePhoto()
-        } else if mode == .video {
-            if isRecording {
-                stopVideoCapture()
-                isRecording = false
-            } else {
-                startVideoCapture()
-                isRecording = true
-            }
-        }
-    }
+    
 //MARK: - video capture
     func newVideoURL() -> URL {
         let fm = FileManager.default
@@ -141,6 +128,10 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate, AVCaptureF
         setting.flashMode = .auto
         
         photoOutput.capturePhoto(with: setting, delegate: self)
+    }
+    @objc func captureButtonTapped() {
+        print("captureButtonTapped received!")
+        takePhoto()
     }
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Error)?) {
         

@@ -20,6 +20,7 @@ struct UnifiedCameraSwiftUIView: View {
     @State private var isRecording = false
     
     @State private var showPhotoSheet = false
+    @State private var showVideoSheet = false
     
     var body: some View {
         GeometryReader { geo in
@@ -48,12 +49,13 @@ struct UnifiedCameraSwiftUIView: View {
                     } else if mode == .video {
                       
                         if isRecording {
-                            print("Video capture started")
-                            NotificationCenter.default.post(name: .startVideoCapture, object: nil)
-                        } else {
                             print("Video capture stopped")
                             NotificationCenter.default.post(name: .stopVideoCapture, object: nil)
+                        } else {
+                            print("Video capture started")
+                            NotificationCenter.default.post(name: .startVideoCapture, object: nil)
                         }
+                        isRecording.toggle()
                     }
                    
                     
@@ -84,7 +86,7 @@ struct UnifiedCameraSwiftUIView: View {
               
                 
                 //capture preview
-                Group{
+                ZStack {
                     if mode == .photo {
                         if let image = captureImage {
                             Image(uiImage: image)
@@ -100,29 +102,39 @@ struct UnifiedCameraSwiftUIView: View {
                         if let videoURL = captureVideoURL {
                             VideoPlayer(player: AVPlayer(url: videoURL))
                                 .scaledToFill()
+                                .allowsHitTesting(false)
                         } else {
                             Color.black
                         }
                     }
+                    
+                    Color.clear
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            if mode == .photo {
+                                showPhotoSheet = true
+                                print("photo preview tapped")
+                            } else {
+                                if captureVideoURL != nil && !isRecording {
+                                    showVideoSheet = true
+                                    print("video preview tapped")
+                                } else {
+                                    print("Video not ready yet")
+                                }                            }
+                        }
                    
                 }
                     .frame(width: 60, height: 60)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
                     .overlay(
                                    RoundedRectangle(cornerRadius: 8)
                                        .stroke(Color.black, lineWidth: 2)
                                )
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
                     .position(
                                 x: geo.size.width - 60/2 - 10, // UIKit の xPosition 相当
                                 y: geo.size.height - 60/2 - 40 // UIKit の yPosition 相当
                             )
-                    .onTapGesture(perform: {
-                        if mode == .photo {
-                            showPhotoSheet = true
-                        } else {
-                            
-                        }
-                    })
+                   
                  
                 
                    
@@ -136,6 +148,7 @@ struct UnifiedCameraSwiftUIView: View {
                     
                 }
             }
+           
         }
        
     }
