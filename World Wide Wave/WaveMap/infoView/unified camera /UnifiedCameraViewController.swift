@@ -130,7 +130,7 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate, AVCaptureF
         photoOutput.capturePhoto(with: setting, delegate: self)
     }
     @objc func captureButtonTapped() {
-        print("captureButtonTapped received!")
+       // print("captureButtonTapped received!")
         takePhoto()
     }
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Error)?) {

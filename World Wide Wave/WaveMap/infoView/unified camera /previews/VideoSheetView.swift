@@ -24,10 +24,22 @@ struct VideoSheetView: View {
                     VideoPlayer(player: AVPlayer(url: url))
                                            .frame(width: geometry.size.width,
                                                   height: geometry.size.height)
-                                           .ignoresSafeArea()
-                   
                 }
             }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Save") {
+                        formData.capturedVideoURL = url
+                        dismiss()
+                        isCameraPresented = false
+                    }
+                    .font(.headline)
+                    .bold()
+                    .foregroundStyle(.brown)
+                }
+            }
+            .ignoresSafeArea()
+            
         }
         
         

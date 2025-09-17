@@ -148,7 +148,14 @@ struct UnifiedCameraSwiftUIView: View {
                     
                 }
             }
-           
+           //add video sheetから続き:2025/9/17 12:50
+            .sheet(isPresented: $showVideoSheet) {
+                if let url = captureVideoURL {
+                    VideoSheetView(url: url, isCameraPresented: $isCameraPresented)
+                        .environmentObject(formData)
+                        .presentationDetents([.fraction(1.0)])
+                }
+            }
         }
        
     }

@@ -42,6 +42,12 @@ class FormData: ObservableObject {
         } else {
             print("no image captured")
         }
+        
+         if let videoURL = capturedVideoURL {
+            print("video captured: \(videoURL)")
+        } else {
+            print("no video captured")
+        }
     }
     
 }

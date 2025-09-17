@@ -32,7 +32,6 @@ struct PhotoSheetView: View {
                     
                 }
             }
-           
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
@@ -52,5 +51,6 @@ struct PhotoSheetView: View {
 }
 #Preview {
     let image = UIImage(systemName: "photo")!
+        
     PhotoSheetView(image: image, isCameraPresented: .constant(true))
 }
