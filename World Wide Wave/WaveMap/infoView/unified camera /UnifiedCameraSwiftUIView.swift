@@ -148,7 +148,6 @@ struct UnifiedCameraSwiftUIView: View {
                     
                 }
             }
-           //add video sheetから続き:2025/9/17 12:50
             .sheet(isPresented: $showVideoSheet) {
                 if let url = captureVideoURL {
                     VideoSheetView(url: url, isCameraPresented: $isCameraPresented)
@@ -160,6 +159,7 @@ struct UnifiedCameraSwiftUIView: View {
        
     }
 }
+
 extension Notification.Name {
     static let captureButtonTapped = Notification.Name("captureButtonTapped")
     static let startVideoCapture = Notification.Name("startVideoCapture")
@@ -167,7 +167,7 @@ extension Notification.Name {
 }
 
 #Preview {
-    
+    @Previewable @State var dummyBlightness : Double = 1.0
     if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
         // カメラ代わりのダミー背景
         GeometryReader { geo in
@@ -210,6 +210,51 @@ extension Notification.Name {
                                    x: geo.size.width - 60/2 - 10, // UIKit の xPosition 相当
                                    y: geo.size.height - 60/2 - 40 // UIKit の yPosition 相当
                                )
+                
+                VStack {
+                    ZStack {
+                        HStack(spacing:0) {
+                            ForEach(0..<3) { i in
+                                                                   Rectangle()
+                                                                       .fill(Color.black.opacity(0.7))
+                                                                       .frame(width: 2, height: 20) // 少し長めの縦線
+                                                                   if i < 2 { Spacer() }
+                                                               }
+                        }
+                        .padding(.horizontal, 20)
+                        
+                        HStack(spacing: 0) {
+                                  ForEach(0..<21) { i in // 0〜1 を 0.05 間隔で 21本の線
+                                      Rectangle()
+                                          .fill(Color.black.opacity(0.6))
+                                          .frame(width: 1, height: 10) // 縦線の幅と高さ
+                                      if i < 20 { Spacer() }
+                                  }
+                              }
+                              .padding(.horizontal, 20)
+                        
+                        Slider(value: $dummyBlightness, in: 0.0...1.0, step: 0.01)
+                        .padding(.horizontal, 20)
+                    }
+                 
+                    HStack {
+                        Text("0.0")
+                        Spacer()
+                        Text("0.25")
+                        Spacer()
+                        Text("0.5")
+                        Spacer()
+                        Text("0.75")
+                        Spacer()
+                        Text("1.0")
+                    }
+                    .padding(.horizontal, 20)
+                    .font(.caption2)
+                       
+                }
+                .position(x: geo.size.width / 2, y: geo.size.height - 50 - 100)
+                    
+                
             }
         }
     } else {
