@@ -22,22 +22,16 @@ struct UnifiedCameraSwiftUIView: View {
     @State private var showPhotoSheet = false
     @State private var showVideoSheet = false
     
+    @State private var blightness: Double = 0.5
+    @State private var showBlightness = false
+    
+    
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                UnifiedCameraView(mode: $mode, captureImage: $captureImage, capterVideoURL: $captureVideoURL)
+                UnifiedCameraView(mode: $mode, captureImage: $captureImage, capterVideoURL: $captureVideoURL, blightness: $blightness)
                     .ignoresSafeArea()
-                    .gesture(
-                        DragGesture()
-                            .onEnded {
-                                value in
-                                if value.translation.width  < -50 {
-                                    mode = .video
-                                } else if value.translation.width  > 50 {
-                                    mode = .photo
-                                }
-                            }
-                    )
+                    
                 
                 //capture button
                 Button(action: {
@@ -135,11 +129,80 @@ struct UnifiedCameraSwiftUIView: View {
                                 y: geo.size.height - 60/2 - 40 // UIKit の yPosition 相当
                             )
                    
-                 
-                
-                   
-              
+                if showBlightness {
+                    VStack {
+                        ZStack {
+                            HStack(spacing:0) {
+                                ForEach(0..<3) { i in
+                                                                       Rectangle()
+                                                                           .fill(Color.black.opacity(0.7))
+                                                                           .frame(width: 2, height: 20) // 少し長めの縦線
+                                                                       if i < 2 { Spacer() }
+                                                                   }
+                            }
+                            .padding(.horizontal, 20)
+                            
+                            HStack(spacing: 0) {
+                                      ForEach(0..<21) { i in // 0〜1 を 0.05 間隔で 21本の線
+                                          Rectangle()
+                                              .fill(Color.black.opacity(0.6))
+                                              .frame(width: 1, height: 10) // 縦線の幅と高さ
+                                          if i < 20 { Spacer() }
+                                      }
+                                  }
+                                  .padding(.horizontal, 20)
+                            
+                            Slider(value: $blightness, in: 0.0...1.0, step: 0.01)
+                            .padding(.horizontal, 20)
+                        }
+                     
+                        HStack {
+                            Text("0.0")
+                            Spacer()
+                            Text("0.25")
+                            Spacer()
+                            Text("0.5")
+                            Spacer()
+                            Text("0.75")
+                            Spacer()
+                            Text("1.0")
+                        }
+                        .padding(.horizontal, 20)
+                        .font(.caption2)
+                           
+                    }
+                    .position(x: geo.size.width / 2, y: geo.size.height - 50 - 100)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .animation(.easeInOut, value: showBlightness)
+                }
             }
+            .gesture(
+                DragGesture()
+                    .onEnded {
+                        value in
+                        if value.translation.width  < -50 {
+                            mode = .video
+                        } else if value.translation.width  > 50 {
+                            mode = .photo
+                        }
+                    }
+            )
+            .simultaneousGesture(
+                DragGesture(minimumDistance: 30)
+                    .onEnded {
+                        value in
+                        if value.translation.height < -50 {
+                            withAnimation {showBlightness = true
+                            }
+                        } else if  value.translation.height > 50 {
+                            withAnimation {
+                                showBlightness = false
+                            }
+                            
+                        }
+                    }
+            )
+            
             .sheet(isPresented: $showPhotoSheet) {
                 if let image = captureImage {
                     PhotoSheetView(image: image, isCameraPresented: $isCameraPresented)

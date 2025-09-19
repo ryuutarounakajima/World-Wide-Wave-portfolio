@@ -36,8 +36,8 @@ class UnifiedCameraViewController : UIViewController {
     private var previewAngleObserver: NSKeyValueObservation?
     private var rotationCoordinator: AVCaptureDevice.RotationCoordinator?
     
-   //button
-    //private  var captureButton: UIButton!
+    //ecposure
+    var onDefalutExposure: ((Double) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,8 +73,38 @@ class UnifiedCameraViewController : UIViewController {
 }
 
 extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate, AVCaptureFileOutputRecordingDelegate {
+
+//MARK: - exposure
+    func setExposure(_ value: Double) {
+        
+        guard let device = currentDeviceAngle else { return }
+        
+        
+        do {
+            try device.lockForConfiguration()
+            let min = device.minExposureTargetBias
+            let max = device.maxExposureTargetBias
+            let bias = Float(min + (max - min) * Float(value))
+            device.setExposureTargetBias(bias) { _ in }
+            device.unlockForConfiguration()
+            print("Exposure set: \(bias)")
+        } catch {
+            print("Exposure setting falied: \(error)")
+        }
+        
+    }
+    func sendDefaultExposureValue() {
+        guard let device = currentDeviceAngle else {
+            return
+        }
+        let min = device.minExposureTargetBias
+        let max = device.maxExposureTargetBias
+        let current = device.exposureTargetBias
+        let nomalized = Double((current - min) / (max - min))
+        onDefalutExposure?(nomalized)
+    }
   
-    //capture setup
+//MARK: - UI button notifications
     private func captueButtonNotication() {
         //photo capture
         NotificationCenter.default.addObserver(self, selector: #selector(captureButtonTapped), name: .captureButtonTapped, object: nil)
@@ -193,6 +223,8 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate, AVCaptureF
             self.view.layer.addSublayer(layer)
             self.previewLayer = layer
             
+            self.sendDefaultExposureValue()
+            
            // self.view.bringSubviewToFront(self.captureButton)
         }
        
@@ -300,6 +332,7 @@ struct UnifiedCameraView: UIViewControllerRepresentable {
     @Binding var mode: captureMode
     @Binding var captureImage: UIImage?
     @Binding var capterVideoURL: URL?
+    @Binding var blightness: Double
     
     func makeUIViewController(context: Context) -> UnifiedCameraViewController {
         
@@ -319,6 +352,8 @@ struct UnifiedCameraView: UIViewControllerRepresentable {
        if uiViewController.mode != mode {
            uiViewController.mode = mode
        }
+       
+       uiViewController.setExposure(blightness)
    }
 }
 
