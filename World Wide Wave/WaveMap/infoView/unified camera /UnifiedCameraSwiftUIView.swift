@@ -106,8 +106,12 @@ struct UnifiedCameraSwiftUIView: View {
                         .contentShape(Rectangle())
                         .onTapGesture {
                             if mode == .photo {
-                                showPhotoSheet = true
-                                print("photo preview tapped")
+                                if captureImage != nil && !isRecording {
+                                    showPhotoSheet = true
+                                    print("photo preview tapped")
+                                } else {
+                                    print("Photo not ready yet")
+                                }
                             } else {
                                 if captureVideoURL != nil && !isRecording {
                                     showVideoSheet = true
