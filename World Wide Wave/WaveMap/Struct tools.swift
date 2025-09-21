@@ -513,6 +513,55 @@ struct SliderModifier: View {
         
         
 }
+
+struct ExposureSlider: UIViewRepresentable {
+    
+    
+    
+    @Binding var value: Double
+    
+    func makeUIView(context: Context) -> UISlider {
+        let slider = UISlider(frame: .zero)
+        slider.minimumValue = 0
+        slider.maximumValue = 1
+        slider.value = Float(value)
+        slider.minimumTrackTintColor = .orange
+        slider.maximumTrackTintColor = .gray
+       
+        if let sunIcon = UIImage(systemName: "sun.max.fill")
+            {
+            let resized = sunIcon
+                .withConfiguration(UIImage.SymbolConfiguration(pointSize: 25, weight: .regular))
+                .withTintColor(.yellow, renderingMode: .alwaysOriginal)
+            
+            slider.setThumbImage(resized, for: .normal)
+        }
+        
+        slider.addTarget(context.coordinator, action: #selector(Coordinator.valueChanged(_:)), for: .valueChanged)
+        
+        return slider
+        
+    }
+    
+    func updateUIView(_ uiView: UISlider, context: Context) {
+        uiView.value = Float(value)
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(value: $value)
+    }
+    
+    class Coordinator: NSObject {
+        var value: Binding<Double>
+        init(value: Binding<Double>) {
+            self.value = value }
+        
+        @objc func valueChanged(_ sender: UISlider) {
+            self.value.wrappedValue = Double(sender.value)
+        }
+    }
+}
+
 //form view preview
 #Preview {
     struct FormViewPreview: View {

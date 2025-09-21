@@ -132,7 +132,8 @@ struct UnifiedCameraSwiftUIView: View {
                                 x: geo.size.width - 60/2 - 10, // UIKit の xPosition 相当
                                 y: geo.size.height - 60/2 - 40 // UIKit の yPosition 相当
                             )
-                   
+                
+                //exposure
                 if showBlightness {
                     VStack {
                         ZStack {
@@ -156,8 +157,14 @@ struct UnifiedCameraSwiftUIView: View {
                                   }
                                   .padding(.horizontal, 20)
                             
-                            Slider(value: $blightness, in: 0.0...1.0, step: 0.01)
+                            //swiftui
+                            /*Slider(value: $blightness, in: 0.0...1.0, step: 0.01)
                             .padding(.horizontal, 20)
+                             */
+                            
+                            //uikit
+                            ExposureSlider(value: $blightness)
+                              .padding(.horizontal, 20)
                         }
                      
                         HStack {
@@ -299,9 +306,18 @@ extension Notification.Name {
                                   }
                               }
                               .padding(.horizontal, 20)
+                    
+                    
+                        /*Slider(value: $dummyBlightness, in: 0.0...1.0, step: 0.01)
+                            .tint(Color.orange)
+                            .padding(.horizontal, 20)
+                        */
                         
-                        Slider(value: $dummyBlightness, in: 0.0...1.0, step: 0.01)
-                        .padding(.horizontal, 20)
+                          ExposureSlider(value: $dummyBlightness)
+                            .padding(.horizontal, 20)
+                          
+                        
+                        
                     }
                  
                     HStack {
