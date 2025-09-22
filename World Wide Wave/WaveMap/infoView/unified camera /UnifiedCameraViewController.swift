@@ -39,13 +39,17 @@ class UnifiedCameraViewController : UIViewController {
     //ecposure
     var onDefalutExposure: ((Double) -> Void)?
     
+    //zoom
+    private var currentZoomFactor: CGFloat = 1.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
         setupSession()
         captueButtonNotication()
         
-       // setupCaptureButton()
+        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
+        view.addGestureRecognizer(pinch)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -73,6 +77,27 @@ class UnifiedCameraViewController : UIViewController {
 }
 
 extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate, AVCaptureFileOutputRecordingDelegate {
+    
+//MARK: - zoom factor
+    @objc private func handlePinchGesture(_ gesture: UIPinchGestureRecognizer) {
+        
+        guard let device = AVCaptureDevice.default(for: .video) else { return }
+        
+        if gesture.state == .began {
+            currentZoomFactor = device.videoZoomFactor
+        }
+        
+        var newZoomFactor = currentZoomFactor * gesture.scale
+        newZoomFactor = max(1.0, min(newZoomFactor, device.activeFormat.videoMaxZoomFactor))
+        
+        do {
+            try device.lockForConfiguration()
+            device.videoZoomFactor = newZoomFactor
+            device.unlockForConfiguration()
+        } catch {
+            print("Zooming failed: \(error)")
+        }
+    }
 
 //MARK: - exposure
     func setExposure(_ value: Double) {
@@ -104,7 +129,7 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate, AVCaptureF
         onDefalutExposure?(nomalized)
     }
   
-//MARK: - UI button notifications
+//MARK: - capture button notifications
     private func captueButtonNotication() {
         //photo capture
         NotificationCenter.default.addObserver(self, selector: #selector(captureButtonTapped), name: .captureButtonTapped, object: nil)
