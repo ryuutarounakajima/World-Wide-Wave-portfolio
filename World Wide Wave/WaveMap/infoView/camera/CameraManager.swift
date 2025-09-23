@@ -17,19 +17,7 @@ import AVFoundation
     }
 }*/
 
-actor CameraManager {
-    func requestCameraAccess() async -> Bool {
-        let status = AVCaptureDevice.authorizationStatus(for: .video)
-        switch status {
-        case .authorized:
-            return true
-        case .notDetermined:
-            return await AVCaptureDevice.requestAccess(for: .video)
-        default:
-            return false
-        }
-    }
-}
+
 
 struct CameraPreviewView: UIViewControllerRepresentable {
   

@@ -14,6 +14,47 @@ enum captureMode {
     case video
 }
 
+actor CameraManager {
+    func requestCameraAccess() async -> Bool {
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        switch status {
+        case .authorized:
+            return true
+        case .notDetermined:
+            return await AVCaptureDevice.requestAccess(for: .video)
+        default:
+            return false
+        }
+    }
+}
+
+actor MicManager {
+    func requestMicAccess() async -> Bool {
+        
+        let micStatus = AVCaptureDevice.authorizationStatus(for: .audio)
+        
+        switch micStatus {
+        case .authorized:
+            return true
+        case .notDetermined:
+            return await AVCaptureDevice.requestAccess(for: .audio)
+        case .denied:
+            print("mic access denied")
+            try? await Task.sleep(nanoseconds: 5_000_000)
+            
+            let newStatus = AVCaptureDevice.authorizationStatus(for: .audio)
+           
+            if newStatus == .authorized {
+                return true
+            } else {
+                return false
+            }
+        default:
+            return true
+        }
+    }
+}
+
 class UnifiedCameraViewController : UIViewController {
     
     var formData: FormData?
@@ -221,8 +262,14 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate, AVCaptureF
             return
         }
         session.addInput(input)
-       
         self.currentDeviceAngle = device
+        
+        if let mic = AVCaptureDevice.default(for: .audio),
+           let micInput = try? AVCaptureDeviceInput(device:mic),
+           session.canAddInput(micInput)  {
+            session.addInput(micInput)
+        }
+        
         
         let photoOut = AVCapturePhotoOutput()
         if session.canAddOutput(photoOut) {
