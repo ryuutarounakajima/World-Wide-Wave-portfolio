@@ -30,7 +30,8 @@ import AVKit
 struct WaveInfoSwiftUIView: View {
     
     @EnvironmentObject  var formData: FormData
-   
+    @Environment(\.dismiss) private var dismiss
+    
     //Wave size select
     @State private var isSizeSelect: Bool = false
     //Wave condition select
@@ -254,6 +255,19 @@ struct WaveInfoSwiftUIView: View {
                                             cameraButtonColoring.toggle()
                                         }
                                     }
+                            }
+                        }
+                    }
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(action: {
+                                dismiss()
+                            }) {
+                                HStack {
+                                    Image(systemName: "chevron.left")
+                                    Text("Back")
+                                }
+                                
                             }
                         }
                     }

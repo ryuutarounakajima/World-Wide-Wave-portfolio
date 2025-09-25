@@ -16,6 +16,17 @@ class waveInfoViewController: UIViewController {
     var timestamp: Date?
     var formData: FormData?
     
+    override var shouldAutorotate: Bool{
+        return true
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return [.portrait, .landscapeLeft, .landscapeRight]
+    }
+    
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,15 +51,17 @@ class waveInfoViewController: UIViewController {
         
     }
     
-    override var shouldAutorotate: Bool{
-        return true
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // navigation bar を非表示にする
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // 元の画面に戻るときは再表示
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return [.portrait, .landscapeLeft, .landscapeRight]
-    }
     
-    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return .portrait
-    }
 }

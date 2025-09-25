@@ -12,7 +12,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
     
-    let isDevelopmentMode = true
+    let isDevelopmentMode = false
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
@@ -65,7 +65,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
         } else {
             // トークンがない、または空の場合（未ログイン）
-            let loginVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "LoginViewController")
+            let loginVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "ViewController")
             self.window?.rootViewController = loginVC
         }
         
