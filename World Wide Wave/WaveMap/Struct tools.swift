@@ -604,7 +604,7 @@ struct RecordingProgressRing: View {
                     style: StrokeStyle(lineWidth: 6, lineCap: .butt))
             .rotationEffect(.degrees(-90))
             .frame(width: 56, height: 56)
-            .animation(.linear(duration: 31), value: progress)
+           //.animation(.linear(duration: 31), value: progress)
             
     }
 }

@@ -27,19 +27,29 @@ struct UnifiedCameraSwiftUIView: View {
     
     @State private var progress: Float = 0
     
-    func starutProgress() {
+    func startProress() {
         
-        progress = 0
-        withAnimation(.linear(duration: 31)) {
-            progress = 1
+        withAnimation(.none) {
+            progress = 0
         }
+       
+        DispatchQueue.main.async {
+               withAnimation(.linear(duration: 31)) {
+                   progress = 1
+               }
+           }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 31) {
             if isRecording {
                 isRecording = false
-                progress = 0
+                stopProress()
                 NotificationCenter.default.post(name: .stopVideoCapture, object: nil)
             }
+        }
+    }
+    func stopProress() {
+        withAnimation(.none) {
+            progress = 0
         }
     }
     
@@ -65,6 +75,7 @@ struct UnifiedCameraSwiftUIView: View {
                         if isRecording {
                             print("Video capture stopped")
                             NotificationCenter.default.post(name: .stopVideoCapture, object: nil)
+                            
                         } else {
                             print("Video capture started")
                             NotificationCenter.default.post(name: .startVideoCapture, object: nil)
@@ -73,7 +84,8 @@ struct UnifiedCameraSwiftUIView: View {
                         
                         isRecording.toggle()
                         if isRecording {
-                            starutProgress()
+                            
+                            startProress()
                         } else {
                             progress = 0
                         }
@@ -85,29 +97,6 @@ struct UnifiedCameraSwiftUIView: View {
                 }
                 .position(x: geo.size.width / 2, y: geo.size.height - 50 - 25)
                 
-                
-                /*  {
-                      Circle()
-                          .fill(Color.white)
-                          .frame(width: 50, height: 50)
-                      
-                  }
-                  .overlay(Circle().stroke(
-                      mode == .photo ? LinearGradient(
-                          colors: [Color.red.opacity(1.0), Color.blue.opacity(0.9)],
-                          startPoint: .top,
-                          endPoint: .bottom
-                      )
-                      : LinearGradient(
-                          colors: [Color.blue.opacity(1.0), Color.red.opacity(0.9)],
-                          startPoint: .top,
-                          endPoint: .bottom
-                      ),
-                      lineWidth: 6
-                  )
-                      .padding(-10)
-                  )
-                */
                 
                 //capture preview
                 ZStack {
@@ -260,8 +249,11 @@ struct UnifiedCameraSwiftUIView: View {
                 }
             }
         }
-       
+        .onReceive(NotificationCenter.default.publisher(for: .stopVideoCapture)) { _ in
+                stopProress()
+            }
     }
+    
 }
 
 extension Notification.Name {
