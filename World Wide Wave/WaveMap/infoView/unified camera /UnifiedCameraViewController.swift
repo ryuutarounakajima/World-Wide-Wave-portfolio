@@ -86,6 +86,8 @@ class UnifiedCameraViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        
+        audioSessionActive()
         setupSession()
         captueButtonNotication()
         
@@ -181,15 +183,34 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate, AVCaptureF
     }
     
 //MARK: - video capture
+    
+    func audioSessionActive() {
+        
+        do {
+             let audioSession = AVAudioSession.sharedInstance()
+             try audioSession.setCategory(.playAndRecord, mode: .videoRecording, options: [.defaultToSpeaker])
+             try audioSession.setActive(true)
+             print("AVAudioSession configured")
+         } catch {
+             print("Failed to configure AVAudioSession: \(error)")
+         }
+        
+    }
     func newVideoURL() -> URL {
         let fm = FileManager.default
         let tempDir = fm.temporaryDirectory
-        let fileName = "output-\(UUID().uuidString).mp4"
+        let fileName = "output-\(UUID().uuidString).mov"
         return  tempDir.appendingPathComponent(fileName)
         
     }
     @objc func startVideoCapture() {
         guard let videoOut = videoOutPut else {return}
+        
+        if let audioInput = videoOut.connection(with: .audio) {
+            print("✅ Audio connection found: \(audioInput)")
+        } else {
+            print("❌ audio connection missing")
+        }
         
         let outputURL = newVideoURL()
         
@@ -281,7 +302,7 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate, AVCaptureF
         if session.canAddOutput(videoOut) {
             session.addOutput(videoOut)
             self.videoOutPut = videoOut
-            session.removeOutput(videoOut)
+           // session.removeOutput(videoOut)
         }
         
         session.commitConfiguration()

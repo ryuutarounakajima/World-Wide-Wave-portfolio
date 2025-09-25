@@ -562,8 +562,55 @@ struct ExposureSlider: UIViewRepresentable {
     }
 }
 
+struct CaptureButtonView: View {
+    var mode: captureMode
+    var isRecording: Bool
+    var progress: CGFloat
+    
+    var body: some View {
+        Circle()
+            .fill(mode == .video ? Color.red : Color.white)
+            .frame(width: 50, height: 50)
+            .overlay(
+                Circle().stroke(
+                                   mode == .photo
+                                       ? LinearGradient(
+                                           colors: [Color.red.opacity(1.0), Color.blue.opacity(0.9)],
+                                           startPoint: .top, endPoint: .bottom
+                                         )
+                                       : LinearGradient(
+                                           colors: [Color.blue.opacity(1.0), Color.red.opacity(0.9)],
+                                           startPoint: .top, endPoint: .bottom
+                                         ),
+                                   lineWidth: 6
+                               )
+                               .padding(-10)
+            )
+            .overlay(
+                RecordingProgressRing(progress: progress)
+                    .opacity(mode == .video && isRecording ? 1 : 0)
+            )
+        
+    }
+}
+struct RecordingProgressRing: View {
+    
+    var progress : CGFloat
+    
+    var body: some View {
+        Circle()
+            .trim(from: 0, to: progress)
+            .stroke(Color.green,
+                    style: StrokeStyle(lineWidth: 6, lineCap: .butt))
+            .rotationEffect(.degrees(-90))
+            .frame(width: 56, height: 56)
+            .animation(.linear(duration: 31), value: progress)
+            
+    }
+}
 //form view preview
 #Preview {
+    
     struct FormViewPreview: View {
         @State private var isSizeSelect = false
         @State private var isConditionSelect = false
@@ -580,7 +627,6 @@ struct ExposureSlider: UIViewRepresentable {
                 .environmentObject(formData)
         }
     }
-
     return FormViewPreview()
 }
 

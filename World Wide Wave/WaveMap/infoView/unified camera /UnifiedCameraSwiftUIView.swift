@@ -25,15 +25,35 @@ struct UnifiedCameraSwiftUIView: View {
     @State private var blightness: Double = 0.5
     @State private var showBlightness = false
     
+    @State private var progress: Float = 0
+    
+    func starutProgress() {
+        
+        progress = 0
+        withAnimation(.linear(duration: 31)) {
+            progress = 1
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 31) {
+            if isRecording {
+                isRecording = false
+                progress = 0
+                NotificationCenter.default.post(name: .stopVideoCapture, object: nil)
+            }
+        }
+    }
     
     var body: some View {
         GeometryReader { geo in
             ZStack {
                 UnifiedCameraView(mode: $mode, captureImage: $captureImage, capterVideoURL: $captureVideoURL, blightness: $blightness)
                     .ignoresSafeArea()
-                    
+                
                 
                 //capture button
+                
+                
+                
                 Button(action: {
                     
                     if mode == .photo {
@@ -41,7 +61,7 @@ struct UnifiedCameraSwiftUIView: View {
                         NotificationCenter.default.post(name: .captureButtonTapped, object: nil)
                         
                     } else if mode == .video {
-                      
+                    
                         if isRecording {
                             print("Video capture stopped")
                             NotificationCenter.default.post(name: .stopVideoCapture, object: nil)
@@ -49,35 +69,45 @@ struct UnifiedCameraSwiftUIView: View {
                             print("Video capture started")
                             NotificationCenter.default.post(name: .startVideoCapture, object: nil)
                         }
+                        
+                        
                         isRecording.toggle()
+                        if isRecording {
+                            starutProgress()
+                        } else {
+                            progress = 0
+                        }
+                        
                     }
-                   
-                    
-                    
                 })
                 {
-                    Circle()
-                        .fill(Color.white)
-                        .frame(width: 50, height: 50)
-                       
+                    CaptureButtonView(mode: mode, isRecording: isRecording, progress: CGFloat(progress))
                 }
-                .overlay(Circle().stroke(
-                    mode == .photo ? LinearGradient(
-                        colors: [Color.red.opacity(1.0), Color.blue.opacity(0.9)],
-                        startPoint: .top,
-                        endPoint: .bottom
-                      )
-                    : LinearGradient(
-                        colors: [Color.blue.opacity(1.0), Color.red.opacity(0.9)],
-                        startPoint: .top,
-                        endPoint: .bottom
-                      ),
-                    lineWidth: 6
-                )
-                    .padding(-10)
-                )
                 .position(x: geo.size.width / 2, y: geo.size.height - 50 - 25)
-              
+                
+                
+                /*  {
+                      Circle()
+                          .fill(Color.white)
+                          .frame(width: 50, height: 50)
+                      
+                  }
+                  .overlay(Circle().stroke(
+                      mode == .photo ? LinearGradient(
+                          colors: [Color.red.opacity(1.0), Color.blue.opacity(0.9)],
+                          startPoint: .top,
+                          endPoint: .bottom
+                      )
+                      : LinearGradient(
+                          colors: [Color.blue.opacity(1.0), Color.red.opacity(0.9)],
+                          startPoint: .top,
+                          endPoint: .bottom
+                      ),
+                      lineWidth: 6
+                  )
+                      .padding(-10)
+                  )
+                */
                 
                 //capture preview
                 ZStack {

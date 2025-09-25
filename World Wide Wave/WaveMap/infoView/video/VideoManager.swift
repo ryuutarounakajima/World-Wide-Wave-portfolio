@@ -412,6 +412,7 @@ extension VideoPreviewViewController: AVCaptureFileOutputRecordingDelegate, CAAn
         animationStartTime = CACurrentMediaTime() - (isPaused ? Double(pausedTime) * maxRecordingDuration : 0)
         isPaused = false
     }
+    
     private func pauseProgressRing() {
         guard let progressLayer = progressLayer else { return }
         
