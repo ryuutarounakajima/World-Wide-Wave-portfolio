@@ -11,6 +11,57 @@ import SwiftData
 
 //Model
 @Model
+class SurfLog2 {
+    var coordinateLat : Double?
+    var cooorinateLon: Double?
+    var timestamp: Date?
+    var note: String
+    var imageData: Data?
+    var videoPath: String?
+    
+    init(
+        coordinateLat: Double?,
+        coordinateLon: Double?,
+        timestamp: Date?,
+        selectedSize: String = "",
+        selectedSize1: String = "",
+        selectedSize2: String = "",
+        selectedCondition: String = "",
+        selectedSwell: String = "",
+        selectedBreaks: String = "",
+        selectedWind: String = "",
+        selectedWindStrengthValue: Double = 0.0,
+        selectedTide: String = "",
+        selectedTideValue: Double = 0.0,
+        selectedWax: String = "",
+        waterTemperatureValue: Double = 0.0,
+        imageData: Data? = nil,
+        videoPath: String? = nil
+        
+    ) {
+        
+        self.coordinateLat = coordinateLat
+        self.cooorinateLon = coordinateLon
+        self.timestamp = timestamp
+        
+        self.note = """
+        Size: \(selectedSize)
+        Size: \(selectedSize1)
+        Size: \(selectedSize2)
+        Condition: \(selectedCondition)
+        Swell: \(selectedSwell)
+        Breaks: \(selectedBreaks)
+        Wind: \(selectedWind) (\(String(format: "%.1f, selectedWindStrengthValue"))
+        Tide: \(selectedTide) (\(String(format: "%.1f", selectedTideValue)))
+        Wax: \(selectedWax)
+        Water Temp: \(String(format: "%.1f", waterTemperatureValue))
+        """
+        
+        self.imageData = imageData
+        self.videoPath = videoPath
+    }
+}
+@Model
 class SurfLog {
     var coordinateLat: Double?
     var coordinateLon: Double?
@@ -115,7 +166,7 @@ class FormData: ObservableObject {
     
     func saveToSwifData(context: ModelContext) {
         
-        let log = SurfLog(coordinateLat: coordinate?.latitude, coordinateLon: coordinate?.longitude, timestamp: timestamp,
+        let log = SurfLog2(coordinateLat: coordinate?.latitude, coordinateLon: coordinate?.longitude, timestamp: timestamp,
                           selectedSize: selectedSize,
                           selectedSize1: selectedSize1,
                           selectedSize2: selectedSize2,
@@ -143,6 +194,7 @@ class FormData: ObservableObject {
         
         
     }
+    
     
 }
 //View
