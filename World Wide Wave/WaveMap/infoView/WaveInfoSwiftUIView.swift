@@ -9,6 +9,7 @@ import SwiftUI
 import MapKit
 import CoreLocation
 import AVKit
+import SwiftData
 
 
 /*extension UIImage {
@@ -31,6 +32,7 @@ struct WaveInfoSwiftUIView: View {
     
     @EnvironmentObject  var formData: FormData
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     
     //Wave size select
     @State private var isSizeSelect: Bool = false
@@ -194,6 +196,7 @@ struct WaveInfoSwiftUIView: View {
                                         print("Yes")
                                         print("You are optimistic person from now!!")
                                         formData.submitForm()
+                                        formData.saveToSwifData(context: modelContext)
                                         
                                     }
                                 } message:{
