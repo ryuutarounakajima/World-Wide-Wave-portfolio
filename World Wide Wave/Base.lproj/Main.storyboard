@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="9GG-vv-SXR">
-    <device id="retina4_0" orientation="portrait" appearance="light"/>
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Image references" minToolsVersion="12.0"/>
@@ -14,18 +14,18 @@
             <objects>
                 <viewController storyboardIdentifier="ViewController" id="9GG-vv-SXR" customClass="LoginViewController" customModule="World_Wide_Wave" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Zf6-mB-w4C">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" semanticContentAttribute="spatial" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="JB" translatesAutoresizingMaskIntoConstraints="NO" id="dxd-yF-Iv0">
-                                <rect key="frame" x="20" y="131" width="280" height="130"/>
+                                <rect key="frame" x="47.5" y="131" width="280" height="130"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="iWg-2k-2cD"/>
                                     <constraint firstAttribute="height" constant="130" id="m5Q-0X-oyP"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign Up" textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="id1-l0-dCD">
-                                <rect key="frame" x="113" y="281" width="94" height="35"/>
+                                <rect key="frame" x="140.5" y="281" width="94" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="1ii-1R-89d"/>
                                     <constraint firstAttribute="height" constant="35" id="OCr-os-cF6"/>
@@ -35,13 +35,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Only surfers know the feeling!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0lR-8P-Emf">
-                                <rect key="frame" x="45" y="328" width="230" height="53"/>
+                                <rect key="frame" x="45" y="328" width="285" height="53"/>
                                 <fontDescription key="fontDescription" name="Cochin" family="Cochin" pointSize="23"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZuH-6z-OKA">
-                                <rect key="frame" x="52" y="403" width="216" height="40"/>
+                                <rect key="frame" x="52" y="403" width="271" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Z0Z-bm-kvr"/>
                                 </constraints>
@@ -55,7 +55,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wtr-EH-6ZL">
-                                <rect key="frame" x="100" y="518" width="120" height="20"/>
+                                <rect key="frame" x="100" y="617" width="175" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="lwU-Ng-RcD"/>
                                 </constraints>
@@ -66,7 +66,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="if your have an account" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bnL-oq-BLc">
-                                <rect key="frame" x="50" y="487" width="220" height="21"/>
+                                <rect key="frame" x="50" y="586" width="275" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="ZdZ-Sy-ZTM"/>
                                 </constraints>
@@ -141,7 +141,7 @@
                         </imageReference>
                     </tabBarItem>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="BJo-Ao-dl0">
-                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -166,7 +166,7 @@
                         </imageReference>
                     </tabBarItem>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="lQT-YW-5f4">
-                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -182,7 +182,7 @@
             <objects>
                 <viewController storyboardIdentifier="WaveMapViewController" id="fug-rh-NQQ" customClass="WaveMapViewController" customModule="World_Wide_Wave" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ILV-gZ-hac">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="6HX-gn-tH7"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -198,7 +198,7 @@
             <objects>
                 <viewController storyboardIdentifier="WaveInfoViewController" id="YUG-eP-pah" customClass="waveInfoViewController" customModule="World_Wide_Wave" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8wk-eW-2B4">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="F31-Dt-XUU"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -213,7 +213,7 @@
             <objects>
                 <viewController id="2WR-XO-zyK" customClass="MylogViewController" customModule="World_Wide_Wave" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rJs-5E-bHH">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="nvG-Zh-VBh"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
