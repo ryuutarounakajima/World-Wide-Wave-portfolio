@@ -542,6 +542,7 @@
 				CODE_SIGN_ENTITLEMENTS = "World Wide Wave/World Wide Wave.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 18;
+				DEVELOPMENT_TEAM = JRKRYNA77K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "World Wide Wave/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -570,6 +571,7 @@
 				CODE_SIGN_ENTITLEMENTS = "World Wide Wave/World Wide Wave.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 18;
+				DEVELOPMENT_TEAM = JRKRYNA77K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "World Wide Wave/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

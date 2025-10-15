@@ -12,7 +12,7 @@ import AuthenticationServices
 class MylogViewController: UIViewController {
     
    
-    @IBOutlet weak var logoutBuuton: UIBarButtonItem!
+    @IBOutlet weak var logoutButton: UIBarButtonItem!
     
     
     override func viewDidLoad() {

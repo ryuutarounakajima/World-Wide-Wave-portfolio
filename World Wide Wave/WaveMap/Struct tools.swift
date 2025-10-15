@@ -61,67 +61,6 @@ class SurfLog2 {
         self.videoPath = videoPath
     }
 }
-@Model
-class SurfLog {
-    var coordinateLat: Double?
-    var coordinateLon: Double?
-    var timestamp: Date?
-    
-    var selectedSize: String
-    var selectedSize1: String
-    var selectedSize2: String
-    
-    var selectedCondition: String
-    var selectedSwell: String
-    var selectedBreaks: String
-    var selectedWind: String
-    var selectedWindStrengthValue: Double
-    var selectedTide: String
-    var selectedTideValue: Double
-    var selectedWax: String
-    var waterTemperatureValue: Double
-    
-    var imageData: Data?
-    var videoPath: String?
-    
-    init(
-        coordinateLat: Double?,
-        coordinateLon: Double?,
-        timestamp: Date?,
-        selectedSize: String = "",
-        selectedSize1: String = "",
-        selectedSize2: String = "",
-        selectedCondition: String = "",
-        selectedSwell: String = "",
-        selectedBreaks: String = "",
-        selectedWind: String = "",
-        selectedWindStrengthValue: Double = 0.0,
-        selectedTide: String = "",
-        selectedTideValue: Double = 0.0,
-        selectedWax: String = "",
-        waterTemperatureValue: Double = 0.0,
-        imageData: Data? = nil,
-        videoPath: String? = nil
-    ) {
-        self.coordinateLat = coordinateLat
-        self.coordinateLon = coordinateLon
-        self.timestamp = timestamp
-        self.selectedSize = selectedSize
-        self.selectedSize1 = selectedSize1
-        self.selectedSize2 = selectedSize2
-        self.selectedCondition = selectedCondition
-        self.selectedSwell = selectedSwell
-        self.selectedBreaks = selectedBreaks
-        self.selectedWind = selectedWind
-        self.selectedWindStrengthValue = selectedWindStrengthValue
-        self.selectedTide = selectedTide
-        self.selectedTideValue = selectedTideValue
-        self.selectedWax = selectedWax
-        self.waterTemperatureValue = waterTemperatureValue
-        self.imageData = imageData
-        self.videoPath = videoPath
-    }
-}
 class FormData: ObservableObject {
     
     @Published var coordinate: CLLocationCoordinate2D?
@@ -197,6 +136,69 @@ class FormData: ObservableObject {
     
     
 }
+/*
+@Model
+class SurfLog {
+    var coordinateLat: Double?
+    var coordinateLon: Double?
+    var timestamp: Date?
+    
+    var selectedSize: String
+    var selectedSize1: String
+    var selectedSize2: String
+    
+    var selectedCondition: String
+    var selectedSwell: String
+    var selectedBreaks: String
+    var selectedWind: String
+    var selectedWindStrengthValue: Double
+    var selectedTide: String
+    var selectedTideValue: Double
+    var selectedWax: String
+    var waterTemperatureValue: Double
+    
+    var imageData: Data?
+    var videoPath: String?
+    
+    init(
+        coordinateLat: Double?,
+        coordinateLon: Double?,
+        timestamp: Date?,
+        selectedSize: String = "",
+        selectedSize1: String = "",
+        selectedSize2: String = "",
+        selectedCondition: String = "",
+        selectedSwell: String = "",
+        selectedBreaks: String = "",
+        selectedWind: String = "",
+        selectedWindStrengthValue: Double = 0.0,
+        selectedTide: String = "",
+        selectedTideValue: Double = 0.0,
+        selectedWax: String = "",
+        waterTemperatureValue: Double = 0.0,
+        imageData: Data? = nil,
+        videoPath: String? = nil
+    ) {
+        self.coordinateLat = coordinateLat
+        self.coordinateLon = coordinateLon
+        self.timestamp = timestamp
+        self.selectedSize = selectedSize
+        self.selectedSize1 = selectedSize1
+        self.selectedSize2 = selectedSize2
+        self.selectedCondition = selectedCondition
+        self.selectedSwell = selectedSwell
+        self.selectedBreaks = selectedBreaks
+        self.selectedWind = selectedWind
+        self.selectedWindStrengthValue = selectedWindStrengthValue
+        self.selectedTide = selectedTide
+        self.selectedTideValue = selectedTideValue
+        self.selectedWax = selectedWax
+        self.waterTemperatureValue = waterTemperatureValue
+        self.imageData = imageData
+        self.videoPath = videoPath
+    }
+}
+*/
 //View
 struct CustomFormSection<Content: View>: View {
     
