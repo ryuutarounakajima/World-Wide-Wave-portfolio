@@ -29,20 +29,28 @@ class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
     }()
     
     private var gradientLayer: CAGradientLayer!
-
+    
+    private var backgroundColor: CAGradientLayer!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         setUp()
         animateZoom()
-        
+        setBackgroundColor()
         
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        backgroundColor?.frame = view.bounds
+    }
+    
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
-
+    
     override var shouldAutorotate: Bool {
         return false
     }
@@ -54,7 +62,7 @@ class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
     @IBAction func loginButton(_ sender: Any) {
         
         if isLoggedIn() {
-           
+            
             if let tabBarVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TabBarController") as? UITabBarController {
                 
                 tabBarVC.selectedIndex = 1
@@ -76,8 +84,8 @@ class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
         signUpImageView.layer.cornerRadius = 20
         signUpImageView.clipsToBounds = true
         signUpImageView.contentMode = .scaleAspectFill
-
-       
+        
+        
     }
     
     private func isLoggedIn() -> Bool {
@@ -130,7 +138,7 @@ class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
         
         gradientLayer.add(fadeAnimation, forKey: "fadeAnimation")
         
-            
+        
     }
     
     //MARK: - Apple Singn-IN function
@@ -157,7 +165,7 @@ class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
             
             UserDefaults.standard.set(appleAuthToken, forKey: "appleAuthToken")
             
-           
+            
             
             let userIdentifier = appleIDCredential.user
             
@@ -171,7 +179,7 @@ class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
             print("email: \(email ?? "nilだよ~ん")")
             print("login sucess!")
             
-          
+            
             if let tabBarVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TabBarController") as? UITabBarController {
                 
                 tabBarVC.selectedIndex = 1
@@ -181,12 +189,28 @@ class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
         }
         
     }
-        
+    
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: any Error) {
         
         print("Error: \(error.localizedDescription)")
     }
     
-
+    //MARK: - backgroun color
+    private func setBackgroundColor() {
+        backgroundColor = CAGradientLayer()
+        backgroundColor.frame = view.bounds
+        backgroundColor.colors = [
+            UIColor.blue.cgColor,
+            UIColor.cyan.cgColor,
+            UIColor.white.cgColor,
+            UIColor.systemBrown.cgColor
+        ]
+        
+        backgroundColor.startPoint = CGPoint(x: 1, y: 1) // bottomTrailing
+           backgroundColor.endPoint = CGPoint(x: 0, y: 0)   // topLeading
+           view.layer.insertSublayer(backgroundColor, at: 0)
+    }
+    
+    
 }
 

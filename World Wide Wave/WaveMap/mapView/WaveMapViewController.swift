@@ -44,7 +44,7 @@ class WaveMapViewController: UIViewController, CLLocationManagerDelegate, MKMapV
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         
-        backToCurrentPositon()
+        backToCurrentPositon2()
         
     }
     
@@ -190,7 +190,7 @@ class WaveMapViewController: UIViewController, CLLocationManagerDelegate, MKMapV
     
        func backToCurrentPositon() {
         
-        let resetButton = UIButton(frame: CGRect(x: self.view.bounds.width - 60, y: view.bounds.height - 110, width: 50, height: 50))
+        let resetButton = UIButton(frame: CGRect(x: self.view.bounds.width - 60, y: view.bounds.height - 140, width: 50, height: 50))
         resetButton.backgroundColor = UIColor.orange.withAlphaComponent(0.5)
         resetButton.layer.cornerRadius = 25
         resetButton.clipsToBounds = true
@@ -199,6 +199,26 @@ class WaveMapViewController: UIViewController, CLLocationManagerDelegate, MKMapV
         resetButton.addTarget(self, action: #selector(resetToUserLocation), for: .touchUpInside)
                
                 self.view.addSubview(resetButton)
+    }
+    
+       func backToCurrentPositon2() {
+        let resetButton = UIButton(type: .custom)
+        resetButton.translatesAutoresizingMaskIntoConstraints = false
+        resetButton.backgroundColor = UIColor.orange.withAlphaComponent(0.5)
+        resetButton.layer.cornerRadius = 25
+        resetButton.clipsToBounds = true
+        resetButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
+        resetButton.tintColor = UIColor.secondarySystemBackground
+        resetButton.addTarget(self, action: #selector(resetToUserLocation), for: .touchUpInside)
+        self.view.addSubview(resetButton)
+        
+        // AutoLayoutで配置（Safe Areaを考慮）
+        NSLayoutConstraint.activate([
+            resetButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            resetButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            resetButton.widthAnchor.constraint(equalToConstant: 50),
+            resetButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
     }
       
        func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
