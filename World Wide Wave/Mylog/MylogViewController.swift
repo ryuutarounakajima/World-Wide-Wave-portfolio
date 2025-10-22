@@ -14,12 +14,14 @@ class MylogViewController: UIViewController {
    
     @IBOutlet weak var logoutButton: UIBarButtonItem!
     
+    var formData = FormData()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         let swiftUIView = MylogSwiftUIView()
+            .environmentObject(formData)
         let hostingController = UIHostingController(rootView: swiftUIView)
         
         addChild(hostingController)

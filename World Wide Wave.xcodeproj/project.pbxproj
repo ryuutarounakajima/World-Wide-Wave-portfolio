@@ -91,6 +91,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		6C2B2E852EA8B207007CD0B2 /* camera */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = camera; sourceTree = "<group>"; };
 		6CFF353E2E2CDAE400485B19 /* WaveMap */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = WaveMap; sourceTree = "<group>"; };
 		6CFF35492E2CDCBE00485B19 /* myLog */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = myLog; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -176,10 +177,11 @@
 				6C8484032CA57D5300CE6B1E /* Main.storyboard */,
 				6C8484092CA57D5400CE6B1E /* Assets.xcassets */,
 				6C4633682CE0C2F4005EAD78 /* AppIconLogoAssets */,
-				6C84840B2CA57D5400CE6B1E /* LaunchScreen.storyboard */,
-				6CCCD4DB2CBFD50300572E3C /* sampleCodeFlie.swift */,
 				6C84840E2CA57D5400CE6B1E /* Info.plist */,
 				6C8484062CA57D5300CE6B1E /* World_Wide_Wave.xcdatamodeld */,
+				6CCCD4DB2CBFD50300572E3C /* sampleCodeFlie.swift */,
+				6C84840B2CA57D5400CE6B1E /* LaunchScreen.storyboard */,
+				6C2B2E852EA8B207007CD0B2 /* camera */,
 			);
 			path = "World Wide Wave";
 			sourceTree = "<group>";
@@ -217,6 +219,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				6C2B2E852EA8B207007CD0B2 /* camera */,
 				6CFF353E2E2CDAE400485B19 /* WaveMap */,
 				6CFF35492E2CDCBE00485B19 /* myLog */,
 			);
@@ -269,7 +272,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					6C8483F92CA57D5300CE6B1E = {
 						CreatedOnToolsVersion = 15.4;
@@ -472,6 +475,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -529,6 +533,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
