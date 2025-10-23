@@ -13,7 +13,7 @@ import SwiftData
 @Model
 class SurfLog2 {
     var coordinateLat : Double?
-    var cooorinateLon: Double?
+    var coorinateLon: Double?
     var timestamp: Date?
     var note: String
     var imageData: Data?
@@ -41,7 +41,7 @@ class SurfLog2 {
     ) {
         
         self.coordinateLat = coordinateLat
-        self.cooorinateLon = coordinateLon
+        self.coorinateLon = coordinateLon
         self.timestamp = timestamp
         
         self.note = """

@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 import AuthenticationServices
+import SwiftData
 
 class MylogViewController: UIViewController {
     
@@ -18,12 +19,15 @@ class MylogViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let container = try! ModelContainer(for: SurfLog2.self)
 
         // Do any additional setup after loading the view.
         let swiftUIView = MylogSwiftUIView()
             .environmentObject(formData)
-        let hostingController = UIHostingController(rootView: swiftUIView)
+            .modelContainer(container)
         
+        let hostingController = UIHostingController(rootView: swiftUIView)
         addChild(hostingController)
         hostingController.view.frame = view.bounds
         view.addSubview(hostingController.view)
