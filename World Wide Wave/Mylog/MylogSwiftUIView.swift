@@ -12,7 +12,7 @@ import AVKit
 
 struct AssetScrollView: View {
     
-    let assetImages = ["wave1", "wave2", "wave3", "wave4", "wave5"]
+    let assetImages = ["wave1", "wave2", "wave3", "wave4", "wave5", "wave6"]
     
     
     var body: some View {
@@ -28,7 +28,7 @@ struct AssetScrollView: View {
                         .shadow(radius: 5)
                 }
             }
-            .padding(.horizontal)
+            .padding([.horizontal, .bottom])
         }
         .frame(height: 140)
     }
