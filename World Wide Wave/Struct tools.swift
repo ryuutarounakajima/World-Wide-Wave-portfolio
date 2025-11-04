@@ -81,6 +81,7 @@ class FormData: ObservableObject {
     @Published var waterTemperatureValue: Double = 0.0
     @Published var capturedImage: UIImage?
     @Published var capturedVideoURL: URL?
+    @Published var customNoteInput: String = ""
     
     func isFormValid() -> Bool {
         return !selectedSize.isEmpty && !selectedCondition.isEmpty && !selectedSwell.isEmpty && !selectedWind.isEmpty
@@ -136,69 +137,7 @@ class FormData: ObservableObject {
     
     
 }
-/*
-@Model
-class SurfLog {
-    var coordinateLat: Double?
-    var coordinateLon: Double?
-    var timestamp: Date?
-    
-    var selectedSize: String
-    var selectedSize1: String
-    var selectedSize2: String
-    
-    var selectedCondition: String
-    var selectedSwell: String
-    var selectedBreaks: String
-    var selectedWind: String
-    var selectedWindStrengthValue: Double
-    var selectedTide: String
-    var selectedTideValue: Double
-    var selectedWax: String
-    var waterTemperatureValue: Double
-    
-    var imageData: Data?
-    var videoPath: String?
-    
-    init(
-        coordinateLat: Double?,
-        coordinateLon: Double?,
-        timestamp: Date?,
-        selectedSize: String = "",
-        selectedSize1: String = "",
-        selectedSize2: String = "",
-        selectedCondition: String = "",
-        selectedSwell: String = "",
-        selectedBreaks: String = "",
-        selectedWind: String = "",
-        selectedWindStrengthValue: Double = 0.0,
-        selectedTide: String = "",
-        selectedTideValue: Double = 0.0,
-        selectedWax: String = "",
-        waterTemperatureValue: Double = 0.0,
-        imageData: Data? = nil,
-        videoPath: String? = nil
-    ) {
-        self.coordinateLat = coordinateLat
-        self.coordinateLon = coordinateLon
-        self.timestamp = timestamp
-        self.selectedSize = selectedSize
-        self.selectedSize1 = selectedSize1
-        self.selectedSize2 = selectedSize2
-        self.selectedCondition = selectedCondition
-        self.selectedSwell = selectedSwell
-        self.selectedBreaks = selectedBreaks
-        self.selectedWind = selectedWind
-        self.selectedWindStrengthValue = selectedWindStrengthValue
-        self.selectedTide = selectedTide
-        self.selectedTideValue = selectedTideValue
-        self.selectedWax = selectedWax
-        self.waterTemperatureValue = waterTemperatureValue
-        self.imageData = imageData
-        self.videoPath = videoPath
-    }
-}
-*/
+
 //View
 struct CustomFormSection<Content: View>: View {
     
@@ -355,6 +294,7 @@ struct CustomFormSection2<Content: View>: View {
               }    }
     
 }
+
 //View model
 struct FormViewModel: View {
   
@@ -472,92 +412,21 @@ struct FormViewModel: View {
                     }
                 }
             }
-          
+
         }
     }
 }
-            
+
+
+
+
+// MARK: - Modifiers
 struct CustomFormTextModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.custom("AvenirNext-Bold", size: 14))
                         .scaleEffect(1.2)
                         .shadow(radius: 2)
-    }
-}
-
-struct MediaPicker: View {
-    @Binding var selectedImage: UIImage?
-    @Binding var selectedVideoURL: URL?
-    
-    var body: some View {
-        GeometryReader { geometry in
-            VStack {
-                Spacer()
-                HStack{
-                    Spacer()
-                    Button {
-                        
-                    } label: {
-                        Image(systemName: "book")
-                            .symbolRenderingMode(.palette)
-                            .font(.system(size: geometry.size.width * 0.1))
-                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.3)
-                            .foregroundStyle(.green, .blue)
-                            .background(Color.purple)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .bold()
-                            .rotationEffect(.degrees(5))
-                            .animation(.spring, value: UUID())
-                    }
-                    Spacer()
-
-                    Button( action: {
-                        
-                    }) {
-                        Image(systemName: "iphone.rear.camera")
-                            .symbolRenderingMode(.palette)
-                            .font(.system(size: geometry.size.width * 0.1))
-                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.3)
-                            .foregroundStyle(.brown, .black)
-                            .background(Color.yellow)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .bold()
-                            .scaleEffect(1.1)
-                            .animation(.easeIn(duration: 0.5), value: UUID())
-                        
-                        
-                    }
-                    Spacer()
-                    
-                    
-                    
-                    Button( action: {
-                        
-                    }) {
-                        Image(systemName: "video")
-                            .symbolRenderingMode(.palette)
-                            .font(.system(size: geometry.size.width * 0.1))
-                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.3)
-                            .foregroundStyle(.white, .gray)
-                            .background(Color.brown)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .bold()
-                            .opacity(0.8)
-                            .rotationEffect(.degrees(-5))
-                            .animation(.easeInOut(duration: 0.8), value: UUID())
-                       
-                    }
-                    Spacer()
-                    
-                 
-                    
-                }
-                Spacer()
-            }
-            
-        }
-       
     }
 }
 
@@ -610,6 +479,10 @@ struct SectionButtonModifier: ViewModifier {
     }
 }
 
+
+
+// MARK: - Slider
+
 struct SliderModifier: View {
     
     @Binding var  value: Double
@@ -659,9 +532,45 @@ struct SliderModifier: View {
         
     }
         
-        
+    
 }
 
+struct ReadOnlyValueTrack: View {
+    // 読み取り専用: 外部から与えられた値を位置に反映するだけ
+    var value: Double
+    let range: ClosedRange<Double>
+    let gradient: Gradient
+
+    var body: some View {
+        GeometryReader { geometry in
+            let width = geometry.size.width
+            let height = geometry.size.height
+            let clamped = min(max(value, range.lowerBound), range.upperBound)
+            let progress = CGFloat((clamped - range.lowerBound) / (range.upperBound - range.lowerBound))
+            let handleX = max(0, min(width, width * progress))
+
+            ZStack {
+                // トラック
+                LinearGradient(gradient: gradient, startPoint: .leading, endPoint: .trailing)
+                    .frame(height: height / 2)
+                    .cornerRadius(height / 2)
+                    .shadow(color: .gray.opacity(0.4), radius: 5, x: 0, y: 2)
+
+                // 値を示すサークル（ドラッグ不可）
+                Circle()
+                    .fill(Color.black)
+                    .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
+                    .frame(width: height, height: height / 2)
+                    .position(x: handleX, y: height / 2)
+            }
+        }
+    }
+}
+
+
+
+
+// MARK: - camera tools
 struct ExposureSlider: UIViewRepresentable {
     
     
@@ -756,6 +665,9 @@ struct RecordingProgressRing: View {
             
     }
 }
+
+
+
 //form view preview
 #Preview {
     
@@ -777,7 +689,7 @@ struct RecordingProgressRing: View {
     }
     return FormViewPreview()
 }
-
+ 
 //Media picker button preview
 /*struct MediaPickerButtonPreview: PreviewProvider {
    @State static var selectedURL: URL? = nil
@@ -790,6 +702,7 @@ struct RecordingProgressRing: View {
     }
 }
 */
+
 //Horizontal drag slider animation effect preview
 /*#Preview {
     struct sliderPreview: View {
@@ -808,3 +721,5 @@ struct RecordingProgressRing: View {
     
 }
 */
+
+
