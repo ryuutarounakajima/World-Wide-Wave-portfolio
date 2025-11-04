@@ -26,7 +26,7 @@ struct UIKitRootViewControllerRepresentable: UIViewControllerRepresentable {
 struct LoadingView: View {
     @State private var scale: CGFloat = 0.1
     @State private var opacity: CGFloat = 1.0
-    var onFInished: () -> Void
+    var onFinished: () -> Void
     
     var body: some View {
         ZStack {
@@ -50,14 +50,14 @@ struct LoadingView: View {
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                onFInished()
+                onFinished()
             }
         }
     }
 }
 
 struct LoadingViewWrapper: View {
-    @State private var finished: Bool = true
+    @State private var finished: Bool = false
     
     var body: some View {
         if finished {
@@ -70,5 +70,5 @@ struct LoadingViewWrapper: View {
     }
 }
 #Preview {
-    LoadingView( onFInished: {})
+    LoadingView( onFinished: {})
 }
