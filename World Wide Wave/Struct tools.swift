@@ -9,7 +9,8 @@ import SwiftUI
 import CoreLocation
 import SwiftData
 
-//Model
+
+// MARK: - Model
 @Model
 class SurfLog2 {
     var coordinateLat : Double?
@@ -133,13 +134,16 @@ class FormData: ObservableObject {
         }
         
         
+        
     }
     
     
 }
 
-//View
+
+// MARK: - View
 struct CustomFormSection<Content: View>: View {
+    
     
     var title: String
     var options: [(key: String, value: String)]
@@ -184,6 +188,9 @@ struct CustomFormSection<Content: View>: View {
                     }
                 }
                
+            } else {
+                
+                
             }
             content()
         }
@@ -211,7 +218,6 @@ struct CustomFormSection<Content: View>: View {
     }
     
 }
-
 struct CustomFormSection2<Content: View>: View {
     
        var title: String
@@ -279,6 +285,9 @@ struct CustomFormSection2<Content: View>: View {
                            }
                        }
                        .frame(height: 150) // 必要に応じてPicker高さ調整してください
+                   } else {
+                      
+                       
                    }
                    content()
                }
@@ -295,7 +304,8 @@ struct CustomFormSection2<Content: View>: View {
     
 }
 
-//View model
+
+// MARK: - View model
 struct FormViewModel: View {
   
     @EnvironmentObject var formData: FormData
@@ -408,14 +418,18 @@ struct FormViewModel: View {
                         
                         Spacer()
                         
-                        SliderModifier(value: $formData.waterTemperatureValue, range: -10...36, gradient: Gradient(colors: [.white, .cyan, .orange]))
+                        SliderModifier(value: $formData.waterTemperatureValue, range: 0...36, gradient: Gradient(colors: [.white, .cyan, .orange]))
                     }
                 }
             }
+            
+            //practice
+            
 
         }
     }
 }
+
 
 
 
@@ -481,8 +495,8 @@ struct SectionButtonModifier: ViewModifier {
 
 
 
-// MARK: - Slider
 
+// MARK: - Slider
 struct SliderModifier: View {
     
     @Binding var  value: Double
@@ -534,7 +548,6 @@ struct SliderModifier: View {
         
     
 }
-
 struct ReadOnlyValueTrack: View {
     // 読み取り専用: 外部から与えられた値を位置に反映するだけ
     var value: Double
@@ -618,7 +631,6 @@ struct ExposureSlider: UIViewRepresentable {
         }
     }
 }
-
 struct CaptureButtonView: View {
     var mode: captureMode
     var isRecording: Bool
@@ -689,7 +701,8 @@ struct RecordingProgressRing: View {
     }
     return FormViewPreview()
 }
- 
+
+
 //Media picker button preview
 /*struct MediaPickerButtonPreview: PreviewProvider {
    @State static var selectedURL: URL? = nil

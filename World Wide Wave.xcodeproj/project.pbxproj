@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		42AA86FF2EBB0F40000D65FA /* RecievedForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AA86FE2EBB0F40000D65FA /* RecievedForm.swift */; };
 		6C4633612CE0C16B005EAD78 /* Monochrome120.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C4633602CE0C16B005EAD78 /* Monochrome120.png */; };
 		6C4633632CE0C1CE005EAD78 /* Monochrome152.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C4633622CE0C1CE005EAD78 /* Monochrome152.png */; };
 		6C4633652CE0C217005EAD78 /* Monochrome167.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C4633642CE0C217005EAD78 /* Monochrome167.png */; };
@@ -56,6 +57,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		42AA86FE2EBB0F40000D65FA /* RecievedForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecievedForm.swift; sourceTree = "<group>"; };
 		6C0F9D912CB8FE27006BF12E /* World Wide Wave.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "World Wide Wave.entitlements"; sourceTree = "<group>"; };
 		6C4633602CE0C16B005EAD78 /* Monochrome120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Monochrome120.png; sourceTree = "<group>"; };
 		6C4633622CE0C1CE005EAD78 /* Monochrome152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Monochrome152.png; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 				6CFF35492E2CDCBE00485B19 /* myLog */,
 				6CFF353E2E2CDAE400485B19 /* WaveMap */,
 				8D63A8542EB9C1690017BB62 /* Struct tools.swift */,
+				42AA86FE2EBB0F40000D65FA /* RecievedForm.swift */,
 				6C8484032CA57D5300CE6B1E /* Main.storyboard */,
 				6C8484092CA57D5400CE6B1E /* Assets.xcassets */,
 				6C4633682CE0C2F4005EAD78 /* AppIconLogoAssets */,
@@ -361,6 +364,7 @@
 				6C9786632E6D4F00005E55DC /* LoadingView.swift in Sources */,
 				8D63A8552EB9C1690017BB62 /* Struct tools.swift in Sources */,
 				6CCCD4DC2CBFD50300572E3C /* sampleCodeFlie.swift in Sources */,
+				42AA86FF2EBB0F40000D65FA /* RecievedForm.swift in Sources */,
 				6C8483FE2CA57D5300CE6B1E /* AppDelegate.swift in Sources */,
 				6C8484082CA57D5300CE6B1E /* World_Wide_Wave.xcdatamodeld in Sources */,
 				6CB288842E448164000D65B9 /* CustomNavigationController.swift in Sources */,
