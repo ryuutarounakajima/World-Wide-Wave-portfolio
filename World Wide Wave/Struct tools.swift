@@ -311,8 +311,6 @@ struct FormViewModel: View {
     @EnvironmentObject var formData: FormData
     //wave size select
     @Binding var isSizeSelect: Bool
-    @State private var waveSizes: [(key: String, value: String)] = [ ("" , ""), ("go home" , "go home"), ("Waist-high", "Waist-high"), ("belly-high", "belly-high"), ("Chest-high" , "Chest-high"), ("Head-high", "Head-high"), ("Overhead", "Overhead"), ("Double", "Double"), ("Triple over", "Triple over")
-    ]
     
     //wave conditon select
     @Binding var isConditionSelect: Bool
@@ -345,7 +343,7 @@ struct FormViewModel: View {
         //info form
         Form {
             //wave size section
-            CustomFormSection2(title: "Size", isSelected: $isSizeSelect, selectedValue1: $formData.selectedSize1, selectedValue2: $formData.selectedSize2, options: waveSizes) {
+            CustomFormSection2(title: "Size", isSelected: $isSizeSelect, selectedValue1: $formData.selectedSize1, selectedValue2: $formData.selectedSize2, options: WaveOptions.waveSizes) {
                 Text("\(formData.selectedSize1) ~ \(formData.selectedSize2)")
                     .modifier(CustomFormTextModifier())
             }
