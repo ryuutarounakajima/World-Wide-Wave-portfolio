@@ -174,15 +174,12 @@ struct RecievedForm: View {
     @EnvironmentObject var formData: FormData
     @State private var isSelected: Bool = false
     
-    // 共通定義から参照（@Stateは不要）
-    private let waveSizes: [(key: String, value: String)] = WaveOptions.waveSizes
-    
-    //wave conditon
-    @State private var waveConditions: [(key: String, value: String)] = [("", ""), ("Go home", "Go home"), ("Choppy", "Choppy"), ("Mushy", "Mushy"), ("Windy", "windy"), ("Clean", "Clean"), ("Glass", "Glass"), ("Rippable", "Rippable"), ("Barrels", "Barrels"), ("Peaky", "Peaky"), ("Gnarly", "Gnarly"), ("Close out", "Close out") ]
-    @State private var randomWaveCondition: String = ""
-    
+    //wave size
     @State private var randomWaveSize: String = ""
     @State private var randomWaveSize2: String = ""
+    
+    //wave conditon
+    @State private var randomWaveCondition: String = ""
         
     
     var body: some View {
@@ -192,7 +189,7 @@ struct RecievedForm: View {
                 isSelected: $isSelected,
                 selectedValue1: $formData.selectedSize1,
                 selectedValue2: $formData.selectedSize2,
-                options: waveSizes
+                options: WaveOptions.waveSizes
             ) {
                 // ランダムに選んだ2値を表示（左 <= 右 の順序を保証）
                 Text("\(randomWaveSize) ~ \(randomWaveSize2)")
@@ -200,7 +197,7 @@ struct RecievedForm: View {
                 
             }
             
-            CustomFormSection3(title: "Condition", isSelected: $isSelected, selectedValue: $formData.selectedCondition, options: waveConditions) {
+            CustomFormSection3(title: "Condition", isSelected: $isSelected, selectedValue: $formData.selectedCondition, options: WaveOptions.waveConditons) {
                 // ランダムに選んだ1値を表示
                 Text(randomWaveCondition)
                     .modifier(CustomFormTextModifier())
@@ -208,13 +205,14 @@ struct RecievedForm: View {
         }
         .onAppear {
             pickRandomWaveSizes()
-            pickRandomCondition()
+           // pickRandomCondition()
+            randomWaveCondition = pickRandomValue(from: WaveOptions.waveConditons)
         }
     }
     
     // 先頭の空要素 ("", "") は除外してランダムに2つ選択し、元配列の順序で左<=右に並べる
     private func pickRandomWaveSizes() {
-        let candidates = Array(waveSizes.dropFirst())
+        let candidates = Array(WaveOptions.waveSizes.dropFirst())
         let count = candidates.count
         
         if count >= 2 {
@@ -238,13 +236,22 @@ struct RecievedForm: View {
     
     // 先頭の空要素 ("", "") は除外してランダムに1つ選択
     private func pickRandomCondition() {
-        let candidates = Array(waveConditions.dropFirst())
+        let candidates = Array(WaveOptions.waveConditons.dropFirst())
         if let picked = candidates.randomElement() {
             randomWaveCondition = picked.value
         } else {
             randomWaveCondition = ""
         }
     }
+    
+    // MARK: - 共通ヘルパー
+    // 先頭の空要素 ("", "") を除外してランダムに1つ選択
+    private func pickRandomValue(from options: [(key: String, value: String)]) -> String {
+        let candidates = Array(options.dropFirst())
+        return candidates.randomElement()?.value ?? ""
+    }
+    
+
 }
 
 #Preview {
