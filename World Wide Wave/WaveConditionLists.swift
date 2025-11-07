@@ -20,7 +20,7 @@ struct WaveOptions {
         ("Triple over", "Triple over")
     ]
     
-    static let waveConditons:  [(key: String, value: String)] = [
+    static let waveConditions:  [(key: String, value: String)] = [
         ("", ""), ("Go home", "Go home"), ("Choppy", "Choppy"), ("Mushy", "Mushy"), ("Windy", "windy"), ("Clean", "Clean"), ("Glass", "Glass"), ("Rippable", "Rippable"), ("Barrels", "Barrels"), ("Peaky", "Peaky"), ("Gnarly", "Gnarly"), ("Close out", "Close out")
     ]
     

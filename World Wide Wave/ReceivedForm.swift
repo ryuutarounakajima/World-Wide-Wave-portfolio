@@ -178,11 +178,21 @@ struct ReceivedForm: View {
     private let waveSizes: [(key: String, value: String)] = WaveOptions.waveSizes
     private let waveConditions: [(key: String, value: String)] = WaveOptions.waveConditions
     private let swells: [(key: String, value: String)] = WaveOptions.swells
+    private let breaks: [(key: String, value: String)] = WaveOptions.breaks
+    private let winds: [(key: String, value: String)] = WaveOptions.winds
+    private let tides: [(key: String, value: String)] = WaveOptions.tides
+    private let waxes: [(key: String, value: String)] = WaveOptions.waxes
     
 
     @State private var randomWaveSize: String = ""
     @State private var randomWaveSize2: String = ""
     @State private var randomWaveCondition: String = ""
+    @State private var randomSwell: String = ""
+    @State private var randomBreak: String = ""
+    @State private var randomWind: String = ""
+    @State private var randomWindSpeed: Double = 0.0
+    @State private var randomTides: String = ""
+    @State private var randomWax: String = ""
     
     var body: some View {
         Form {
@@ -212,12 +222,38 @@ struct ReceivedForm: View {
             
             CustomFormSection3(title: "swell", isSelected: $isSelected, selectedValue: $formData.selectedSwell, options: swells) {
             
+                Text(randomSwell)
+                    .modifier(CustomFormTextModifier())
             }
             
+            CustomFormSection3(title: "break type", isSelected: $isSelected, selectedValue: $formData.selectedBreaks, options: breaks) {
+                
+                Text(randomBreak)
+                    .modifier(CustomFormTextModifier())
+            }
+            
+            CustomFormSection3(title: "Wind", isSelected: $isSelected, selectedValue: $formData.selectedWind, options: winds) {
+                
+                VStack {
+                    Text(randomWind)
+                        .modifier(CustomFormTextModifier())
+                    HStack {
+                        Text("Strength")
+                            .font(.custom("AvenirNext-Bold", size: 14))
+                            .scaleEffect(0.8)
+                            .shadow(radius: 2)
+                        
+                        Spacer()
+                        
+                        ReadOnlyValueTrack(value: randomWindSpeed, range: 0...20, gradient: Gradient(colors: [.cyan, .red]))
+                    }
+                }
+            }
             
         }
         .onAppear {
             refreshRandomSuggestions()
+            randomWindSpeed = Double.random(in: 0...20)
         }
     }
     
@@ -251,12 +287,15 @@ struct ReceivedForm: View {
     
     // ここに「全部のランダム候補」をまとめて更新
     private func refreshRandomSuggestions() {
+        
         let (low, high) = pickTwoValuesOrdered(from: waveSizes)
         randomWaveSize = low
         randomWaveSize2 = high
         
         randomWaveCondition = pickOneValue(from: waveConditions)
-        
+        randomSwell = pickOneValue(from: swells)
+        randomBreak = pickOneValue(from: breaks)
+        randomWind = pickOneValue(from: winds)
         // 例えば将来 Swell/Wind/Tide/Wax を追加するなら：
         // randomSwell = pickOneValue(from: WaveOptions.swells)
         // randomWind = pickOneValue(from: WaveOptions.winds)
