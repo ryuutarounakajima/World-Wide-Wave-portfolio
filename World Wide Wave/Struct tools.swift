@@ -314,7 +314,7 @@ struct FormViewModel: View {
     
     //wave conditon select
     @Binding var isConditionSelect: Bool
-    @State private var waveCondtions: [(key: String, value: String)] = [("", ""), ("Go home", "Go home"), ("Choppy", "Choppy"), ("Mushy", "Mushy"), ("Windy", "windy"), ("Clean", "Clean"), ("Glass", "Glass"), ("Rippable", "Rippable"), ("Barrels", "Barrels"), ("Peaky", "Peaky"), ("Gnarly", "Gnarly"), ("Close out", "Close out") ]
+    
     
     //swell
     @Binding var isSwellSelect: Bool
@@ -349,7 +349,7 @@ struct FormViewModel: View {
             }
         
             //wave condtion section
-            CustomFormSection(title: "Conditon", isSelected: $isConditionSelect, selectedValue: $formData.selectedCondition, options: waveCondtions) {
+            CustomFormSection(title: "Conditon", isSelected: $isConditionSelect, selectedValue: $formData.selectedCondition, options: WaveOptions.waveConditions) {
                 Text(formData.selectedCondition)
                     .modifier(CustomFormTextModifier())
             }
@@ -421,7 +421,7 @@ struct FormViewModel: View {
                 }
             }
             
-            //practice
+            
             
 
         }

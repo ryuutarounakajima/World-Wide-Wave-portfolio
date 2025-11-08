@@ -192,7 +192,9 @@ struct ReceivedForm: View {
     @State private var randomWind: String = ""
     @State private var randomWindSpeed: Double = 0.0
     @State private var randomTides: String = ""
+    @State private var randomTideLevel: Double = 0.0
     @State private var randomWax: String = ""
+    @State private var randomWaterTemp: Double = 0
     
     var body: some View {
         Form {
@@ -250,21 +252,74 @@ struct ReceivedForm: View {
                 }
             }
             
+            CustomFormSection3(title: "Tide", isSelected: $isSelected, selectedValue: $formData.selectedTide, options: WaveOptions.tides) {
+                VStack {
+                    Text(randomTides)
+                        .modifier(CustomFormTextModifier())
+                    HStack {
+                        Text("High & Low")
+                            .font(.custom("AvenirNext-Bold", size: 14))
+                            .scaleEffect(0.8)
+                            .shadow(radius: 2)
+                        
+                        Spacer()
+                        
+                        ReadOnlyValueTrack(value: randomTideLevel, range: 0...3, gradient: Gradient(colors: [.brown, .yellow, .cyan, .blue]))
+                    }
+                }
+               
+            }
+            
+            CustomFormSection3(title: "wax", isSelected: $isSelected, selectedValue: $formData.selectedTide, options: WaveOptions.waxes) {
+                VStack {
+                    Text(randomWax)
+                        .modifier(CustomFormTextModifier())
+                    HStack {
+                        Text("Cold water")
+                            .font(.custom("AvenirNext-Bold", size: 14))
+                            .scaleEffect(0.8)
+                            .shadow(radius: 2)
+                        
+                        Spacer()
+                        
+                        ReadOnlyValueTrack(value: randomWaterTemp, range: 0...36, gradient: Gradient(colors: [.white, .cyan, .orange]))
+                    }
+                }
+               
+            }
+            
+            
         }
         .onAppear {
             refreshRandomSuggestions()
             randomWindSpeed = Double.random(in: 0...20)
+            randomTideLevel = Double.random(in: 0...3)
+            randomWaterTemp = Double.random(in: 0...36)
         }
     }
     
+    // ここに「全部のランダム候補」をまとめて更新
+    private func refreshRandomSuggestions() {
+        
+        let (low, high) = pickTwoValuesOrdered(from: waveSizes)
+        randomWaveSize = low
+        randomWaveSize2 = high
+        
+        randomWaveCondition = pickOneValue(from: waveConditions)
+        randomSwell = pickOneValue(from: swells)
+        randomBreak = pickOneValue(from: breaks)
+        randomWind = pickOneValue(from: winds)
+        randomTides = pickOneValue(from: tides)
+        randomWax = pickOneValue(from: waxes)
+    }
+    
+    
     // MARK: - 共通ランダム選択ユーティリティ
-    // 先頭の空要素 ("", "") は除外してランダムに1つ選択
     private func pickOneValue(from options: [(key: String, value: String)]) -> String {
         let candidates = Array(options.dropFirst())
         return candidates.randomElement()?.value ?? ""
     }
     
-    // 先頭の空要素 ("", "") は除外してランダムに2つ選択し、元配列の順序で左<=右に並べる
     private func pickTwoValuesOrdered(from options: [(key: String, value: String)]) -> (String, String) {
         let candidates = Array(options.dropFirst())
         let count = candidates.count
@@ -284,24 +339,7 @@ struct ReceivedForm: View {
             return ("", "")
         }
     }
-    
-    // ここに「全部のランダム候補」をまとめて更新
-    private func refreshRandomSuggestions() {
-        
-        let (low, high) = pickTwoValuesOrdered(from: waveSizes)
-        randomWaveSize = low
-        randomWaveSize2 = high
-        
-        randomWaveCondition = pickOneValue(from: waveConditions)
-        randomSwell = pickOneValue(from: swells)
-        randomBreak = pickOneValue(from: breaks)
-        randomWind = pickOneValue(from: winds)
-        // 例えば将来 Swell/Wind/Tide/Wax を追加するなら：
-        // randomSwell = pickOneValue(from: WaveOptions.swells)
-        // randomWind = pickOneValue(from: WaveOptions.winds)
-        // randomTide = pickOneValue(from: WaveOptions.tides)
-        // randomWax = pickOneValue(from: WaveOptions.waxes)
-    }
+
 }
 
 #Preview {
