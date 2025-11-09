@@ -318,16 +318,15 @@ struct FormViewModel: View {
     
     //swell
     @Binding var isSwellSelect: Bool
-    @State private var swells: [(key: String, value: String)] = [("", ""), ("N", "N"), ("NNE" , "NNE"), ("NE", "NE"), ("ENE", "ENE"), ("E", "E"), ("ESE", "ESE"), ("SE", "SE"), ("SSE", "SSE"), ("S", "S"), ("SSW", "SSW"), ("SW", "SW"), ("WSW", "WSW"), ("W", "W"), ("WNW", "WNW"), ("NW", "NW") , ("NNW", "NNW")
-    ]
+    
     
     //breaks
     @Binding var isBreakSelect: Bool
-    @State private var breaks: [(key: String, value: String)] = [((""), ("")), ("ShoreBreak", "Shorebreak"), ("Beachbreak", "Beachbreak"), ("Poindbreak", "Pointbreak"), ("Sandbar", "Sandbar"), ("Reef", "Reef")]
+   
     
     //wind
     @Binding var isWindSelect: Bool
-    @State private var winds: [(key: String, value: String)] = [("", ""), ("Offshore", "Offshore"), ("Onshore" , "Onshore"), ("Side off", "Side off"), ("Side on", "Side on"), ("ClossShore", "ClossShore")]
+    
     
     //Tide
     @Binding  var isTideSelect: Bool
@@ -355,19 +354,19 @@ struct FormViewModel: View {
             }
 
             //swell
-            CustomFormSection(title: "Swell", isSelected: $isSwellSelect, selectedValue: $formData.selectedSwell, options: swells) {
+            CustomFormSection(title: "Swell", isSelected: $isSwellSelect, selectedValue: $formData.selectedSwell, options: WaveOptions.swells) {
                 Text(formData.selectedSwell)
                     .modifier(CustomFormTextModifier())
             }
             
             //Breaks
-            CustomFormSection(title: "Break type", isSelected: $isBreakSelect, selectedValue: $formData.selectedBreaks, options: breaks) {
+            CustomFormSection(title: "Break type", isSelected: $isBreakSelect, selectedValue: $formData.selectedBreaks, options: WaveOptions.breaks) {
                 Text(formData.selectedBreaks)
                     .modifier(CustomFormTextModifier())
             }
 
             //wind
-            CustomFormSection(title: "Wind", isSelected: $isWindSelect, selectedValue: $formData.selectedWind, options: winds) {
+            CustomFormSection(title: "Wind", isSelected: $isWindSelect, selectedValue: $formData.selectedWind, options: WaveOptions.winds) {
                 VStack {
                     Text(formData.selectedWind)
                         .modifier(CustomFormTextModifier())
@@ -387,7 +386,7 @@ struct FormViewModel: View {
                 
             }
             //tide
-            CustomFormSection(title: "Tide", isSelected: $isTideSelect, selectedValue: $formData.selectedTide, options: tides) {
+            CustomFormSection(title: "Tide", isSelected: $isTideSelect, selectedValue: $formData.selectedTide, options: WaveOptions.tides) {
                 VStack {
                     Text(formData.selectedTide)
                         .modifier(CustomFormTextModifier())
@@ -404,7 +403,7 @@ struct FormViewModel: View {
                 }
             }
             //wax
-            CustomFormSection(title: "Wax", isSelected: $isWaxSelect, selectedValue: $formData.selectedWax, options: waxes) {
+            CustomFormSection(title: "Wax", isSelected: $isWaxSelect, selectedValue: $formData.selectedWax, options: WaveOptions.waxes) {
                 VStack {
                     Text(formData.selectedWax)
                         .modifier(CustomFormTextModifier())
