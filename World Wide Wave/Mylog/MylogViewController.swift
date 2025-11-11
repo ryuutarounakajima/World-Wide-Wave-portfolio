@@ -20,12 +20,20 @@ class MylogViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.title = "Wave gallery"
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.largeTitleDisplayMode = .always
+
+        
         let container = try! ModelContainer(for: SurfLog2.self)
 
         // Do any additional setup after loading the view.
-        let swiftUIView = MylogSwiftUIView()
-            .environmentObject(formData)
-            .modelContainer(container)
+        let swiftUIView = NavigationStack {
+            MylogSwiftUIView()
+                .environmentObject(formData)
+                
+        }
+        .modelContainer(container)
         
         let hostingController = UIHostingController(rootView: swiftUIView)
         addChild(hostingController)

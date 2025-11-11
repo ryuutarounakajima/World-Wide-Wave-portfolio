@@ -8,7 +8,74 @@
 import SwiftUI
 import SwiftData
 import AVKit
+import MapKit
 
+struct AssetDetailView: View {
+    
+    let asset: WaveAsset
+    @State private var cameraPosition: MapCameraPosition
+    @EnvironmentObject var formData: FormData
+    
+    private var destinationCoordinate: CLLocationCoordinate2D {
+        CLLocationCoordinate2D(latitude: asset.latitude, longitude: asset.longitude)
+    }
+    
+    init(asset: WaveAsset) {
+        self.asset = asset
+        let coordinate = CLLocationCoordinate2D(latitude: asset.latitude, longitude: asset.longitude)
+        
+        _cameraPosition = State(initialValue: .region(MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))))
+    }
+
+    var body: some View {
+        VStack(spacing: 16) {
+            // 1) Top image
+            Image(asset.imageName)
+                .resizable()
+                .scaledToFit()
+                .clipShape(RoundedRectangle(cornerRadius: 180))
+                .shadow(radius: 4)
+
+            // 2) Map from latitude/longitude
+            Map(position: $cameraPosition) {
+                let coordinate = CLLocationCoordinate2D(latitude: asset.latitude, longitude: asset.longitude)
+                Marker("Here", coordinate: coordinate)
+            }
+            .frame(height: 240)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .shadow(radius: 2)
+            
+            
+            Button {
+                    openInMapsDriving()
+                } label: {
+                    Label("go surf", systemImage: "figure.surfing.circle.fill")
+                }
+                .buttonStyle(.borderedProminent)
+
+                .buttonStyle(.bordered)
+            
+
+            // 3) Form (must not be inside another ScrollView)
+            ReceivedForm()
+        }
+        .padding()
+        .navigationTitle("Asset Detail")
+    }
+    
+    private func openInMapsDriving() {
+        let destination = MKMapItem(placemark: MKPlacemark(coordinate: destinationCoordinate))
+        destination.name = asset.imageName
+        let options = [
+            MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving
+        ]
+        destination.openInMaps(launchOptions: options)
+    }
+
+   
+}
+
+// MARK: - mock assets
 let waveAssetImages: [String] = ["wave1", "wave2", "wave3", "wave4", "wave5", "wave6", "Logo"]
 
 func randomDateInBirthToCurent() -> Date {
@@ -23,13 +90,25 @@ func randomDateInBirthToCurent() -> Date {
     let randomTime = TimeInterval.random(in: range)
     return Date(timeIntervalSince1970: randomTime)
 }
-func formatDate(_ date: Date) -> String {
+func formatDate(_ date: Date) -> (dateText: String, timeText: String) {
     let formatter = DateFormatter()
     formatter.locale = .current
     formatter.calendar = Calendar(identifier: .gregorian)
-    formatter.dateStyle = .medium
+    
+    formatter.dateStyle = .long
     formatter.timeStyle = .none
-    return formatter.string(from: date)
+    let dateText = formatter.string(from: date)
+    
+    formatter.dateStyle = .none
+    formatter.timeStyle = .long
+    let timeText = formatter.string(from: date)
+    
+    return (dateText, timeText)
+}
+func randomCoordinate() -> (latitude: Double, longitude: Double) {
+    let latitude = Double.random(in: -90.0...90.0)
+    let longitude = Double.random(in: -180.0...180.0)
+    return (latitude, longitude)
 }
 
 struct WaveAsset: Identifiable {
@@ -37,17 +116,26 @@ struct WaveAsset: Identifiable {
     let imageName: String
     let date: Date
     let dateText: String
+    let timeText: String
+    let latitude: Double
+    let longitude: Double
 }
 let waveAssets: [WaveAsset] = waveAssetImages.map { name in
     let randomDate = randomDateInBirthToCurent()
-    return WaveAsset(imageName: name, date: randomDate, dateText: formatDate(randomDate))
+    let (dateText, timeText) = formatDate(randomDate)
+    let coordinate = randomCoordinate()
+    
+    return WaveAsset(imageName: name, date: randomDate, dateText: dateText, timeText: timeText, latitude: coordinate.latitude, longitude: coordinate.longitude)
 }
 let sortedWaveAssets: [WaveAsset] = waveAssets.sorted(by: { $0.date > $1.date })
+
+
 
 
 struct AssetScrollView: View {
     
     let assets: [WaveAsset] = sortedWaveAssets
+    @State private var selectedAsset: WaveAsset? = nil
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: true) {
@@ -60,10 +148,20 @@ struct AssetScrollView: View {
                             .clipped()
                             .cornerRadius(180)
                             .shadow(radius: 5)
+                            .onTapGesture {
+                                selectedAsset = asset
+                            }
                         
-                        Text(asset.dateText)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                        VStack(spacing: 2) {
+                            Text(asset.dateText) // 例: "2025/11/10"
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+
+                            Text(asset.timeText) // 例: "14:35"
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+
                         
                     }
                 }
@@ -71,13 +169,17 @@ struct AssetScrollView: View {
             .padding([.horizontal, .bottom])
         }
         .frame(height: 140)
+        .sheet(item: $selectedAsset) { asset in
+            AssetDetailView(asset: asset)
+        }
     }
 }
 struct MylogSwiftUIView: View {
     
-    
+    @StateObject private var formData = FormData()
     
     @Query(sort: \SurfLog2.timestamp, order: .reverse) var logs: [SurfLog2]
+    @State private var selectedAsset : WaveAsset? = nil
     
     var body: some View {
         NavigationStack {
@@ -98,13 +200,14 @@ struct MylogSwiftUIView: View {
                                     .clipped()
                                     .cornerRadius(180)
                                     .shadow(radius: 5)
+                                    .padding()
+                                    .onTapGesture {
+                                        selectedAsset = firstAsset
+                                    }
                                    
-                                
                                 Text(firstAsset.dateText)
-                                    .font(.title3)
-                                    .fontWeight(.medium)
-                                    .foregroundColor(.gray)
-                                    .padding(.top, 4)
+                                
+                                Text(firstAsset.timeText)
 
                             }
                             
@@ -117,7 +220,7 @@ struct MylogSwiftUIView: View {
                         
                         VStack(alignment: .leading, spacing: height * 0.015) {
                             
-                            Text("Wave Gallery")
+                            Text("Recent")
                                 .font(.title)
                                 .bold()
                                 .padding(.vertical)
@@ -133,7 +236,10 @@ struct MylogSwiftUIView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     
                     .background(Color(.systemGroupedBackground))
-                    .navigationTitle("My surf logs")
+                    .sheet(item: $selectedAsset) { asset in
+                        AssetDetailView(asset: asset)
+                    }
+                    
                     
                 } else {
                     List {
@@ -172,10 +278,12 @@ struct MylogSwiftUIView: View {
                 }
             }
         }
+        .environmentObject(formData)
     }
 }
 
 #Preview {
     MylogSwiftUIView()
+        .environmentObject(FormData())
 }
 

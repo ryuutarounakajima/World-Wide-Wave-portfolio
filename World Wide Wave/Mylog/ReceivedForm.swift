@@ -172,7 +172,15 @@ struct CustomFormSection4<Content: View>: View {
 struct ReceivedForm: View {
     
     @EnvironmentObject var formData: FormData
-    @State private var isSelected: Bool = false
+    
+    
+    @State private var isSizeOpen = false
+    @State private var isConditionOpen = false
+    @State private var isSwellOpen = false
+    @State private var isBreakTypeOpen = false
+    @State private var isWindOpen = false
+    @State private var isTideOpen = false
+    @State private var isWaxOpen = false
     
     // 共通定義から参照
     private let waveSizes: [(key: String, value: String)] = WaveOptions.waveSizes
@@ -200,7 +208,7 @@ struct ReceivedForm: View {
         Form {
             CustomFormSection4(
                 title: "Size",
-                isSelected: $isSelected,
+                isSelected: $isSizeOpen,
                 selectedValue1: $formData.selectedSize1,
                 selectedValue2: $formData.selectedSize2,
                 options: waveSizes
@@ -213,7 +221,7 @@ struct ReceivedForm: View {
             
             CustomFormSection3(
                 title: "Condition",
-                isSelected: $isSelected,
+                isSelected: $isConditionOpen,
                 selectedValue: $formData.selectedCondition,
                 options: waveConditions
             ) {
@@ -222,19 +230,19 @@ struct ReceivedForm: View {
                     .modifier(CustomFormTextModifier())
             }
             
-            CustomFormSection3(title: "swell", isSelected: $isSelected, selectedValue: $formData.selectedSwell, options: swells) {
+            CustomFormSection3(title: "Swell", isSelected: $isSwellOpen, selectedValue: $formData.selectedSwell, options: swells) {
             
                 Text(randomSwell)
                     .modifier(CustomFormTextModifier())
             }
             
-            CustomFormSection3(title: "break type", isSelected: $isSelected, selectedValue: $formData.selectedBreaks, options: breaks) {
+            CustomFormSection3(title: "Break type", isSelected: $isBreakTypeOpen, selectedValue: $formData.selectedBreaks, options: breaks) {
                 
                 Text(randomBreak)
                     .modifier(CustomFormTextModifier())
             }
             
-            CustomFormSection3(title: "Wind", isSelected: $isSelected, selectedValue: $formData.selectedWind, options: winds) {
+            CustomFormSection3(title: "Wind", isSelected: $isWindOpen, selectedValue: $formData.selectedWind, options: winds) {
                 
                 VStack {
                     Text(randomWind)
@@ -252,7 +260,7 @@ struct ReceivedForm: View {
                 }
             }
             
-            CustomFormSection3(title: "Tide", isSelected: $isSelected, selectedValue: $formData.selectedTide, options: WaveOptions.tides) {
+            CustomFormSection3(title: "Tide", isSelected: $isTideOpen, selectedValue: $formData.selectedTide, options: WaveOptions.tides) {
                 VStack {
                     Text(randomTides)
                         .modifier(CustomFormTextModifier())
@@ -270,7 +278,7 @@ struct ReceivedForm: View {
                
             }
             
-            CustomFormSection3(title: "wax", isSelected: $isSelected, selectedValue: $formData.selectedTide, options: WaveOptions.waxes) {
+            CustomFormSection3(title: "Wax", isSelected: $isWaxOpen, selectedValue: $formData.selectedWax, options: WaveOptions.waxes) {
                 VStack {
                     Text(randomWax)
                         .modifier(CustomFormTextModifier())
