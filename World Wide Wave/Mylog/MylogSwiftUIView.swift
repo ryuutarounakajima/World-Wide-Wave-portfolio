@@ -20,49 +20,6 @@ struct AssetDetailView: View {
         CLLocationCoordinate2D(latitude: asset.latitude, longitude: asset.longitude)
     }
     
-    init(asset: WaveAsset) {
-        self.asset = asset
-        let coordinate = CLLocationCoordinate2D(latitude: asset.latitude, longitude: asset.longitude)
-        
-        _cameraPosition = State(initialValue: .region(MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))))
-    }
-
-    var body: some View {
-        VStack(spacing: 16) {
-            // 1) Top image
-            Image(asset.imageName)
-                .resizable()
-                .scaledToFit()
-                .clipShape(RoundedRectangle(cornerRadius: 180))
-                .shadow(radius: 4)
-
-            // 2) Map from latitude/longitude
-            Map(position: $cameraPosition) {
-                let coordinate = CLLocationCoordinate2D(latitude: asset.latitude, longitude: asset.longitude)
-                Marker("Here", coordinate: coordinate)
-            }
-            .frame(height: 240)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .shadow(radius: 2)
-            
-            
-            Button {
-                    openInMapsDriving()
-                } label: {
-                    Label("go surf", systemImage: "figure.surfing.circle.fill")
-                }
-                .buttonStyle(.borderedProminent)
-
-                .buttonStyle(.bordered)
-            
-
-            // 3) Form (must not be inside another ScrollView)
-            ReceivedForm()
-        }
-        .padding()
-        .navigationTitle("Asset Detail")
-    }
-    
     private func openInMapsDriving() {
         let destination = MKMapItem(placemark: MKPlacemark(coordinate: destinationCoordinate))
         destination.name = asset.imageName
@@ -71,6 +28,60 @@ struct AssetDetailView: View {
         ]
         destination.openInMaps(launchOptions: options)
     }
+    
+    init(asset: WaveAsset) {
+        self.asset = asset
+        let coordinate = CLLocationCoordinate2D(latitude: asset.latitude, longitude: asset.longitude)
+        
+        _cameraPosition = State(initialValue: .region(MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))))
+    }
+
+    var body: some View {
+        GeometryReader {
+            geo in
+            
+            VStack(spacing: 16) {
+                
+                Text(asset.dateText)
+                   
+                Text(asset.timeText)
+                    .font(.title)
+                
+                // 1) Top image
+                Image(asset.imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(RoundedRectangle(cornerRadius: 180))
+                    .frame(height: geo.size.height * 0.25)
+                    .shadow(radius: 4)
+
+                // 2) Map from latitude/longitude
+                Map(position: $cameraPosition) {
+                    let coordinate = CLLocationCoordinate2D(latitude: asset.latitude, longitude: asset.longitude)
+                    Marker("Here", coordinate: coordinate)
+                }
+                .frame(height: geo.size.height * 0.2)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .shadow(radius: 2)
+                
+                
+                Button {
+                        openInMapsDriving()
+                    } label: {
+                        Label("go surf", systemImage: "figure.surfing.circle.fill")
+                    }
+                    .buttonStyle(.borderedProminent)
+
+                
+                ReceivedForm()
+            }
+            .padding()
+            .navigationTitle("Asset Detail")
+        }
+        
+    }
+    
+    
 
    
 }
