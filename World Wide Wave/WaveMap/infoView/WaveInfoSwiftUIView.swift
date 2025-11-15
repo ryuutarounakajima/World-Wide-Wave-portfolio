@@ -79,15 +79,12 @@ struct WaveInfoSwiftUIView: View {
     var timestamp: Date
     @State private var selectedImage: UIImage?
     @State private var selectedVideoURL: URL?
-    //@State private var showPreview = false
     
-    //@State var isCameraButtonRotating = false
     @State var cameraButtonColoring = false
-    
+    @State private var navigateToMyLog: Bool = false
     
     var body: some View {
         NavigationStack {
-           
                 GeometryReader { geometry in
                     VStack{
                         
@@ -193,32 +190,29 @@ struct WaveInfoSwiftUIView: View {
                                         print("You are optimistic person from now!!")
                                     }
                                     Button("Yes") {
+                                        
                                         print("Yes")
                                         print("You are optimistic person from now!!")
+                                        
                                         formData.submitForm()
-                                        formData.saveToSwifData(context: modelContext)
+                                        
+                                        let success = formData.saveToSwifData(context: modelContext)
+                                        
+                                        if success {
+                                            navigateToMyLog = true
+                                        }
                                         
                                     }
                                 } message:{
                                     Text("This will determine your future")
                                 }
-                                
                                 Spacer()
-                               
                             }
-                            
-                            
-                            
-                            
                         }
                         .frame(maxWidth: .infinity, alignment: .trailing)
-                        //.padding(.trailing)
-                        //The time
-                        //Text("\(timestamp)")
                         .padding([.leading, .trailing, .bottom])
                     }
                     .frame(maxHeight: .infinity)
-                   
                     }
                     .ignoresSafeArea()
                     .toolbar {
@@ -278,13 +272,11 @@ struct WaveInfoSwiftUIView: View {
                         UnifiedCameraSwiftUIView( isCameraPresented: $isCameraVsiable)
                             .environmentObject(formData)
                     }
-                   /* .fullScreenCover(isPresented: $isPickerVisable) {
-                        UnifiedCameraSwiftUIView()
-                        // CameraSwiftUIPreview(isCameraPresented: $isPickerVisable, captureImage: $formData.capturedImage).environmentObject(formData)
-                    }*/
+                    .navigationDestination(isPresented: $navigateToMyLog) {
+                        MylogSwiftUIView()
+                            .environmentObject(formData)
+                    }
         }
-        
-        
     }
     
     private func updateBlinking() {
@@ -305,6 +297,11 @@ struct WaveInfoSwiftUIView: View {
     
     let mockCoordinate = CLLocationCoordinate2D(latitude: 35.6895, longitude: 139.6917)
     let mockTimestamp = Date()
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let modelContainer = try! ModelContainer(for: SurfLog2.self, configurations: config)
     let formdata = FormData()
-    WaveInfoSwiftUIView(coordinate: mockCoordinate, timestamp: mockTimestamp).environmentObject(formdata)
+    
+    WaveInfoSwiftUIView(coordinate: mockCoordinate, timestamp: mockTimestamp)
+        .environmentObject(formdata)
+        .modelContainer(modelContainer)
 }

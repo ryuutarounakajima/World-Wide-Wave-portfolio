@@ -40,7 +40,9 @@ class waveInfoViewController: UIViewController {
        /* guard let coordinate = coordinate, let timestamp = timestamp else {return}
         */
         
-        let swiftUIView = WaveInfoSwiftUIView( coordinate: safeCoordinate, timestamp: safeTimeStamp).environmentObject(formDataToUse)
+        let swiftUIView = WaveInfoSwiftUIView( coordinate: safeCoordinate, timestamp: safeTimeStamp)
+            .environmentObject(formDataToUse)
+            .modelContainer(ModelContainerProvider.shared)
         let hostingController = UIHostingController(rootView: swiftUIView)
         
         addChild(hostingController)

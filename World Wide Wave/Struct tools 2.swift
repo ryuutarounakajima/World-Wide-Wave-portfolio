@@ -11,16 +11,6 @@ import SwiftData
 
 
 // MARK: - Model
-
-import SwiftData
-
-enum ModelContainerProvider {
-    static let shared: ModelContainer = {
-        // モデルが増えたら配列にする: ModelContainer(for: [SurfLog2.self, ...])
-        let container = try! ModelContainer(for: SurfLog2.self)
-        return container
-    }()
-}
 @Model
 class SurfLog2 {
     var coordinateLat : Double?
@@ -62,7 +52,7 @@ class SurfLog2 {
         Condition: \(selectedCondition)
         Swell: \(selectedSwell)
         Breaks: \(selectedBreaks)
-        Wind: \(selectedWind) (\(String(format: "%.1f", selectedWindStrengthValue)))
+        Wind: \(selectedWind) (\(String(format: "%.1f, selectedWindStrengthValue"))
         Tide: \(selectedTide) (\(String(format: "%.1f", selectedTideValue)))
         Wax: \(selectedWax)
         Water Temp: \(String(format: "%.1f", waterTemperatureValue))
@@ -115,7 +105,7 @@ class FormData: ObservableObject {
         }
     }
     
-   @discardableResult func saveToSwifData(context: ModelContext) -> Bool {
+    func saveToSwifData(context: ModelContext) {
         
         let log = SurfLog2(coordinateLat: coordinate?.latitude, coordinateLon: coordinate?.longitude, timestamp: timestamp,
                           selectedSize: selectedSize,
@@ -139,13 +129,10 @@ class FormData: ObservableObject {
         do {
             try context.save()
             print("Surf log saved scccessfully")
-            return true
         } catch {
             print("Falied to save: \(error)")
-            return false
         }
         
-       
         
         
     }
