@@ -10,6 +10,7 @@ import MapKit
 import CoreLocation
 import AVKit
 import SwiftData
+import UIKit
 
 
 /*extension UIImage {
@@ -81,7 +82,6 @@ struct WaveInfoSwiftUIView: View {
     @State private var selectedVideoURL: URL?
     
     @State var cameraButtonColoring = false
-    @State private var navigateToMyLog: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -199,7 +199,8 @@ struct WaveInfoSwiftUIView: View {
                                         let success = formData.saveToSwifData(context: modelContext)
                                         
                                         if success {
-                                            navigateToMyLog = true
+                                            switchToFirstTab()
+                                            dismiss()
                                         }
                                         
                                     }
@@ -272,10 +273,6 @@ struct WaveInfoSwiftUIView: View {
                         UnifiedCameraSwiftUIView( isCameraPresented: $isCameraVsiable)
                             .environmentObject(formData)
                     }
-                    .navigationDestination(isPresented: $navigateToMyLog) {
-                        MylogSwiftUIView()
-                            .environmentObject(formData)
-                    }
         }
     }
     
@@ -290,6 +287,15 @@ struct WaveInfoSwiftUIView: View {
                 isBlinking = false
             }
         }
+    }
+    
+    private func switchToFirstTab() {
+        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = scene.windows.first,
+              let tabBar = window.rootViewController as? UITabBarController else {
+            return
+        }
+        tabBar.selectedIndex = 0
     }
 }
 
