@@ -199,6 +199,8 @@ struct AssetScrollView: View {
     let assets: [WaveAsset] = sortedWaveAssets
     @State private var selectedAsset: WaveAsset? = nil
     
+    
+    
     var body: some View {
         ScrollView(.horizontal, showsIndicators: true) {
             HStack(spacing: 16) {

@@ -199,6 +199,7 @@ struct WaveInfoSwiftUIView: View {
                                         let success = formData.saveToSwifData(context: modelContext)
                                         
                                         if success {
+                                            formData.resetFormData()
                                             switchToFirstTab()
                                             dismiss()
                                         }

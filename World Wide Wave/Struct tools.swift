@@ -150,6 +150,29 @@ class FormData: ObservableObject {
         
     }
     
+    func resetFormData() {
+        coordinate = nil
+        timestamp = nil
+
+        selectedSize = ""
+        selectedSize1 = ""
+        selectedSize2 = ""
+
+        selectedCondition = ""
+        selectedSwell = ""
+        selectedBreaks = ""
+        selectedWind = ""
+        selectedWindStrengthValue = 0.0
+        selectedTide = ""
+        selectedTideValue = 0.0
+        selectedWax = ""
+        waterTemperatureValue = 0.0
+
+        capturedImage = nil
+        capturedVideoURL = nil
+        customNoteInput = ""
+    }
+    
     
 }
 
