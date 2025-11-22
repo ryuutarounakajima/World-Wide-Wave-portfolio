@@ -20,13 +20,14 @@ This portfolio branch:
 --
 
 
-##🪡 Features
+###🪡 Feature
 
-### Login view
+
+**Login view**
 Authentication view for Apple users only.
 
 
-<img src="screenshots/loginview.png" alt="Login Screen" width="400">
+<img src="screenshots/loginview.png" alt="Login Screen" width="300" height= "300">
 File: [LoginViewController.swift](World%2Wide%2Wave%/LoginViewController.swift)
 
 - **MapView (Surf point Registration)**
