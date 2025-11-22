@@ -14,11 +14,20 @@ visual elements.
 
 This portfolio branch:
 
-- **LoginView
+- Demonstrates selected featres with mock assets.
+- Includes screenshots and brief descriptions.
 
-Authentication view for only apple user
+--
 
-![Login view](screenshots/loginview.png)
+
+##🪡 Features
+
+### Login view
+Authentication view for Apple users only.
+
+
+<img src="screenshots/loginview.png" alt="Login Screen" width="400">
+File: [LoginViewController.swift](World%2Wide%2Wave%/LoginViewController.swift)
 
 - **MapView (Surf point Registration)**
   Users cand long-press on the map to register surf point location.
