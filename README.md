@@ -28,7 +28,8 @@ This portfolio branch:
 Authentication view for Apple users only.
 
 <img src="screenshots/loginview.png" alt="Login Screen" height= "400">
-File: [LoginViewController.swift](./World%20Wide%20Wave/LoginViewController.swift)
+File:　[LoginViewController.swift](./World%20Wide%20Wave/LoginViewController.swift)
+
 
 
 ###  MapView(Surf point Registration)
@@ -37,8 +38,9 @@ Users can long-press on the map to register surf point location.
 
 <img src="screenshots/mapview.gif" alt="Login Screen" height= "400">
 
-Flie: [WaveMapViewController](/Users/ryuutarounakajima/Desktop/World\ Wide\ Wave/World\ Wide\ Wave/WaveMap/mapView/WaveMapViewController.swift)
 
-File: [WaveInfoSwifUIViewController](/Users/ryuutarounakajima/Desktop/World\ Wide\ Wave/World\ Wide\ Wave/WaveMap/infoView/WaveInfoSwiftUIView.swift) 
+Flie: [WaveMapViewController](./World%20Wide%20Wave/WaveMap/mapView/WaveMapViewController.swift)
+
+File: [WaveInfoSwifUIViewController](./World%20Wide%20Wave/WaveMap/mapView/WaveMapViewController.swift) 
  
 
