@@ -39,4 +39,4 @@ Users can long-press on the map to register surf point location.
 
 Flie: [WaveMapViewController](/Users/ryuutarounakajima/Desktop/World\ Wide\ Wave/World\ Wide\ Wave/WaveMap/mapView/WaveMapViewController.swift)
  
-File: [WaveInfoSwiftUIView](/Users/ryuutarounakajima/Desktop/World\ Wide\ Wave/World\ Wide\ Wave/WaveMap/infoView/WaveInfoSwiftUIView.swift)
+
