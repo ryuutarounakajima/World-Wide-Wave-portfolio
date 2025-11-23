@@ -28,7 +28,9 @@ This portfolio branch:
 Authentication view for Apple users only.
 
 <img src="screenshots/loginview.png" alt="Login Screen" height= "400">
-File:　[LoginViewController.swift](./World%20Wide%20Wave/LoginViewController.swift)
+
+File:[LoginViewController.swift](./World%20Wide%20Wave/LoginViewController.swift)
+
 
 
 
