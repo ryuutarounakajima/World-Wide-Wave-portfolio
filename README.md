@@ -35,9 +35,10 @@ File: [LoginViewController.swift](World%20Wide%20Wave/LoginViewController.swift)
 
 Users can long-press on the map to register surf point location.
 
-<img src="screenshots/optimaized\ gif\ 1.gif" alt="Login Screen" height= "400">
+<img src="screenshots/mapview.gif" alt="Login Screen" height= "400">
 
 Flie: [WaveMapViewController](/Users/ryuutarounakajima/Desktop/World\ Wide\ Wave/World\ Wide\ Wave/WaveMap/mapView/WaveMapViewController.swift)
 
-File: [WaveInfoSwiftUIViewController](/Users/ryuutarounakajima/Desktop/World\ Wide\ Wave/World\ Wide\ Wave/WaveMap/infoView/WaveInfoSwiftUIView.swift) 
+File: [WaveInfoSwifUIViewController](/Users/ryuutarounakajima/Desktop/World\ Wide\ Wave/World\ Wide\ Wave/WaveMap/infoView/WaveInfoSwiftUIView.swift) 
+ 
 
