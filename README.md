@@ -31,6 +31,12 @@ Authentication view for Apple users only.
 File: [LoginViewController.swift](World%20Wide%20Wave/LoginViewController.swift)
 
 
-### MapView (Surf point Registration)
-  Users cand long-press on the map to register surf point location.
+### MapView ~ Wave information view (Surf point Registration)
 
+Users can long-press on the map to register surf point location.
+
+<img src="screenshots/mapToInfoView.gif" alt="Login Screen" height= "400">
+
+Flie: [WaveMapViewController](/Users/ryuutarounakajima/Desktop/World\ Wide\ Wave/World\ Wide\ Wave/WaveMap/mapView/WaveMapViewController.swift)
+ 
+File: [WaveInfoSwiftUIView](/Users/ryuutarounakajima/Desktop/World\ Wide\ Wave/World\ Wide\ Wave/WaveMap/infoView/WaveInfoSwiftUIView.swift)
