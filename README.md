@@ -48,7 +48,7 @@ File: [WaveInfoSwifUIViewController](./World%20Wide%20Wave/WaveMap/mapView/WaveM
 
 On this view, Users can view a list of the wave log which recorded on other tab view
 
-<image src= "screenshots/mylogView.gif" alt="log collections" height= "400">
+<img src= "screenshots/mylogView.gif" alt="log collections" height= "400">
 
 Flie:
     [MylogSwiftUiView](./World%20Wide%20Wave/myLog/MylogSwiftUIView.swift)
