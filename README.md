@@ -33,16 +33,24 @@ File:[LoginViewController.swift](./World%20Wide%20Wave/LoginViewController.swift
 
 
 
-
-###  MapView(Surf point Registration)
+### MapView(Surf point Registration)
 
 Users can long-press on the map to register surf point location.
 
 <img src="screenshots/mapview.gif" alt="Login Screen" height= "400">
 
-
 Flie: [WaveMapViewController](./World%20Wide%20Wave/WaveMap/mapView/WaveMapViewController.swift)
 
 File: [WaveInfoSwifUIViewController](./World%20Wide%20Wave/WaveMap/mapView/WaveMapViewController.swift) 
+
+
+### MylogView(collenctions of user's wave information)
+
+On this view, Users can view a list of the wave log which recorded on other tab view
+
+<image src= "screenshots/mylogView.gif" alt="log collections" height= "400">
+
+Flie:
+    [MylogSwiftUiView](./World%20Wide%20Wave/myLog/MylogSwiftUIView.swift)
  
 
