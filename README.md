@@ -66,7 +66,7 @@ Users can view a list of their recorded wave logs from the other tabs.
 
 他のタブ画面(Mapview)で記録した波ログを一覧で確認できます。
 
-<img src="screenshots/mylogView.gif" alt="log collections" height="400">
+<img src="screenshots/mylogview.gif" alt="Log collection" height= "400">
 
 Flie:
     [MylogSwiftUiView](./World%20Wide%20Wave/myLog/MylogSwiftUIView.swift)
