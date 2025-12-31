@@ -57,8 +57,8 @@ class SurfLog2 {
         
         self.note = """
         Size: \(selectedSize)
-        Size: \(selectedSize1)
-        Size: \(selectedSize2)
+        Size1: \(selectedSize1)
+        Size2: \(selectedSize2)
         Condition: \(selectedCondition)
         Swell: \(selectedSwell)
         Breaks: \(selectedBreaks)
