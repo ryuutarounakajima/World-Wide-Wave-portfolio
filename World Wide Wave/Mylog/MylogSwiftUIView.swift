@@ -10,11 +10,10 @@ import SwiftData
 import AVKit
 import MapKit
 
-
-
 struct MylogSwiftUIView: View {
     
     @StateObject private var formData = FormData()
+    @Environment(\.modelContext) private var modelContext
     
     @Query(sort: \SurfLog2.timestamp, order: .reverse) var logs: [SurfLog2]
     @State private var selectedAsset : WaveAsset? = nil
@@ -84,9 +83,8 @@ struct MylogSwiftUIView: View {
                         ForEach(logs) { log in
                             
                             VStack(alignment: .leading, spacing: 8) {
-                                if let  imageData = log.imageData, let UIImage = UIImage(data: imageData) {
-                                    
-                                    Image(uiImage: UIImage)
+                                if let imageData = log.imageData, let uiImage = UIImage(data: imageData) {
+                                    Image(uiImage: uiImage)
                                         .resizable()
                                         .scaledToFill()
                                         .frame(height: 100)
@@ -109,16 +107,52 @@ struct MylogSwiftUIView: View {
                                             alignment: .bottomTrailing
                                         )
                                 }
+                                
+                                if let ts = log.timestamp {
+                                    Text(ts.formatted(date: .abbreviated, time: .shortened))
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                
+                                Text(log.note)
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(3)
+                            }
+                            // 個別スワイプアクション（iOS 15+）
+                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                Button(role: .destructive) {
+                                    deleteLogs([log])
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
                             }
                         }
+                        /* // 伝統的なスワイプ削除（編集モードや左スワイプで有効）
+                        .onDelete { indexSet in
+                            let targets = indexSet.map { logs[$0] }
+                            deleteLogs(targets)
+                        }
+                         */
                     }
-                    
                 }
             }
         }
         .environmentObject(formData)
     }
+    
+    private func deleteLogs(_ targets: [SurfLog2]) {
+        for log in targets {
+            modelContext.delete(log)
+        }
+        do {
+            try modelContext.save()
+        } catch {
+            print("Failed to delete logs: \(error)")
+        }
+    }
 }
+
 struct AssetDetailView: View {
     
     let asset: WaveAsset
@@ -189,17 +223,12 @@ struct AssetDetailView: View {
         }
         
     }
-    
-    
-
-   
 }
+
 struct AssetScrollView: View {
     
     let assets: [WaveAsset] = sortedWaveAssets
     @State private var selectedAsset: WaveAsset? = nil
-    
-    
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: true) {
@@ -217,16 +246,14 @@ struct AssetScrollView: View {
                             }
                         
                         VStack(spacing: 2) {
-                            Text(asset.dateText) // 例: "2025/11/10"
+                            Text(asset.dateText)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
 
-                            Text(asset.timeText) // 例: "14:35"
+                            Text(asset.timeText)
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
                         }
-
-                        
                     }
                 }
             }
@@ -238,6 +265,7 @@ struct AssetScrollView: View {
         }
     }
 }
+
 // MARK: - mock assets
 let waveAssetImages: [String] = ["wave1", "wave2", "wave3", "wave4", "wave5", "wave6", "Logo"]
 let waveAssets: [WaveAsset] = waveAssetImages.map { name in
@@ -252,7 +280,6 @@ func randomDateInBirthToCurent() -> Date {
     var calendar = Calendar(identifier: .gregorian)
     calendar.timeZone = .current
 
-    // 2025/01/01 から 2025/12/31 まで
     let start = calendar.date(from: DateComponents(year: 1988, month: 11, day: 19))!
     let end = calendar.date(from: DateComponents(year: 2025, month: 11, day: 9))!
 
@@ -291,11 +318,8 @@ struct WaveAsset: Identifiable {
     let longitude: Double
 }
 
-
-
 #Preview {
     MylogSwiftUIView()
         .environmentObject(FormData())
         .modelContainer(for: SurfLog2.self )
 }
-
