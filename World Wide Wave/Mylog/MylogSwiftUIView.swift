@@ -79,6 +79,23 @@ struct MylogSwiftUIView: View {
                     
                     
                 } else {
+                    
+                    VStack(spacing: height * 0.06) {
+                        VStack(spacing: 3) {
+                            
+                            if let log = logs.first,
+                               let uiImage = UIImage(data: log.imageData!){
+                                
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .clipped()
+                                    .cornerRadius(180)
+                                
+                            }
+                        }
+                    }
+                    
                     List {
                         ForEach(logs) { log in
                             
