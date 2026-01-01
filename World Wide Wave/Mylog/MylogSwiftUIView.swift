@@ -4,7 +4,37 @@
 //
 //  Created by Ryutarou Nakajima on 2024/11/13.
 //
-
+/*
+ VStack(spacing: height * 0.06) {
+     VStack(spacing: 3) {
+         if let firstLog = logs.first {
+             if let data = firstLog.imageData, let uiImage = UIImage(data: data) {
+                 Image(uiImage: uiImage)
+                     .resizable()
+                     .scaledToFit()
+                     .clipped()
+                     .cornerRadius(180)
+                     .shadow(radius: 5)
+                     .padding()
+             } else {
+                 Image("Logo")
+                     .resizable()
+                     .scaledToFit()
+                     .clipped()
+                     .cornerRadius(180)
+                     .shadow(radius: 5)
+                     .padding()
+             }
+             
+             if let ts = firstLog.timestamp {
+                 Text(ts.formatted(date: .long, time: .omitted))
+                 Text(ts.formatted(date: .omitted, time: .long))
+             }
+         }
+     }
+    
+ */
+ 
 import SwiftUI
 import SwiftData
 import AVKit
@@ -80,64 +110,97 @@ struct MylogSwiftUIView: View {
                     
                 } else {
                     
-                  
-                    
-                    List {
-                        ForEach(logs) { log in
+                    VStack(spacing: height * 0.06) {
+                        VStack(spacing: 3) {
                             
-                            VStack(alignment: .leading, spacing: 8) {
-                                if let imageData = log.imageData, let uiImage = UIImage(data: imageData) {
+                            if let firstLog = logs.first {
+                                if let data = firstLog.imageData, let uiImage = UIImage(data: data) {
+                                    
                                     Image(uiImage: uiImage)
                                         .resizable()
-                                        .scaledToFill()
-                                        .frame(height: 100)
+                                        .scaledToFit()
                                         .clipped()
-                                        .cornerRadius(12)
+                                        .cornerRadius(180)
+                                        .shadow(radius: 5)
+                                        .padding()
                                 } else {
                                     Image("Logo")
                                         .resizable()
-                                        .scaledToFill()
-                                        .frame(height: 180)
+                                        .scaledToFit()
                                         .clipped()
-                                        .cornerRadius(12)
-                                        .overlay(
-                                            Text("No Image Available")
-                                                .font(.caption)
-                                                .foregroundColor(.white)
-                                                .padding(6)
-                                                .background(Color.black.opacity(0.5))
-                                                .cornerRadius(8),
-                                            alignment: .bottomTrailing
-                                        )
+                                        .cornerRadius(180)
+                                        .shadow(radius: 5)
+                                        .padding()
+
                                 }
                                 
-                                if let ts = log.timestamp {
-                                    Text(ts.formatted(date: .abbreviated, time: .shortened))
-                                        .font(.caption)
+                                if let timeStamp = firstLog.timestamp {
+                                    Text(timeStamp.formatted(date: .long, time: .omitted))
+                                    Text(timeStamp.formatted(date: .omitted, time:.complete))
+                                }
+                            }
+                        }
+                        
+                        List {
+                            ForEach(logs) { log in
+                                
+                                VStack(alignment: .leading, spacing: 8) {
+                                    if let imageData = log.imageData, let uiImage = UIImage(data: imageData) {
+                                        Image(uiImage: uiImage)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(height: 100)
+                                            .clipped()
+                                            .cornerRadius(12)
+                                    } else {
+                                        Image("Logo")
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(height: 180)
+                                            .clipped()
+                                            .cornerRadius(12)
+                                            .overlay(
+                                                Text("No Image Available")
+                                                    .font(.caption)
+                                                    .foregroundColor(.white)
+                                                    .padding(6)
+                                                    .background(Color.black.opacity(0.5))
+                                                    .cornerRadius(8),
+                                                alignment: .bottomTrailing
+                                            )
+                                    }
+                                    
+                                    if let ts = log.timestamp {
+                                        Text(ts.formatted(date: .abbreviated, time: .shortened))
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    
+                                    Text(log.note)
+                                        .font(.footnote)
                                         .foregroundStyle(.secondary)
+                                        .lineLimit(3)
                                 }
-                                
-                                Text(log.note)
-                                    .font(.footnote)
-                                    .foregroundStyle(.secondary)
-                                    .lineLimit(3)
-                            }
-                            // 個別スワイプアクション（iOS 15+）
-                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                Button(role: .destructive) {
-                                    deleteLogs([log])
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
+                                // 個別スワイプアクション（iOS 15+）
+                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                    Button(role: .destructive) {
+                                        deleteLogs([log])
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
                                 }
                             }
+                            /* // 伝統的なスワイプ削除（編集モードや左スワイプで有効）
+                            .onDelete { indexSet in
+                                let targets = indexSet.map { logs[$0] }
+                                deleteLogs(targets)
+                            }
+                             */
                         }
-                        /* // 伝統的なスワイプ削除（編集モードや左スワイプで有効）
-                        .onDelete { indexSet in
-                            let targets = indexSet.map { logs[$0] }
-                            deleteLogs(targets)
-                        }
-                         */
                     }
+                    
+                   
+                     
                 }
             }
         }
