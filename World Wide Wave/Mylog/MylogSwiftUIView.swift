@@ -47,6 +47,7 @@ struct MylogSwiftUIView: View {
     
     @Query(sort: \SurfLog2.timestamp, order: .reverse) var logs: [SurfLog2]
     @State private var selectedAsset : WaveAsset? = nil
+    @State private var selectedLog: SurfLog2? = nil
     
     var body: some View {
         NavigationStack {
@@ -131,6 +132,10 @@ struct MylogSwiftUIView: View {
                                         .cornerRadius(180)
                                         .shadow(radius: 5)
                                         .padding()
+                                        .onTapGesture {
+                                            selectedLog = firstLog
+                                        }
+                                        .sheet(item: $selectedLog) { log in }
 
                                 }
                                 
@@ -142,6 +147,7 @@ struct MylogSwiftUIView: View {
                         }
                         
                         LogScrollView(logs: logs)
+                        
                         List {
                             ForEach(logs) { log in
                                 
