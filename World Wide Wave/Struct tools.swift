@@ -56,9 +56,7 @@ class SurfLog2 {
         self.timestamp = timestamp
         
         self.note = """
-        Size: \(selectedSize)
-        Size1: \(selectedSize1)
-        Size2: \(selectedSize2)
+        Size: \(selectedSize1) ~ \(selectedSize2)
         Condition: \(selectedCondition)
         Swell: \(selectedSwell)
         Breaks: \(selectedBreaks)

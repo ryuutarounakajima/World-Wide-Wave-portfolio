@@ -10,6 +10,63 @@ import Foundation
 
 
 /*
+// Log ScrollView
+ struct LogScrollView: View {
+     let logs: [SurfLog2]
+     @State private var selectedLog: SurfLog2? = nil
+
+     var body: some View {
+         ScrollView(.horizontal, showsIndicators: true) {
+             HStack(spacing: 16) {
+                 ForEach(logs) { log in
+                     VStack(spacing: 8) {
+                         if let data = log.imageData, let uiImage = UIImage(data: data) {
+                             Image(uiImage: uiImage)
+                                 .resizable()
+                                 .scaledToFit()
+                                 .clipped()
+                                 .cornerRadius(180)
+                                 .shadow(radius: 5)
+                                 .onTapGesture {
+                                     selectedLog = log
+                                 }
+                         } else {
+                             Image("Logo")
+                                 .resizable()
+                                 .scaledToFit()
+                                 .clipped()
+                                 .cornerRadius(180)
+                                 .shadow(radius: 5)
+                                 .onTapGesture {
+                                     selectedLog = log
+                                 }
+                         }
+
+                         VStack(spacing: 2) {
+                             if let ts = log.timestamp {
+                                 Text(ts.formatted(date: .abbreviated, time: .omitted))
+                                     .font(.caption)
+                                     .foregroundStyle(.secondary)
+                                 Text(ts.formatted(date: .omitted, time: .shortened))
+                                     .font(.caption2)
+                                     .foregroundStyle(.secondary)
+                             } else {
+                                 Text("-")
+                                     .font(.caption)
+                                     .foregroundStyle(.secondary)
+                             }
+                         }
+                     }
+                 }
+             }
+             .padding([.horizontal, .bottom])
+         }
+         .frame(height: 140)
+         .sheet(item: $selectedLog) { log in
+             LogDetailView(log: log)
+         }
+     }
+ }
 //unified camera code
  import UIKit
  import AVFoundation
