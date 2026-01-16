@@ -169,6 +169,7 @@ struct CustomFormSection4<Content: View>: View {
     
 }
 
+
 struct ReceivedForm: View {
     
     @EnvironmentObject var formData: FormData
@@ -350,7 +351,11 @@ struct ReceivedForm: View {
 
 }
 
+
+
+
 #Preview {
     ReceivedForm()
         .environmentObject(FormData())
 }
+

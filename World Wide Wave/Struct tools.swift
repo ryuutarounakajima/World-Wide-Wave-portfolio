@@ -30,6 +30,8 @@ class SurfLog2 {
     var imageData: Data?
     var videoPath: String?
     
+    
+    
     init(
         coordinateLat: Double?,
         coordinateLon: Double?,
@@ -54,6 +56,7 @@ class SurfLog2 {
         self.coordinateLat = coordinateLat
         self.coorinateLon = coordinateLon
         self.timestamp = timestamp
+        
         
         self.note = """
         Size: \(selectedSize1) ~ \(selectedSize2)
@@ -115,7 +118,8 @@ class FormData: ObservableObject {
     
    @discardableResult func saveToSwifData(context: ModelContext) -> Bool {
         
-        let log = SurfLog2(coordinateLat: coordinate?.latitude, coordinateLon: coordinate?.longitude, timestamp: timestamp,
+       let log = SurfLog2(coordinateLat: coordinate?.latitude,
+                          coordinateLon: coordinate?.longitude, timestamp: timestamp,
                           selectedSize: selectedSize,
                           selectedSize1: selectedSize1,
                           selectedSize2: selectedSize2,
@@ -130,7 +134,7 @@ class FormData: ObservableObject {
                           waterTemperatureValue: waterTemperatureValue,
                           imageData: capturedImage?.jpegData(compressionQuality: 0.8),
                           videoPath: capturedVideoURL?.absoluteString
-                        )
+       )
         
         context.insert(log)
         

@@ -135,7 +135,9 @@ struct MylogSwiftUIView: View {
                                         .onTapGesture {
                                             selectedLog = firstLog
                                         }
-                                        .sheet(item: $selectedLog) { log in }
+                                        .sheet(item: $selectedLog) { log in
+                                            LogDetailView(log: log)
+                                        }
 
                                 }
                                 
@@ -283,8 +285,120 @@ struct LogScrollView: View {
         .frame(height: 140)
         .sheet(item: $selectedLog) {
             log in
-            
+            LogDetailView(log: log)
         }}
+}
+
+struct LogDetailView: View {
+    
+    let log: SurfLog2
+    @EnvironmentObject var formData: FormData
+    @State private var cameraPosition: MapCameraPosition = .automatic
+
+    private var destinationCoordinate: CLLocationCoordinate2D? {
+        guard let lat = log.coordinateLat, let lon = log.coorinateLon else { return nil }
+        return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+    }
+    
+    private func openInMapsDriving() {
+        
+        guard let coord = destinationCoordinate else { return }
+        
+        let placemark = MKPlacemark(coordinate: coord)
+        let destination = MKMapItem(placemark: placemark)
+        
+        //destination.name = log.imageData.flatMap(\.debugDescription) ?? "Unknown Location"
+        
+        let options = [
+            MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving
+        ]
+        
+        destination.openInMaps(launchOptions: options)
+    }
+    
+    init(log: SurfLog2) {
+        self.log = log
+        let coordinate = CLLocationCoordinate2D(latitude: log.coordinateLat ?? 0, longitude: log.coorinateLon ?? 0)
+        
+        _cameraPosition = State(initialValue: .region(MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))))
+    }
+
+    var body: some View {
+        GeometryReader {
+            geo in
+            
+            VStack(spacing: 16) {
+                
+                if let ts = log.timestamp {
+                    Text(ts.formatted(date: .abbreviated, time: .omitted))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    
+                    Text(ts.formatted(date: .omitted, time: .shortened))
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text("_")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                }
+                
+                //WavePhoto
+                if let data = log.imageData, let uiImage = UIImage(data: data) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                } else {
+                    Image("Logo")
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 180))
+                        .frame(height: geo.size.height * 0.25)
+                        .shadow(radius: 4)
+                }
+                
+                // Video
+                if let videoPath = log.videoPath, !videoPath.isEmpty {
+                    if let url = URL(string: videoPath) ?? URL(string: videoPath.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? "") {
+                        VideoPlayer(player: AVPlayer(url: url))
+                            .clipShape(RoundedRectangle(cornerRadius: 180))
+                            .frame(height: geo.size.height * 0.25)
+                            .shadow(radius: 4)
+                        
+                    } else {
+                        Text("Invalid video URL")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                // Map
+                Map(position: $cameraPosition) {
+                    if let lat = log.coordinateLat, let lon = log.coorinateLon {
+                        let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+                        Marker("Here", coordinate: coordinate)
+                    }
+                }
+                .frame(height: geo.size.height * 0.2)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .shadow(radius: 2)
+                
+                //Go button
+                Button {
+                    openInMapsDriving()
+                } label: {
+                    Label("Go surf", systemImage: "figure.surfing.circle.fill")
+                }
+                .buttonStyle(.borderedProminent)
+                
+                
+
+            }
+            .padding()
+           
+        }
+    }
 }
 
 struct AssetDetailView: View {
@@ -358,6 +472,8 @@ struct AssetDetailView: View {
         
     }
 }
+
+
 
 struct AssetScrollView: View {
     
@@ -457,3 +573,4 @@ struct WaveAsset: Identifiable {
         .environmentObject(FormData())
         .modelContainer(for: SurfLog2.self )
 }
+
