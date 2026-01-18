@@ -29,7 +29,8 @@ class SurfLog2 {
     var note: String
     var imageData: Data?
     var videoPath: String?
-    
+    var selectedSize1: String?
+    var selectedSize2: String?
     
     
     init(
@@ -71,6 +72,8 @@ class SurfLog2 {
         
         self.imageData = imageData
         self.videoPath = videoPath
+        self.selectedSize1 = selectedSize1
+        self.selectedSize2 = selectedSize2
     }
 }
 class FormData: ObservableObject {

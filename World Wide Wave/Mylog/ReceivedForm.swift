@@ -350,7 +350,63 @@ struct ReceivedForm: View {
     }
 
 }
+struct ReceivedForm2: View {
+    
+    @EnvironmentObject var formData: FormData
+    let log: SurfLog2
+    @State private var isSizeOpen = false
+    @State private var isConditionOpen = false
+    
+    var body : some View {
+        
+        Form {
+            CustomFormSection5(title: "Size", isSelected: $isSizeOpen) {
+                Text(verbatim: (log.selectedSize1 ?? "") + " ~ " + (log.selectedSize2 ?? ""))
+                    .modifier(CustomFormTextModifier())
+            }
+        }
+        
+    }
+    }
+struct CustomFormSection5<Content: View>: View {
+    var title: String
+    var content: () -> Content
 
+    @Binding var isSelected: Bool
+
+    @EnvironmentObject var formData: FormData
+
+    init(
+        title: String,
+        isSelected: Binding<Bool>,
+        @ViewBuilder content: @escaping () -> Content
+    ) {
+        self.title = title
+        self._isSelected = isSelected
+        self.content = content
+    }
+
+    var body: some View {
+        
+        Section(header: Button(action: {
+            withAnimation {
+                isSelected = false
+            }
+        }) {
+            Text(title)
+                .headerProminence(.increased)
+                .modifier(SectionButtonModifier(isSelected: $isSelected))
+            
+        }) {
+            if isSelected {
+                
+            } else {
+                
+            }
+        }
+        content()
+    }
+}
 
 
 

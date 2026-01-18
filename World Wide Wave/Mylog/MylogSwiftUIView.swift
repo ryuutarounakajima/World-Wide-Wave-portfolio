@@ -392,6 +392,7 @@ struct LogDetailView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 
+                ReceivedForm2(log: log)
                 
 
             }
@@ -567,6 +568,8 @@ struct WaveAsset: Identifiable {
     let latitude: Double
     let longitude: Double
 }
+
+
 
 #Preview {
     MylogSwiftUIView()
