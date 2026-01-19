@@ -42,6 +42,26 @@ struct ReceivedForm2: View {
                     .modifier(CustomFormTextModifier())
                     .padding()
             }
+            
+            CustomFormSection5(title: "wind",
+                               isSelected: $isButtonOpen) {
+            
+                VStack {
+                    Text(verbatim: (log.selectedWind ??  ""))
+                        .modifier(CustomFormTextModifier())
+                    HStack {
+
+                        Text("Strength")
+                            .font(.custom("AventirNext-Bold", size: 14))
+                            .scaleEffect(0.8)
+                            .shadow(radius: 2)
+                        
+                        Spacer()
+                        
+                        ReadOnlyValueTrack(value: log.selectedWindStrengthValue ?? 0.00, range: 0...20, gradient: Gradient(colors: [.cyan, .red]))
+                    }
+                }
+            }
         }
         
     }

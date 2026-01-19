@@ -148,7 +148,20 @@ struct MylogSwiftUIView: View {
                             }
                         }
                         
-                        LogScrollView(logs: logs)
+                        
+                        
+                        VStack(alignment: .leading, spacing: height * 0.015) {
+                            
+                            Text("Recent")
+                                .font(.title)
+                                .bold()
+                                .padding(.vertical)
+                                .padding(.leading)
+                                .foregroundStyle(.primary)
+                            
+                            LogScrollView(logs: logs)
+                                
+                        }
                         
                         List {
                             ForEach(logs) { log in
