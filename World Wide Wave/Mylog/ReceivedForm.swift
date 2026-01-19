@@ -7,6 +7,89 @@
 
 import SwiftUI
 
+
+struct ReceivedForm2: View {
+    
+    @EnvironmentObject var formData: FormData
+    let log: SurfLog2
+    @State private var isButtonOpen = false
+    
+    
+    
+    var body : some View {
+        
+        Form {
+            CustomFormSection5(title: "Size", isSelected: $isButtonOpen) {
+                Text(verbatim: (log.selectedSize1 ?? "") + " ~ " + (log.selectedSize2 ?? ""))
+                    .modifier(CustomFormTextModifier())
+                    .padding()
+            }
+            
+            CustomFormSection5(title: "Condition", isSelected: $isButtonOpen) {
+                Text(verbatim: (log.selectedCondition ?? ""))
+                    .modifier(CustomFormTextModifier())
+                    .padding()
+            }
+            
+            CustomFormSection5(title: "Swell", isSelected: $isButtonOpen) {
+                Text(verbatim: (log.selectedSwell ?? ""))
+                    .modifier(CustomFormTextModifier())
+                    .padding()
+            }
+            
+            CustomFormSection5(title: "Break type", isSelected: $isButtonOpen) {
+                Text(verbatim: (log.selectedBreaks ?? ""))
+                    .modifier(CustomFormTextModifier())
+                    .padding()
+            }
+        }
+        
+    }
+    
+  
+    }
+
+struct CustomFormSection5<Content: View>: View {
+    var title: String
+    var content: () -> Content
+
+    @Binding var isSelected: Bool
+
+    @EnvironmentObject var formData: FormData
+
+    init(
+        title: String,
+        isSelected: Binding<Bool>,
+        @ViewBuilder content: @escaping () -> Content
+    ) {
+        self.title = title
+        self._isSelected = isSelected
+        self.content = content
+    }
+
+    var body: some View {
+        
+        Section(header: Button(action: {
+            withAnimation {
+                isSelected = false
+            }
+        }) {
+            Text(title)
+                .headerProminence(.increased)
+                .modifier(SectionButtonModifier(isSelected: $isSelected))
+            
+        }) {
+            if isSelected {
+                
+            } else {
+                
+            }
+        }
+        content()
+    }
+}
+
+//mock assets
 struct CustomFormSection3<Content: View>: View {
     
     
@@ -168,8 +251,6 @@ struct CustomFormSection4<Content: View>: View {
               }    }
     
 }
-
-
 struct ReceivedForm: View {
     
     @EnvironmentObject var formData: FormData
@@ -217,6 +298,7 @@ struct ReceivedForm: View {
                 // ランダムに選んだ2値を表示（左 <= 右 の順序を保証）
                 Text("\(randomWaveSize) ~ \(randomWaveSize2)")
                     .modifier(CustomFormTextModifier())
+                    .padding()
                 
             }
             
@@ -229,12 +311,14 @@ struct ReceivedForm: View {
                 // ランダムに選んだ1値を表示
                 Text(randomWaveCondition)
                     .modifier(CustomFormTextModifier())
+                    .padding()
             }
             
             CustomFormSection3(title: "Swell", isSelected: $isSwellOpen, selectedValue: $formData.selectedSwell, options: swells) {
             
                 Text(randomSwell)
                     .modifier(CustomFormTextModifier())
+                    .padding()
             }
             
             CustomFormSection3(title: "Break type", isSelected: $isBreakTypeOpen, selectedValue: $formData.selectedBreaks, options: breaks) {
@@ -350,63 +434,8 @@ struct ReceivedForm: View {
     }
 
 }
-struct ReceivedForm2: View {
-    
-    @EnvironmentObject var formData: FormData
-    let log: SurfLog2
-    @State private var isSizeOpen = false
-    @State private var isConditionOpen = false
-    
-    var body : some View {
-        
-        Form {
-            CustomFormSection5(title: "Size", isSelected: $isSizeOpen) {
-                Text(verbatim: (log.selectedSize1 ?? "") + " ~ " + (log.selectedSize2 ?? ""))
-                    .modifier(CustomFormTextModifier())
-            }
-        }
-        
-    }
-    }
-struct CustomFormSection5<Content: View>: View {
-    var title: String
-    var content: () -> Content
 
-    @Binding var isSelected: Bool
 
-    @EnvironmentObject var formData: FormData
-
-    init(
-        title: String,
-        isSelected: Binding<Bool>,
-        @ViewBuilder content: @escaping () -> Content
-    ) {
-        self.title = title
-        self._isSelected = isSelected
-        self.content = content
-    }
-
-    var body: some View {
-        
-        Section(header: Button(action: {
-            withAnimation {
-                isSelected = false
-            }
-        }) {
-            Text(title)
-                .headerProminence(.increased)
-                .modifier(SectionButtonModifier(isSelected: $isSelected))
-            
-        }) {
-            if isSelected {
-                
-            } else {
-                
-            }
-        }
-        content()
-    }
-}
 
 
 

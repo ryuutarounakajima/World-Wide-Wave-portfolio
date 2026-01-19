@@ -29,8 +29,20 @@ class SurfLog2 {
     var note: String
     var imageData: Data?
     var videoPath: String?
+    
     var selectedSize1: String?
     var selectedSize2: String?
+    var selectedCondition: String?
+    var selectedSwell: String?
+    var selectedBreaks: String?
+    var selectedWind: String?
+    var selectedWindStrengthValue: Double?
+    var selectedTide: String?
+    var selectedTideValue: Double?
+    var selectedWax: String?
+    var selectedWaterTemperature: Double?
+    
+    
     
     
     init(
@@ -57,8 +69,6 @@ class SurfLog2 {
         self.coordinateLat = coordinateLat
         self.coorinateLon = coordinateLon
         self.timestamp = timestamp
-        
-        
         self.note = """
         Size: \(selectedSize1) ~ \(selectedSize2)
         Condition: \(selectedCondition)
@@ -74,6 +84,15 @@ class SurfLog2 {
         self.videoPath = videoPath
         self.selectedSize1 = selectedSize1
         self.selectedSize2 = selectedSize2
+        self.selectedCondition = selectedCondition
+        self.selectedSwell = selectedSwell
+        self.selectedBreaks = selectedBreaks
+        self.selectedTide = selectedTide
+        self.selectedTideValue = selectedTideValue
+        self.selectedWind = selectedWind
+        self.selectedWindStrengthValue = selectedWindStrengthValue
+        self.selectedWax = selectedWax
+        self.selectedWaterTemperature = waterTemperatureValue
     }
 }
 class FormData: ObservableObject {
