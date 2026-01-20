@@ -62,6 +62,18 @@ struct ReceivedForm2: View {
                     }
                 }
             }
+            
+            CustomFormSection5(title: "Tide", isSelected: $isButtonOpen) {
+                
+                Text("High & Low")
+                    .font(.custom("AvenirNext-Bold", size: 14))
+                    .scaleEffect(0.8)
+                    .shadow(radius: 2)
+                
+                Spacer()
+                
+                ReadOnlyValueTrack(value: log.selectedTideValue ?? 0.00, range: 0...3, gradient: Gradient(colors: [.brown, .yellow, .cyan, .blue]))
+            }
         }
         
     }
