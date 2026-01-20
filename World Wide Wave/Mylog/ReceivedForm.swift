@@ -119,13 +119,16 @@ struct CustomFormSection5<Content: View>: View {
                 .modifier(SectionButtonModifier(isSelected: $isSelected))
             
         }) {
+            
+            content()
+            
             if isSelected {
                 
             } else {
                 
             }
         }
-        content()
+     
     }
 }
 
