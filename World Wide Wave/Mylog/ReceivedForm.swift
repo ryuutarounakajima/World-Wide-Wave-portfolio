@@ -82,13 +82,35 @@ struct ReceivedForm2: View {
                 }
                
             }
+            
+            CustomFormSection5(title: "Wax", isSelected: $isButtonOpen) {
+                VStack {
+                    Text(verbatim: (log.selectedWax ?? ""))
+                        .modifier(CustomFormTextModifier())
+                    
+                    HStack {
+                        Text("Cold water??")
+                            .font(
+                                .custom("AvenirNext-Bold", size: 14))
+                                .scaleEffect(0.8)
+                                .shadow(radius: 2)
+                        
+                        Spacer()
+                        
+                        ReadOnlyValueTrack(value: log.selectedWaterTemperature ?? 0.00, range: 0...36, gradient: Gradient(colors: [.white, .cyan, .orange]))
+                            
+                    }
+                    
+                }
+            }
+                
+            }
         }
         
     }
     
   
-    }
-
+    
 struct CustomFormSection5<Content: View>: View {
     var title: String
     var content: () -> Content
