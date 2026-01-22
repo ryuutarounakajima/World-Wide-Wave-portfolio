@@ -348,11 +348,11 @@ struct LogDetailView: View {
                 if let ts = log.timestamp {
                     Text(ts.formatted(date: .abbreviated, time: .omitted))
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.primary)
                     
                     Text(ts.formatted(date: .omitted, time: .shortened))
                         .font(.caption2)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.primary)
                 } else {
                     Text("_")
                         .font(.callout)
