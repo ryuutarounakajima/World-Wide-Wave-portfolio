@@ -163,7 +163,7 @@ struct MylogSwiftUIView: View {
                                 
                         }
                         
-                        List {
+                      /*  List {
                             ForEach(logs) { log in
                                 
                                 VStack(alignment: .leading, spacing: 8) {
@@ -219,7 +219,10 @@ struct MylogSwiftUIView: View {
                             }
                              */
                         }
+                       */
                     }
+                       
+                       
                     
                    
                      
@@ -278,11 +281,11 @@ struct LogScrollView: View {
                             if let ts = log.timestamp {
                                 Text(ts.formatted(date: .abbreviated, time: .omitted))
                                     .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(.primary)
                                 
                                 Text(ts.formatted(date: .omitted, time: .shortened))
                                     .font(.caption2)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(.primary)
                             } else {
                                 Text("_")
                                     .font(.callout)

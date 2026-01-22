@@ -10,10 +10,14 @@ import SwiftUI
 
 struct ReceivedForm2: View {
     
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var formData: FormData
     let log: SurfLog2
-    @State private var isButtonOpen = false
+   // var onDelete:(() -> Void)? = nil
     
+    @State private var isButtonOpen = false
+    @State private var showDeleteConfirm = false
     
     
     var body : some View {
@@ -103,7 +107,35 @@ struct ReceivedForm2: View {
                     
                 }
             }
-                
+             
+            Section {
+                Button(role: .destructive) {
+                    showDeleteConfirm = true
+                } label: {
+                    HStack {
+                        Spacer()
+                        Label("Delete this log", systemImage: "trash")
+                            .font(.headline)
+                        Spacer()
+                    }
+                }
+            }
+            .alert("Delete this log?", isPresented: $showDeleteConfirm) {
+                Button("Delete", role: .destructive) {
+                    modelContext.delete(log)
+                    do {
+                        try modelContext.save()
+                        //onDelete?()
+                        dismiss()
+                    } catch {
+                        print("Failed to delete log: \(error)")
+                    }
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("This action cannot be undone.")
+            }
+            
             }
         }
         
