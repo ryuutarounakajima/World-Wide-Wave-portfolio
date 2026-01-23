@@ -15,6 +15,8 @@ class MylogViewController: UIViewController {
    
     @IBOutlet weak var logoutButton: UIBarButtonItem!
     
+    @IBOutlet weak var myPageButton: UIBarButtonItem!
+    
     var formData = FormData()
     
     override func viewDidLoad() {
@@ -69,7 +71,9 @@ class MylogViewController: UIViewController {
     }
     
     
- 
+    @IBAction func myPageButoonPressed(_ sender: Any) {
+        print("tapped")
+    }
   
     
 

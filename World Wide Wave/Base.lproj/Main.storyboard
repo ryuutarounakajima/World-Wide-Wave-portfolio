@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="9GG-vv-SXR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="9GG-vv-SXR">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -224,9 +224,16 @@
                                 <action selector="logoutButtonPressed:" destination="2WR-XO-zyK" id="cJL-Od-uIr"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" id="gI1-a4-2Ca">
+                            <imageReference key="image" image="person.circle.fill" catalog="system" renderingMode="original"/>
+                            <connections>
+                                <action selector="myPageButoonPressed:" destination="2WR-XO-zyK" id="j28-Ow-Alc"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="logoutButton" destination="dsC-TA-YCX" id="LzX-o5-ZIH"/>
+                        <outlet property="myPageBUtton" destination="gI1-a4-2Ca" id="Wpv-rO-DCH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aGZ-Fr-1Ma" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -238,6 +245,7 @@
         <image name="JB" width="612" height="408"/>
         <image name="apple.logo" catalog="system" width="105" height="128"/>
         <image name="book.pages" catalog="system" width="107" height="128"/>
+        <image name="person.circle.fill" catalog="system" width="128" height="123"/>
         <image name="waveform.path.ecg.rectangle" catalog="system" width="128" height="93"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
