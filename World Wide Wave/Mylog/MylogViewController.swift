@@ -15,7 +15,8 @@ class MylogViewController: UIViewController {
    
     @IBOutlet weak var logoutButton: UIBarButtonItem!
     
-    @IBOutlet weak var myPageButton: UIBarButtonItem!
+    
+    @IBOutlet weak var mypageButton: UIBarButtonItem!
     
     var formData = FormData()
     

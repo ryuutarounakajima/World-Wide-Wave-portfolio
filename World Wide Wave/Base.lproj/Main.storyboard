@@ -225,15 +225,15 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" id="gI1-a4-2Ca">
-                            <imageReference key="image" image="person.circle.fill" catalog="system" renderingMode="original"/>
+                            <imageReference key="image" image="person.circle.fill" catalog="system" symbolScale="large" renderingMode="original"/>
                             <connections>
-                                <action selector="myPageButoonPressed:" destination="2WR-XO-zyK" id="j28-Ow-Alc"/>
+                                <action selector="myPageButoonPressed:" destination="2WR-XO-zyK" id="Pvd-ak-tv3"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="logoutButton" destination="dsC-TA-YCX" id="LzX-o5-ZIH"/>
-                        <outlet property="myPageBUtton" destination="gI1-a4-2Ca" id="Wpv-rO-DCH"/>
+                        <outlet property="mypageButton" destination="gI1-a4-2Ca" id="s9r-WY-iBp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aGZ-Fr-1Ma" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
