@@ -42,7 +42,9 @@ import MapKit
 
 struct MylogSwiftUIView: View {
     
-    @StateObject private var formData = FormData()
+    @EnvironmentObject var formData: FormData
+
+    //@StateObject private var formData = FormData()
     @Environment(\.modelContext) private var modelContext
     
     @Query(sort: \SurfLog2.timestamp, order: .reverse) var logs: [SurfLog2]
@@ -222,14 +224,13 @@ struct MylogSwiftUIView: View {
                        */
                     }
                        
-                       
-                    
-                   
-                     
                 }
             }
         }
-        .environmentObject(formData)
+        .sheet(isPresented: $formData.showMyPagesheet) {
+            // Present your My Page sheet content here when ready
+            MyPageView()
+        }
     }
     
     private func deleteLogs(_ targets: [SurfLog2]) {
@@ -592,4 +593,3 @@ struct WaveAsset: Identifiable {
         .environmentObject(FormData())
         .modelContainer(for: SurfLog2.self )
 }
-

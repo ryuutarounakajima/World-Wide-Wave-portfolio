@@ -50,7 +50,7 @@ struct WaveInfoSwiftUIView: View {
     //Wax
     @State private var isWaxSeleted: Bool = false
     
-    
+    @State private var isNoteWritten: Bool = false
     
     
     

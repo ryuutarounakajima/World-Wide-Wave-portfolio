@@ -73,7 +73,9 @@ class MylogViewController: UIViewController {
     
     
     @IBAction func myPageButoonPressed(_ sender: Any) {
-        print("tapped")
+        
+        print("my page sheet tapped")
+        formData.showMyPagesheet = true
     }
   
     

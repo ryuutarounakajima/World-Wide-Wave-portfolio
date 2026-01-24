@@ -42,6 +42,7 @@ class SurfLog2 {
     var selectedWax: String?
     var selectedWaterTemperature: Double?
     
+    var customNoteInput: String?
     
     
     
@@ -62,7 +63,8 @@ class SurfLog2 {
         selectedWax: String = "",
         waterTemperatureValue: Double = 0.0,
         imageData: Data? = nil,
-        videoPath: String? = nil
+        videoPath: String? = nil,
+        customNoteInput: String?  = ""
         
     ) {
         
@@ -93,6 +95,7 @@ class SurfLog2 {
         self.selectedWindStrengthValue = selectedWindStrengthValue
         self.selectedWax = selectedWax
         self.selectedWaterTemperature = waterTemperatureValue
+        self.customNoteInput = customNoteInput
     }
 }
 class FormData: ObservableObject {
@@ -115,7 +118,12 @@ class FormData: ObservableObject {
     @Published var waterTemperatureValue: Double = 0.0
     @Published var capturedImage: UIImage?
     @Published var capturedVideoURL: URL?
+    
+    
     @Published var customNoteInput: String = ""
+    
+    @Published var showMyPagesheet: Bool = false
+    
     
     func isFormValid() -> Bool {
         return !selectedSize.isEmpty && !selectedCondition.isEmpty && !selectedSwell.isEmpty && !selectedWind.isEmpty
@@ -123,7 +131,7 @@ class FormData: ObservableObject {
     
     func submitForm() {
         
-        print("Form submitted with \(String(describing: coordinate)), \(String(describing: timestamp)),\(selectedSize1),\(selectedSize2), \(selectedCondition), \(selectedSwell),\(selectedBreaks),\(selectedWind), \(String(format: "%.1f", selectedWindStrengthValue)),\(selectedTide), \(String(format: "%.1f", selectedTideValue)), \(selectedWax),\(String(format: "%.1f", waterTemperatureValue))")
+        print("Form submitted with \(String(describing: coordinate)), \(String(describing: timestamp)),\(selectedSize1),\(selectedSize2), \(selectedCondition), \(selectedSwell),\(selectedBreaks),\(selectedWind), \(String(format: "%.1f", selectedWindStrengthValue)),\(selectedTide), \(String(format: "%.1f", selectedTideValue)), \(selectedWax),\(String(format: "%.1f", waterTemperatureValue)), \(customNoteInput)")
         
         if let image = capturedImage {
             print("image captured: \(image)")
@@ -155,7 +163,8 @@ class FormData: ObservableObject {
                           selectedWax: selectedWax,
                           waterTemperatureValue: waterTemperatureValue,
                           imageData: capturedImage?.jpegData(compressionQuality: 0.8),
-                          videoPath: capturedVideoURL?.absoluteString
+                          videoPath: capturedVideoURL?.absoluteString,
+                          customNoteInput: customNoteInput
        )
         
         context.insert(log)
@@ -369,34 +378,23 @@ struct CustomFormSection2<Content: View>: View {
 struct FormViewModel: View {
   
     @EnvironmentObject var formData: FormData
+    
     //wave size select
     @Binding var isSizeSelect: Bool
-    
     //wave conditon select
     @Binding var isConditionSelect: Bool
-    
-    
     //swell
     @Binding var isSwellSelect: Bool
-    
-    
     //breaks
     @Binding var isBreakSelect: Bool
-   
-    
     //wind
     @Binding var isWindSelect: Bool
-    
-    
     //Tide
-    @Binding  var isTideSelect: Bool
-    @State private var tides: [(key: String, value: String)] = [
-        ("", ""), ("Spring Tide", "Spring Tide"), ("Moderate Tide", "Moderate Tide"), ("Neap Tide", "Neap Tide"), ("Long Tide", "Long Tide"), ("Young Tide", "Young Tide")
-    ]
-    
+    @Binding var isTideSelect: Bool
     //Wax
     @Binding var isWaxSelect: Bool
-    @State private var waxes:[(key: String, value: String)] = [("", ""), ("Cold", "Cold"), ("Cool", "Cool"), ("Warm", "Warm"), ("Tropical", "Tropical")]
+    //Note
+    //@Binding var isNoteWritten: Bool
     
     var body: some View {
         //info form
@@ -480,7 +478,11 @@ struct FormViewModel: View {
                 }
             }
             
-            
+            Section() {
+                TextField("How's surf??", text: $formData.customNoteInput)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                        .padding(.vertical, 5)
+            }
             
 
         }
@@ -748,6 +750,7 @@ struct RecordingProgressRing: View {
         @State private var isWindSelect = false
         @State private var isTideSelect = false
         @State private var isWaveSelect = false
+        @State private var isNoteWritten = false
         
         @StateObject private var formData = FormData()
 
