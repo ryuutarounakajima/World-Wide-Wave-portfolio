@@ -395,6 +395,7 @@ struct FormViewModel: View {
     @Binding var isWaxSelect: Bool
     //Note
     //@Binding var isNoteWritten: Bool
+    @State private var isNoteSelected: Bool = false
     
     var body: some View {
         //info form
@@ -478,13 +479,13 @@ struct FormViewModel: View {
                 }
             }
             
-            Section() {
-                TextField("How's surf??", text: $formData.customNoteInput)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                                        .padding(.vertical, 5)
+            CustomFormSection5(title: "Note", isSelected: $isNoteSelected) {
+                
+                TextEditor(text: $formData.customNoteInput)
+                    .frame(height: UIScreen.main.bounds.height * 0.25)
+                    .padding(8)
+                    .background(RoundedRectangle(cornerRadius: 8).stroke(Color.brown.opacity(0.5)))
             }
-            
-
         }
     }
 }
@@ -494,6 +495,8 @@ struct FormViewModel: View {
 
 
 // MARK: - Modifiers
+
+
 struct CustomFormTextModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
