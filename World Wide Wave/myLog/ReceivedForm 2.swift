@@ -11,13 +11,13 @@ import SwiftUI
 struct ReceivedForm2: View {
     
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var formData: FormData
-    
     let log: SurfLog2
+   // var onDelete:(() -> Void)? = nil
     
-    @State private var showDeleteConfirm = false
     @State private var isButtonOpen = false
-    
+    @State private var showDeleteConfirm = false
     
     
     var body : some View {
@@ -102,11 +102,12 @@ struct ReceivedForm2: View {
                         Spacer()
                         
                         ReadOnlyValueTrack(value: log.selectedWaterTemperature ?? 0.00, range: 0...36, gradient: Gradient(colors: [.white, .cyan, .orange]))
+                            
                     }
+                    
                 }
             }
-              
-            
+             
             Section {
                 Button(role: .destructive) {
                     showDeleteConfirm = true
@@ -124,6 +125,8 @@ struct ReceivedForm2: View {
                     modelContext.delete(log)
                     do {
                         try modelContext.save()
+                        //onDelete?()
+                        dismiss()
                     } catch {
                         print("Failed to delete log: \(error)")
                     }
@@ -137,6 +140,9 @@ struct ReceivedForm2: View {
         }
         
     }
+    
+  
+    
 struct CustomFormSection5<Content: View>: View {
     var title: String
     var content: () -> Content

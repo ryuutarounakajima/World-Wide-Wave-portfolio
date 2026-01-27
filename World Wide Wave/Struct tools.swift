@@ -479,12 +479,11 @@ struct FormViewModel: View {
                 }
             }
             
+           //Note
             CustomFormSection5(title: "Note", isSelected: $isNoteSelected) {
+
+                GradientOuterFrameTextEditor(note: $formData.customNoteInput)
                 
-                TextEditor(text: $formData.customNoteInput)
-                    .frame(height: UIScreen.main.bounds.height * 0.25)
-                    .padding(8)
-                    .background(RoundedRectangle(cornerRadius: 8).stroke(Color.brown.opacity(0.5)))
             }
         }
     }
@@ -496,6 +495,43 @@ struct FormViewModel: View {
 
 // MARK: - Modifiers
 
+struct GradientOuterFrameTextEditor: View {
+    
+    @State private var rotation: Double = 0
+    @Binding var note: String
+    var body: some View {
+        
+        ZStack {
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(AngularGradient(
+                    gradient: Gradient(colors: [.cyan, .blue, .pink, .yellow, .orange, .cyan]),
+                    center: .center,
+                    angle: .degrees(rotation)
+                ),
+                lineWidth: 3)
+                .onAppear {
+                              withAnimation(.linear(duration: 3).repeatForever(autoreverses: false)) { rotation = 360
+                              }
+                          }
+            ZStack(alignment: .topLeading) {
+                TextEditor(text: $note)
+                    .padding(12)
+                
+                if note.isEmpty {
+                       Text("How's surf??")
+                           .foregroundColor(.gray)
+                           .padding(.horizontal, 16)
+                           .padding(.vertical, 20)
+                           .allowsHitTesting(false) // タップを邪魔しない
+                   }
+            }
+           
+        }
+        .frame(height: UIScreen.main.bounds.height * 0.25)
+        
+       
+    }
+}
 
 struct CustomFormTextModifier: ViewModifier {
     func body(content: Content) -> some View {
