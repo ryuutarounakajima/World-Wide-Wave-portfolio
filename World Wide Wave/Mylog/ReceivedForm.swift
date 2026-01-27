@@ -9,7 +9,7 @@ import SwiftUI
 
 
 struct ReceivedForm2: View {
-    
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var formData: FormData
     
@@ -124,6 +124,7 @@ struct ReceivedForm2: View {
                     modelContext.delete(log)
                     do {
                         try modelContext.save()
+                        dismiss()
                     } catch {
                         print("Failed to delete log: \(error)")
                     }
