@@ -495,6 +495,7 @@ struct FormViewModel: View {
 
 // MARK: - Modifiers
 
+//outer frame
 struct GradientOuterFrameTextEditor: View {
     
     @State private var rotation: Double = 0
@@ -530,6 +531,39 @@ struct GradientOuterFrameTextEditor: View {
         .frame(height: UIScreen.main.bounds.height * 0.25)
         
        
+    }
+}
+struct GradientOuterFrameTextView: View {
+    
+    @State private var rotation : Double = 0
+    @Binding var note: String
+    
+    var body: some View {
+        
+        ZStack {
+            
+            RoundedRectangle(cornerRadius: 12)
+                         .stroke(
+                             AngularGradient(
+                                 gradient: Gradient(colors: [.cyan, .blue, .pink, .yellow, .orange, .cyan]),
+                                 center: .center,
+                                 angle: .degrees(rotation)
+                             ),
+                             lineWidth: 3
+                         )
+                         .onAppear {
+                             withAnimation(.linear(duration: 3).repeatForever(autoreverses: false)) {
+                                 rotation = 360
+                             }
+                         }
+                     
+            ScrollView {
+                Text(note.isEmpty ? "" : note)
+                    .padding(15)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .frame(height: UIScreen.main.bounds.height * 0.25)
     }
 }
 

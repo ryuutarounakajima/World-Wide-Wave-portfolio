@@ -105,6 +105,10 @@ struct ReceivedForm2: View {
                     }
                 }
             }
+            
+            CustomFormSection5(title: "Note", isSelected: $isButtonOpen) {
+                GradientOuterFrameTextView(note: .constant(log.customNoteInput ?? ""))
+            }
               
             
             Section {
@@ -134,6 +138,7 @@ struct ReceivedForm2: View {
                 Text("This action cannot be undone.")
             }
             
+           
             }
         }
         
