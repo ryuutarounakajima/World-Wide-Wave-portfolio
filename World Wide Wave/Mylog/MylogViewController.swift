@@ -28,7 +28,7 @@ class MylogViewController: UIViewController {
         self.navigationItem.largeTitleDisplayMode = .always
 
         
-        let container = try! ModelContainer(for: SurfLog2.self)
+        let container = try! ModelContainer(for: SurfLog2.self, UserData.self)
 
         // Do any additional setup after loading the view.
         let swiftUIView = NavigationStack {

@@ -17,14 +17,51 @@ import SwiftData
 enum ModelContainerProvider {
     static let shared: ModelContainer = {
         // モデルが増えたら配列にする: ModelContainer(for: [SurfLog2.self, ...])
-        let container = try! ModelContainer(for: SurfLog2.self)
+        let container = try! ModelContainer(for: UserData.self, SurfLog2.self)
         return container
     }()
 }
+
+@Model
+class UserData {
+    var userName: String?
+    var imageData: Data?
+    var country: String?
+    var stance: String?
+    var homePoint: String?
+    var favoriteSufer: String?
+    var insta: String?
+    var tiktok: String?
+    var youtube: String?
+    
+    init(
+            userName: String? = nil,
+            imageData: Data? = nil,
+            country: String? = nil,
+            stance: String? = nil,
+            homePoint: String? = nil,
+            favoriteSurfer: String? = nil,
+            insta: String? = nil,
+            tiktok: String? = nil,
+            youtube: String? = nil
+        ) {
+            self.userName = userName
+            self.imageData = imageData
+            self.country = country
+            self.stance = stance
+            self.homePoint = homePoint
+            self.favoriteSufer = favoriteSurfer
+            self.insta = insta
+            self.tiktok = tiktok
+            self.youtube = youtube
+        }
+
+}
+
 @Model
 class SurfLog2 {
     var coordinateLat : Double?
-    var coorinateLon: Double?
+    var coordinatelon: Double?
     var timestamp: Date?
     var note: String
     var imageData: Data?
@@ -69,7 +106,7 @@ class SurfLog2 {
     ) {
         
         self.coordinateLat = coordinateLat
-        self.coorinateLon = coordinateLon
+        self.coordinatelon = coordinateLon
         self.timestamp = timestamp
         self.note = """
         Size: \(selectedSize1) ~ \(selectedSize2)
@@ -98,7 +135,7 @@ class SurfLog2 {
         self.customNoteInput = customNoteInput
     }
 }
-class FormData: ObservableObject {
+final class FormData: ObservableObject {
     
     @Published var coordinate: CLLocationCoordinate2D?
     @Published var timestamp: Date?
