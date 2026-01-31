@@ -19,13 +19,41 @@ struct MyPageView: View {
     @State private var selectedImage: UIImage?
     
     var body: some View {
-        VStack {
-            
-            PhotosPicker( selection: $selectedItem, matching: .images) {
+        
+        VStack(spacing: 12) {
+           
                 
-             
+       
+            GeometryReader { geo in
+                PhotosPicker(selection: $selectedItem, matching: .images) {
+
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 24)
+                            .fill(Color(.systemGray6))
+
+                        if let image = selectedImage {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(
+                                    width: min(geo.size.width, geo.size.height) * 0.5,
+                                    height: min(geo.size.width, geo.size.height) * 0.5
+                                )
+                                .clipShape(Circle())
+                        } else {
+                            Image(systemName: "person.crop.circle.fill")
+                                .font(.system(size: geo.size.height * 0.35))
+                                .foregroundColor(.gray)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
             }
-            
+            .frame(height: UIScreen.main.bounds.height * 0.35) // ← ここで固定
+            .clipped()
+
+         
+      
             TextField("name", text: $userName)
                 .textFieldStyle(.automatic)
             
@@ -34,6 +62,9 @@ struct MyPageView: View {
                 
                 userInfo.userName = userName
                 
+                if let image = selectedImage {
+                    userInfo.imageData = image.jpegData(compressionQuality: 0.75)
+                }
                 if userData.isEmpty {
                     modelContext.insert(userInfo)
                 }
@@ -46,16 +77,39 @@ struct MyPageView: View {
                 }
                 
             }
+            
+            Spacer()
         }
         .onAppear {
            
             if let existing = userData.first {
                 userName = existing.userName ?? ""
+            
+                if let data = existing.imageData,
+                   let uiImage = UIImage(data: data) {
+                    selectedImage = uiImage
+                }
             }
         }
     }
 }
 
 #Preview {
-    MyPageView()
+    let container = try! ModelContainer(
+        for: UserData.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+
+    let context = container.mainContext
+
+    let mockUser = UserData(
+        userName: "Preview User",
+        imageData: UIImage(systemName: "person.crop.circle")?
+            .jpegData(compressionQuality: 1.0)
+    )
+
+    context.insert(mockUser)
+
+    return MyPageView()
+        .modelContainer(container)
 }
