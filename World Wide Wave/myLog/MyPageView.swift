@@ -17,6 +17,7 @@ struct MyPageView: View {
     @State private var userName = ""
     @State private var selectedItem: PhotosPickerItem?
     @State private var selectedImage: UIImage?
+    @State private var isButtonOpen: Bool = false
     
     var body: some View {
         
@@ -52,11 +53,18 @@ struct MyPageView: View {
             .frame(height: UIScreen.main.bounds.height * 0.35) // ← ここで固定
             .clipped()
 
-         
-      
-            TextField("name", text: $userName)
-                .textFieldStyle(.automatic)
             
+            Form {
+                
+                CustomFormSection5(title: "Name", isSelected: $isButtonOpen) {
+                    
+                    TextField("name", text: $userName)
+                        .textFieldStyle(.automatic)
+                }
+                
+                
+            }
+      
             Button("save") {
                 let userInfo = userData.first ?? UserData()
                 
