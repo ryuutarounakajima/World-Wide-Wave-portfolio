@@ -574,7 +574,7 @@
 				INFOPLIST_FILE = "World Wide Wave/Info.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to the camera for capturing photos and videos.";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "The value for NSFaceIDUsageDescription must be a non-empty string. ";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app uses Face ID to provide secure and convenient access to your account.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "The app retrieves location information in the background.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app uses location information while in use";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app requires access to the microphone for recording audio.";
@@ -615,7 +615,7 @@
 				INFOPLIST_FILE = "World Wide Wave/Info.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to the camera for capturing photos and videos.";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "The value for NSFaceIDUsageDescription must be a non-empty string. ";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app uses Face ID to provide secure and convenient access to your account.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "The app retrieves location information in the background.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app uses location information while in use";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app requires access to the microphone for recording audio.";
