@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		427AB4812F3316FD00901259 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 427AB4802F3316FC00901259 /* StoreKit.framework */; };
 		42AA874D2EBC3472000D65FA /* WaveConditionLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AA874C2EBC3472000D65FA /* WaveConditionLists.swift */; };
 		6C4633612CE0C16B005EAD78 /* Monochrome120.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C4633602CE0C16B005EAD78 /* Monochrome120.png */; };
 		6C4633632CE0C1CE005EAD78 /* Monochrome152.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C4633622CE0C1CE005EAD78 /* Monochrome152.png */; };
@@ -57,6 +58,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		427AB4802F3316FC00901259 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		42AA874C2EBC3472000D65FA /* WaveConditionLists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveConditionLists.swift; sourceTree = "<group>"; };
 		6C0F9D912CB8FE27006BF12E /* World Wide Wave.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "World Wide Wave.entitlements"; sourceTree = "<group>"; };
 		6C4633602CE0C16B005EAD78 /* Monochrome120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Monochrome120.png; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				427AB4812F3316FD00901259 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +128,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		427AB47F2F3316FC00901259 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				427AB4802F3316FC00901259 /* StoreKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		6C4633682CE0C2F4005EAD78 /* AppIconLogoAssets */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,6 +163,7 @@
 				6C8483FC2CA57D5300CE6B1E /* World Wide Wave */,
 				6C8484162CA57D5500CE6B1E /* World Wide WaveTests */,
 				6C8484202CA57D5500CE6B1E /* World Wide WaveUITests */,
+				427AB47F2F3316FC00901259 /* Frameworks */,
 				6C8483FB2CA57D5300CE6B1E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -553,11 +565,21 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "World Wide Wave/World Wide Wave.entitlements";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = JRKRYNA77K;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = JRKRYNA77K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "World Wide Wave/Info.plist";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to the camera for capturing photos and videos.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "The value for NSFaceIDUsageDescription must be a non-empty string. ";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "The app retrieves location information in the background.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app uses location information while in use";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app requires access to the microphone for recording audio.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This app requires access to the photo library to save photos and videos.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app requires access to the photo library to select and upload photos or videos.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -568,8 +590,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "ride.World-Wide-Wave";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ryuutarou.worldwidewave;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = WorldWideWave_AppStore;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -582,11 +606,21 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "World Wide Wave/World Wide Wave.entitlements";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = JRKRYNA77K;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = JRKRYNA77K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "World Wide Wave/Info.plist";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to the camera for capturing photos and videos.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "The value for NSFaceIDUsageDescription must be a non-empty string. ";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "The app retrieves location information in the background.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app uses location information while in use";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app requires access to the microphone for recording audio.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This app requires access to the photo library to save photos and videos.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app requires access to the photo library to select and upload photos or videos.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -597,8 +631,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "ride.World-Wide-Wave";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ryuutarou.worldwidewave;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = WorldWideWave_AppStore;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
