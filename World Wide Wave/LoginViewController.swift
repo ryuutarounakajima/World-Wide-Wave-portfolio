@@ -13,7 +13,7 @@ class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
     
     @IBOutlet weak var signUpImageView: UIImageView!
     
-    @IBOutlet weak var signUpWithApple: UIButton!
+    @IBOutlet weak var signUpWithApple: ASAuthorizationAppleIDButton!
     
     private let  imageLogo: UIImageView = {
         
@@ -84,6 +84,7 @@ class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
         signUpImageView.layer.cornerRadius = 20
         signUpImageView.clipsToBounds = true
         signUpImageView.contentMode = .scaleAspectFill
+        
         
         
     }
