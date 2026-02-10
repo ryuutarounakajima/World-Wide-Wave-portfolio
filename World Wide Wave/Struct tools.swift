@@ -36,7 +36,7 @@ class UserData {
     var country: String?
     var stance: String?
     var homePoint: String?
-    var favoriteSufer: String?
+    var favoriteSurfer: String?
     var insta: String?
     var tiktok: String?
     var youtube: String?
@@ -57,7 +57,7 @@ class UserData {
             self.country = country
             self.stance = stance
             self.homePoint = homePoint
-            self.favoriteSufer = favoriteSurfer
+            self.favoriteSurfer = favoriteSurfer
             self.insta = insta
             self.tiktok = tiktok
             self.youtube = youtube
@@ -68,7 +68,7 @@ class UserData {
 @Model
 class SurfLog2 {
     var coordinateLat : Double?
-    var coordinatelon: Double?
+    var coordinateLon: Double?
     var timestamp: Date?
     var note: String?
     var videoPath: String?
@@ -96,7 +96,7 @@ class SurfLog2 {
         coordinateLat: Double?,
         coordinateLon: Double?,
         timestamp: Date?,
-        selectedSize: String = "",
+       // selectedSize: String = "",
         selectedSize1: String = "",
         selectedSize2: String = "",
         selectedCondition: String = "",
@@ -115,7 +115,7 @@ class SurfLog2 {
     ) {
         
         self.coordinateLat = coordinateLat
-        self.coordinatelon = coordinateLon
+        self.coordinateLon = coordinateLon
         self.timestamp = timestamp
         self.note = """
         Size: \(selectedSize1) ~ \(selectedSize2)
@@ -208,7 +208,6 @@ final class FormData: ObservableObject {
        
        let log = SurfLog2(coordinateLat: coordinate?.latitude,
                           coordinateLon: coordinate?.longitude, timestamp: timestamp,
-                          selectedSize: selectedSize,
                           selectedSize1: selectedSize1,
                           selectedSize2: selectedSize2,
                           selectedCondition: selectedCondition,

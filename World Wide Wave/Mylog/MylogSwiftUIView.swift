@@ -313,7 +313,7 @@ struct LogDetailView: View {
     @State private var cameraPosition: MapCameraPosition = .automatic
 
     private var destinationCoordinate: CLLocationCoordinate2D? {
-        guard let lat = log.coordinateLat, let lon = log.coordinatelon else { return nil }
+        guard let lat = log.coordinateLat, let lon = log.coordinateLon else { return nil }
         return CLLocationCoordinate2D(latitude: lat, longitude: lon)
     }
     
@@ -335,7 +335,7 @@ struct LogDetailView: View {
     
     init(log: SurfLog2) {
         self.log = log
-        let coordinate = CLLocationCoordinate2D(latitude: log.coordinateLat ?? 0, longitude: log.coordinatelon ?? 0)
+        let coordinate = CLLocationCoordinate2D(latitude: log.coordinateLat ?? 0, longitude: log.coordinateLon ?? 0)
         
         _cameraPosition = State(initialValue: .region(MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))))
     }
@@ -392,7 +392,7 @@ struct LogDetailView: View {
 
                 // Map
                 Map(position: $cameraPosition) {
-                    if let lat = log.coordinateLat, let lon = log.coordinatelon {
+                    if let lat = log.coordinateLat, let lon = log.coordinateLon {
                         let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
                         Marker("Here", coordinate: coordinate)
                     }
