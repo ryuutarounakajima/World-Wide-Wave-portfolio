@@ -589,7 +589,11 @@ struct WaveAsset: Identifiable {
 
 
 #Preview {
-    MylogSwiftUIView()
+    let schema = Schema([SurfLog2.self])
+    let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: schema, configurations: [configuration])
+
+    return MylogSwiftUIView()
         .environmentObject(FormData())
-        .modelContainer(for: SurfLog2.self )
+        .modelContainer(container)
 }

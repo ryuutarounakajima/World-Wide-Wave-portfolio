@@ -10,6 +10,9 @@ import Foundation
 
 
 /*
+// external storage
+ @Attribute(.externalStorage) var videoData: Data?
+ 
 // Log ScrollView
  struct LogScrollView: View {
      let logs: [SurfLog2]

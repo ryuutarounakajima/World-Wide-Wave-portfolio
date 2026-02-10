@@ -111,10 +111,20 @@ struct MyPageView: View {
 }
 
 #Preview {
-    let container = try! ModelContainer(
-        for: UserData.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
+    let schema = Schema([UserData.self])
+    let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
+    
+    let container : ModelContainer
+    do {
+        container = try ModelContainer(for: schema, configurations: [configuration])
+    } catch {
+        print("Preview ModelContainer init error:", error)
+        return Text("Preview failed to create ModelContainer: \(error.localizedDescription)")
+            .padding()
+    }
+    
+    
+   
 
     let context = container.mainContext
 

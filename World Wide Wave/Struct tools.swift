@@ -17,7 +17,14 @@ import SwiftData
 enum ModelContainerProvider {
     static let shared: ModelContainer = {
         // モデルが増えたら配列にする: ModelContainer(for: [SurfLog2.self, ...])
-        let container = try! ModelContainer(for: UserData.self, SurfLog2.self)
+        
+        let container: ModelContainer
+
+        do {
+            container = try ModelContainer(for: SurfLog2.self, UserData.self)
+        } catch {
+            fatalError("ModelContainer failed: \(error)")
+        }
         return container
     }()
 }
@@ -63,9 +70,11 @@ class SurfLog2 {
     var coordinateLat : Double?
     var coordinatelon: Double?
     var timestamp: Date?
-    var note: String
-    var imageData: Data?
+    var note: String?
     var videoPath: String?
+    
+    //@Attribute(.externalStorage)
+    var imageData: Data?
     
     var selectedSize1: String?
     var selectedSize2: String?
@@ -135,7 +144,16 @@ class SurfLog2 {
         self.customNoteInput = customNoteInput
     }
 }
+
 final class FormData: ObservableObject {
+    
+    enum SaveState: Equatable {
+        case idle
+        case saving
+        case success
+        case failure(String)
+    }
+    @Published var saveState: SaveState = .idle
     
     @Published var coordinate: CLLocationCoordinate2D?
     @Published var timestamp: Date?
@@ -183,8 +201,11 @@ final class FormData: ObservableObject {
         }
     }
     
-   @discardableResult func saveToSwifData(context: ModelContext) -> Bool {
+    @MainActor
+    func saveToSwifData(context: ModelContext) async {
         
+       saveState = .saving
+       
        let log = SurfLog2(coordinateLat: coordinate?.latitude,
                           coordinateLon: coordinate?.longitude, timestamp: timestamp,
                           selectedSize: selectedSize,
@@ -206,18 +227,23 @@ final class FormData: ObservableObject {
         
         context.insert(log)
         
+        let start = Date()
         do {
             try context.save()
             print("Surf log saved scccessfully")
-            return true
+            saveState = .success
         } catch {
             print("Falied to save: \(error)")
-            return false
+            saveState = .failure(error.localizedDescription)
         }
         
        
+        let elapsed = Date().timeIntervalSince(start)
+        let minimum: TimeInterval = 0.3
         
-        
+        if elapsed < minimum {
+            try? await Task.sleep(nanoseconds: UInt64((minimum - elapsed) * 1_000_000_000))
+        }
     }
     
     func resetFormData() {

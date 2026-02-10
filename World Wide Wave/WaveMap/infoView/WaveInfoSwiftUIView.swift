@@ -85,6 +85,7 @@ struct WaveInfoSwiftUIView: View {
     
     var body: some View {
         NavigationStack {
+            ZStack {
                 GeometryReader { geometry in
                     VStack{
                         
@@ -162,7 +163,7 @@ struct WaveInfoSwiftUIView: View {
                                             isRecordedButton.toggle()
                                         }
                                         showAlert = true
-                                    } 
+                                    }
                                 }) {
                                     Image("Logo")
                                         .resizable()
@@ -187,7 +188,7 @@ struct WaveInfoSwiftUIView: View {
                                 .alert("Are you an optimistionist?", isPresented: $showAlert) {
                                     Button("Yes,but not goona save my data") {
                                         print("Yes")
-                                        print("You are optimistic person from now!!")
+                                        print("You are optimistic person when you save the data!!")
                                     }
                                     Button("Yes") {
                                         
@@ -196,14 +197,17 @@ struct WaveInfoSwiftUIView: View {
                                         
                                         formData.submitForm()
                                         
-                                        let success = formData.saveToSwifData(context: modelContext)
+                                        Task {
+                                          await formData.saveToSwifData(context: modelContext)
+                                        }
+                                       
                                         
-                                        if success {
+                                      /*  if success {
                                             formData.resetFormData()
                                             switchToFirstTab()
                                             dismiss()
                                         }
-                                        
+                                      */
                                     }
                                 } message:{
                                     Text("This will determine your future")
@@ -274,6 +278,30 @@ struct WaveInfoSwiftUIView: View {
                         UnifiedCameraSwiftUIView( isCameraPresented: $isCameraVsiable)
                             .environmentObject(formData)
                     }
+                
+                if formData.saveState == .saving {
+                    LoadingView {
+                        
+                    }
+                    .transition(.opacity)
+                    .zIndex(1)
+                }
+            }
+                
+        }
+        .onChange(of: formData.saveState) { oldValue, newValue in
+            switch newValue {
+            case .success:
+                formData.resetFormData()
+                switchToFirstTab()
+                dismiss()
+
+            case .failure(let message):
+                print("failed to save:", message)
+
+            default:
+                break
+            }
         }
     }
     
@@ -301,14 +329,24 @@ struct WaveInfoSwiftUIView: View {
 }
 
 #Preview {
-    
     let mockCoordinate = CLLocationCoordinate2D(latitude: 35.6895, longitude: 139.6917)
     let mockTimestamp = Date()
-    let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    let modelContainer = try! ModelContainer(for: SurfLog2.self, configurations: config)
+
+    let schema = Schema([SurfLog2.self])
+    let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
+
+    let container: ModelContainer
+    do {
+        container = try ModelContainer(for: schema, configurations: [configuration])
+    } catch {
+        print("Preview ModelContainer init error:", error)
+        return Text("Preview failed to create ModelContainer: \(error.localizedDescription)")
+            .padding()
+    }
+
     let formdata = FormData()
-    
-    WaveInfoSwiftUIView(coordinate: mockCoordinate, timestamp: mockTimestamp)
+
+    return WaveInfoSwiftUIView(coordinate: mockCoordinate, timestamp: mockTimestamp)
         .environmentObject(formdata)
-        .modelContainer(modelContainer)
+        .modelContainer(container)
 }
