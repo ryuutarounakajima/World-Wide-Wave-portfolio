@@ -238,20 +238,24 @@ final class FormData: ObservableObject {
         let start = Date()
         do {
             try context.save()
-            print("Surf log saved scccessfully")
-            saveState = .success
+            
+            //saveState = .success
         } catch {
             print("Falied to save: \(error)")
             saveState = .failure(error.localizedDescription)
+            return
         }
         
        
         let elapsed = Date().timeIntervalSince(start)
-        let minimum: TimeInterval = 1.3
+        let minimum: TimeInterval = 0.3
         
         if elapsed < minimum {
             try? await Task.sleep(nanoseconds: UInt64((minimum - elapsed) * 1_000_000_000))
         }
+        
+      saveState = .success
+        print("Surf log saved scccessfully")
     }
     
     func resetFormData() {
