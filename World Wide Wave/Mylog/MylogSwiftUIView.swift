@@ -48,6 +48,7 @@ struct MylogSwiftUIView: View {
     @Environment(\.modelContext) private var modelContext
     
     @Query(sort: \SurfLog2.timestamp, order: .reverse) var logs: [SurfLog2]
+    
     @State private var selectedAsset : WaveAsset? = nil
     @State private var selectedLog: SurfLog2? = nil
     
@@ -490,8 +491,6 @@ struct AssetDetailView: View {
         
     }
 }
-
-
 
 struct AssetScrollView: View {
     

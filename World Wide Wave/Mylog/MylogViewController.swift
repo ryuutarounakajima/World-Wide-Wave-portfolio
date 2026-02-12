@@ -28,7 +28,7 @@ class MylogViewController: UIViewController {
         self.navigationItem.largeTitleDisplayMode = .always
 
         
-        let container = try! ModelContainer(for: SurfLog2.self, UserData.self)
+        // _ = try! ModelContainer(for: SurfLog2.self, UserData.self)
 
         // Do any additional setup after loading the view.
         let swiftUIView = NavigationStack {
@@ -36,7 +36,7 @@ class MylogViewController: UIViewController {
                 .environmentObject(formData)
                 
         }
-        .modelContainer(container)
+            .modelContainer(ModelContainerProvider.shared)
         
         let hostingController = UIHostingController(rootView: swiftUIView)
         addChild(hostingController)

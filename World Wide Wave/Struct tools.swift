@@ -12,23 +12,32 @@ import SwiftData
 
 // MARK: - Model
 
-import SwiftData
-
 enum ModelContainerProvider {
     static let shared: ModelContainer = {
-        // モデルが増えたら配列にする: ModelContainer(for: [SurfLog2.self, ...])
-        
-        let container: ModelContainer
 
+        // ① 対象モデル
+        let schema = Schema([
+            SurfLog2.self,
+            UserData.self
+        ])
+
+        // ② CloudKit を有効にする設定
+        let configuration = ModelConfiguration(
+            schema: schema,
+            cloudKitDatabase: .private("iCloud.com.ryuutarou.worldwidewave")
+        )
+
+        // ③ ModelContainer を生成
         do {
-            container = try ModelContainer(for: SurfLog2.self, UserData.self)
+            return try ModelContainer(
+                for: schema,
+                configurations: [configuration]
+            )
         } catch {
             fatalError("ModelContainer failed: \(error)")
         }
-        return container
     }()
 }
-
 @Model
 class UserData {
     var userName: String?
@@ -238,7 +247,7 @@ final class FormData: ObservableObject {
         
        
         let elapsed = Date().timeIntervalSince(start)
-        let minimum: TimeInterval = 0.3
+        let minimum: TimeInterval = 1.3
         
         if elapsed < minimum {
             try? await Task.sleep(nanoseconds: UInt64((minimum - elapsed) * 1_000_000_000))
