@@ -580,7 +580,7 @@ struct GradientOuterFrameTextEditor: View {
         ZStack {
             RoundedRectangle(cornerRadius: 12)
                 .stroke(AngularGradient(
-                    gradient: Gradient(colors: [.cyan, .blue, .pink, .yellow, .orange, .cyan]),
+                    gradient: Gradient(colors: [.cyan, .blue, .mint, .indigo, .white, .cyan]),
                     center: .center,
                     angle: .degrees(rotation)
                 ),

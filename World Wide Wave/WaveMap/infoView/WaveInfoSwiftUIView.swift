@@ -262,18 +262,14 @@ struct WaveInfoSwiftUIView: View {
                         }
                     }
                     .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button(action: {
-                                dismiss()
-                            }) {
-                                HStack {
-                                    Image(systemName: "chevron.left")
-                                    Text("Back")
-                                }
-                                
+                        ToolbarItem(placement: .topBarLeading) {
+                            Button(action: { dismiss() }) {
+                                Label("Back", systemImage: "chevron.left")
                             }
+                            .labelStyle(.titleAndIcon)
                         }
                     }
+                    .toolbarTitleDisplayMode(.inline)
                     .navigationDestination(isPresented: $isCameraVsiable) {
                         UnifiedCameraSwiftUIView( isCameraPresented: $isCameraVsiable)
                             .environmentObject(formData)
@@ -350,3 +346,4 @@ struct WaveInfoSwiftUIView: View {
         .environmentObject(formdata)
         .modelContainer(container)
 }
+
