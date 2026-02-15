@@ -447,7 +447,46 @@ struct CustomFormSection2<Content: View>: View {
               }    }
     
 }
-
+struct CustomFormSection6<Content: View>: View {
+    
+    var title: String
+    var content: () -> Content
+    
+    @Binding var isSelected: Bool
+    
+    @EnvironmentObject var formData: FormData
+    
+    init(title: String, isSelected: Binding<Bool>,@ViewBuilder content: @escaping () -> Content) {
+    
+        self.title = title
+        self._isSelected = isSelected
+        self.content = content
+    }
+    
+    var body: some View {
+        Section(header: Button(action: {
+            withAnimation {
+                isSelected.toggle()
+            }
+        }) {
+            Text(title)
+                .headerProminence(.increased)
+                .modifier(SectionButtonModifier(isSelected: $isSelected))
+        }) {
+            
+            if isSelected {
+                
+            } else {
+                
+            }
+            
+           content()
+        }
+      
+    }
+   
+    
+}
 
 // MARK: - View model
 struct FormViewModel: View {
@@ -469,8 +508,8 @@ struct FormViewModel: View {
     //Wax
     @Binding var isWaxSelect: Bool
     //Note
-    //@Binding var isNoteWritten: Bool
-    @State private var isNoteSelected: Bool = false
+    @Binding var isNoteSelected2: Bool
+   // @State private var isNoteSelected: Bool = false
     
     var body: some View {
         //info form
@@ -554,12 +593,13 @@ struct FormViewModel: View {
                 }
             }
             
-           //Note
+            /* //Note
             CustomFormSection5(title: "Note", isSelected: $isNoteSelected) {
 
                 GradientOuterFrameTextEditor(note: $formData.customNoteInput)
                 
             }
+            */
         }
     }
 }
@@ -898,12 +938,12 @@ struct RecordingProgressRing: View {
         @State private var isWindSelect = false
         @State private var isTideSelect = false
         @State private var isWaveSelect = false
-        @State private var isNoteWritten = false
+        @State private var isNoteSelect = false
         
         @StateObject private var formData = FormData()
 
         var body: some View {
-            FormViewModel(isSizeSelect: $isSizeSelect, isConditionSelect: $isConditionSelect, isSwellSelect: $isSwellSelect, isBreakSelect: $isBreakSelect, isWindSelect: $isWindSelect, isTideSelect: $isTideSelect, isWaxSelect: $isWaveSelect)
+            FormViewModel(isSizeSelect: $isSizeSelect, isConditionSelect: $isConditionSelect, isSwellSelect: $isSwellSelect, isBreakSelect: $isBreakSelect, isWindSelect: $isWindSelect, isTideSelect: $isTideSelect, isWaxSelect: $isWaveSelect, isNoteSelected2: $isNoteSelect)
                 .environmentObject(formData)
         }
     }

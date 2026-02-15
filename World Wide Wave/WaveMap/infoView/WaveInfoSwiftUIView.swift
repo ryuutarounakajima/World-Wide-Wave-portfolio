@@ -49,8 +49,8 @@ struct WaveInfoSwiftUIView: View {
     @State private var isTideSelected: Bool = false
     //Wax
     @State private var isWaxSeleted: Bool = false
-    
-    @State private var isNoteWritten: Bool = false
+    //Note
+    @State private var isNoteSelected: Bool = false
     
     
     
@@ -131,7 +131,7 @@ struct WaveInfoSwiftUIView: View {
                                 .presentationDragIndicator(.visible)
                         */
                         //info form
-                        FormViewModel(isSizeSelect: $isSizeSelect, isConditionSelect: $isConditionSelect, isSwellSelect: $isSwellSelected, isBreakSelect: $isBreakSelected, isWindSelect: $isWindSelected, isTideSelect: $isTideSelected, isWaxSelect: $isWaxSeleted)
+                        FormViewModel(isSizeSelect: $isSizeSelect, isConditionSelect: $isConditionSelect, isSwellSelect: $isSwellSelected, isBreakSelect: $isBreakSelected, isWindSelect: $isWindSelected, isTideSelect: $isTideSelected, isWaxSelect: $isWaxSeleted, isNoteSelected2: $isNoteSelected)
                                 .environmentObject(formData)
                         
                         
