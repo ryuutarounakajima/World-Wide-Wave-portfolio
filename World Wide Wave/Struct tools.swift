@@ -455,7 +455,7 @@ struct CustomFormSection6<Content: View>: View {
     @Binding var isSelected: Bool
     
     @EnvironmentObject var formData: FormData
-    
+  
     init(title: String, isSelected: Binding<Bool>,@ViewBuilder content: @escaping () -> Content) {
     
         self.title = title
@@ -467,6 +467,7 @@ struct CustomFormSection6<Content: View>: View {
         Section(header: Button(action: {
             withAnimation {
                 isSelected.toggle()
+                
             }
         }) {
             Text(title)
@@ -485,6 +486,57 @@ struct CustomFormSection6<Content: View>: View {
       
     }
    
+    
+}
+struct CustomFormSection7<Content: View>: View {
+    
+    
+    var title: String
+   // var options: [(key: String, value: String)]
+    var content: () -> Content
+    
+    @Binding var isSelected: Bool
+    @Binding var selectedValue: String
+    
+    @State private var showNoteSheet = false
+    @State private var note: String = ""
+    
+    @EnvironmentObject var formData: FormData
+    
+    init(title: String, isSelected: Binding<Bool>, selectedValue: Binding<String>,@ViewBuilder content: @escaping () -> Content) {
+        
+        self.title = title
+        self._isSelected = isSelected
+        self._selectedValue = selectedValue
+       // self.options = options
+        self.content = content
+    }
+    
+    var body: some View {
+        Section(header: Button(action: {
+            withAnimation{
+                showNoteSheet = true
+                isSelected.toggle()
+            }
+        }) {
+            Text(title)
+                .headerProminence(.increased)
+                .modifier(SectionButtonModifier(isSelected: $isSelected))
+        }) {
+            content()
+        }
+        
+    }
+    
+    private func upDateFormData() {
+        switch title {
+            
+        case "Note":
+            formData.customNoteInput = selectedValue
+        default:
+            break
+        }
+    }
     
 }
 
@@ -593,13 +645,24 @@ struct FormViewModel: View {
                 }
             }
             
-            /* //Note
-            CustomFormSection5(title: "Note", isSelected: $isNoteSelected) {
-
+            //Note
+           /* CustomFormSection5(title: "Note", isSelected: $isNoteSelected2) {
                 GradientOuterFrameTextEditor(note: $formData.customNoteInput)
                 
             }
             */
+            CustomFormSection7(title: "Note", isSelected: $isNoteSelected2, selectedValue: $formData.customNoteInput) {
+                GradientOuterFrameTextView(note: $formData.customNoteInput)
+            }
+           
+            
+        }
+        .sheet(isPresented: $isNoteSelected2)
+        {
+            NoteSheetWrapper(note: $formData.customNoteInput)
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
+           
         }
     }
 }
@@ -610,6 +673,32 @@ struct FormViewModel: View {
 
 // MARK: - Modifiers
 
+struct NoteSheetWrapper: View {
+    
+    @Binding var note: String
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        
+        ZStack(alignment: .topTrailing) {
+            
+            VStack {
+                GradientOuterFrameTextEditor(note: $note)
+                    .padding(.top, 50)   // ← ボタン分の余白
+                
+                Spacer()
+            }
+            
+            Button {
+                dismiss()
+            } label: {
+                Text("Done")
+                    .fontWeight(.bold)
+            }
+            .padding()
+        }
+    }
+}
 //outer frame
 struct GradientOuterFrameTextEditor: View {
     
@@ -643,7 +732,7 @@ struct GradientOuterFrameTextEditor: View {
             }
            
         }
-        .frame(height: UIScreen.main.bounds.height * 0.25)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         
        
     }
@@ -678,7 +767,7 @@ struct GradientOuterFrameTextView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-        .frame(height: UIScreen.main.bounds.height * 0.25)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
