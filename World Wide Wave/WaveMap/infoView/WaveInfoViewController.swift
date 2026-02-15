@@ -21,7 +21,7 @@ class waveInfoViewController: UIViewController {
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return [.portrait, .landscapeLeft, .landscapeRight]
+        return [.portrait]
     }
     
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {

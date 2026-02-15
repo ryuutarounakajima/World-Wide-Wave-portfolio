@@ -127,6 +127,9 @@ struct MylogSwiftUIView: View {
                                         .cornerRadius(180)
                                         .shadow(radius: 5)
                                         .padding()
+                                        .onTapGesture {
+                                            selectedLog = firstLog
+                                        }
                                 } else {
                                     Image("Logo")
                                         .resizable()
@@ -138,10 +141,6 @@ struct MylogSwiftUIView: View {
                                         .onTapGesture {
                                             selectedLog = firstLog
                                         }
-                                        .sheet(item: $selectedLog) { log in
-                                            LogDetailView(log: log)
-                                        }
-
                                 }
                                 
                                 if let timeStamp = firstLog.timestamp {
@@ -149,6 +148,9 @@ struct MylogSwiftUIView: View {
                                     Text(timeStamp.formatted(date: .omitted, time:.complete))
                                 }
                             }
+                        }
+                        .sheet(item: $selectedLog) { log in
+                            LogDetailView(log: log)
                         }
                         
                         
@@ -312,7 +314,8 @@ struct LogDetailView: View {
     let log: SurfLog2
     @EnvironmentObject var formData: FormData
     @State private var cameraPosition: MapCameraPosition = .automatic
-
+    @State private var player: AVPlayer?
+    
     private var destinationCoordinate: CLLocationCoordinate2D? {
         guard let lat = log.coordinateLat, let lon = log.coordinateLon else { return nil }
         return CLLocationCoordinate2D(latitude: lat, longitude: lon)
@@ -377,13 +380,23 @@ struct LogDetailView: View {
                 }
                 
                 // Video
+                /*
                 if let videoPath = log.videoPath, !videoPath.isEmpty {
                     if let url = URL(string: videoPath) ?? URL(string: videoPath.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? "") {
                         VideoPlayer(player: AVPlayer(url: url))
                             .clipShape(RoundedRectangle(cornerRadius: 180))
                             .frame(height: geo.size.height * 0.25)
                             .shadow(radius: 4)
-                        
+                 
+                 */
+                
+                if let videoPath = log.videoPath, !videoPath.isEmpty {
+                    if let player
+                    {
+                        VideoPlayer(player: player)
+                                   .clipShape(RoundedRectangle(cornerRadius: 180))
+                                   .frame(height: geo.size.height * 0.25)
+                                   .shadow(radius: 4)
                     } else {
                         Text("Invalid video URL")
                             .font(.footnote)
@@ -415,7 +428,23 @@ struct LogDetailView: View {
 
             }
             .padding()
-           
+            .onAppear {
+                if let videoPath = log.videoPath,
+                   !videoPath.isEmpty {
+
+                    print("🎥 videoPath:", videoPath)
+                    print("🎥 exists:",
+                          FileManager.default.fileExists(atPath: videoPath))
+
+                    let url = URL(fileURLWithPath: videoPath)
+                    player = AVPlayer(url: url)
+                    player?.play()
+                }
+            }
+            .onDisappear {
+                player?.pause()
+            }
+        
         }
     }
 }
