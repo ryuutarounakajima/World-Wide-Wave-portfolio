@@ -229,7 +229,7 @@ final class FormData: ObservableObject {
                           selectedWax: selectedWax,
                           waterTemperatureValue: waterTemperatureValue,
                           imageData: capturedImage?.jpegData(compressionQuality: 0.8),
-                          videoPath: capturedVideoURL?.absoluteString,
+                          videoPath: capturedVideoURL?.path,
                           customNoteInput: customNoteInput
        )
         

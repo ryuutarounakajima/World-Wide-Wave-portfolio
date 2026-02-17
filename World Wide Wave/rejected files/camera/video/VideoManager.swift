@@ -4,7 +4,7 @@
 //
 //  Created by Ryutarou Nakajima on 2025/02/16.
 //
-
+/*
 import UIKit
 import SwiftUI
 import AVFoundation
@@ -527,6 +527,8 @@ struct VideoPreviewView: UIViewControllerRepresentable {
     }
 }
 
+
+*/
 /*class VideoPreviewViewController: UIViewController, AVCaptureFileOutputRecordingDelegate{
     
     func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Error)?) {

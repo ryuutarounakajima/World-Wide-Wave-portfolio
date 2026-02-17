@@ -23,7 +23,7 @@ class MylogViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = "Wave gallery"
+        self.navigationItem.title = "Recent"
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.largeTitleDisplayMode = .always
 
@@ -46,9 +46,12 @@ class MylogViewController: UIViewController {
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
+        return [.portrait, .landscapeRight, .landscapeLeft]
     }
     
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
+    }
     
     
     override func viewWillAppear(_ animated: Bool) {

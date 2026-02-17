@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+/*
 struct CameraSwiftUIPreview: View {
     
     private let micManager = MicManager()
@@ -125,3 +125,4 @@ struct CameraSwiftUIPreview: View {
     let formData = FormData()
     CameraSwiftUIPreview(isCameraPresented: .constant(false), captureImage: .constant(image)).environmentObject(formData)
 }
+*/

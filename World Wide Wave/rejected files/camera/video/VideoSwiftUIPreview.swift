@@ -7,7 +7,7 @@
 
 import SwiftUI
 import AVFoundation
-
+/*
 struct VideoSwiftUIPreview: View {
     
     //private let captureSession = AVCaptureSession()
@@ -64,3 +64,4 @@ struct VideoSwiftUIPreview: View {
         captureVideoURL: .constant(dummyURL), isVideoPresented: .constant(true)
     ).environmentObject(formData)
 }
+*/

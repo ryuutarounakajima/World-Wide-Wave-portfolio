@@ -230,8 +230,32 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate, AVCaptureF
         }
         
         print("Video save: \(outputFileURL)")
-        //formData?.capturedVideoURL = outputFileURL
-        onVideoCaptured?(outputFileURL)
+        print("🎥 tmp exists:", FileManager.default.fileExists(atPath: outputFileURL.path))
+      //formData?.capturedVideoURL = outputFileURL
+        
+        
+        let fileManager = FileManager.default
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        
+        let newURL = documentsURL.appendingPathComponent(UUID().uuidString + ".mov")
+        
+        do {
+            
+            // 🔥 tmp → Documents にコピー
+                    try fileManager.moveItem(at: outputFileURL, to: newURL)
+                    
+                    print("✅ Saved to Documents:", newURL.path)
+                    print("✅ Exists after copy:",
+                          fileManager.fileExists(atPath: newURL.path))
+                    
+                    // 🔥 ここが超重要
+                    onVideoCaptured?(newURL)
+        } catch {
+            print("❌ Copy failed:", error)
+        }
+        
+       // onVideoCaptured?(outputFileURL)
+        
     }
     
 //MARK: - photo capture

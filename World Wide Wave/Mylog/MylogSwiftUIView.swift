@@ -316,6 +316,20 @@ struct LogDetailView: View {
     @State private var cameraPosition: MapCameraPosition = .automatic
     @State private var player: AVPlayer?
     
+    enum FullScreenType: Identifiable {
+        case video
+        case camera
+        
+        var id: String {
+            switch self {
+            case .video: return "video"
+            case .camera: return "camera"
+            }
+        }
+    }
+    @State private var fullScreenType: FullScreenType?
+    
+  
     private var destinationCoordinate: CLLocationCoordinate2D? {
         guard let lat = log.coordinateLat, let lon = log.coordinateLon else { return nil }
         return CLLocationCoordinate2D(latitude: lat, longitude: lon)
@@ -366,17 +380,28 @@ struct LogDetailView: View {
                 
                 //WavePhoto
                 if let data = log.imageData, let uiImage = UIImage(data: data) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .scaledToFit()
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                    Button {
+                        fullScreenType = .camera
+                    } label: {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFit()
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .frame(height: geo.size.height * 0.25)
+                            .frame(maxWidth: .infinity)
+                            .shadow(radius: 4)
+                    }
                 } else {
-                    Image("Logo")
-                        .resizable()
-                        .scaledToFit()
-                        .clipShape(RoundedRectangle(cornerRadius: 180))
-                        .frame(height: geo.size.height * 0.25)
-                        .shadow(radius: 4)
+                    Button{
+                        //fullScreenType = .camera
+                    } label: {
+                        Image("Logo")
+                            .resizable()
+                            .scaledToFit()
+                            .clipShape(RoundedRectangle(cornerRadius: 180))
+                            .frame(width: geo.size.width * (0.25), height: geo.size.height * 0.25)
+                            .shadow(radius: 4)
+                    }
                 }
                 
                 // Video
@@ -389,14 +414,24 @@ struct LogDetailView: View {
                             .shadow(radius: 4)
                  
                  */
-                
                 if let videoPath = log.videoPath, !videoPath.isEmpty {
                     if let player
                     {
-                        VideoPlayer(player: player)
-                                   .clipShape(RoundedRectangle(cornerRadius: 180))
-                                   .frame(height: geo.size.height * 0.25)
-                                   .shadow(radius: 4)
+                        VStack(spacing: 8) {
+                            VideoPlayer(player: player)
+                                .clipShape(RoundedRectangle(cornerRadius: 180))
+                                .frame(height: geo.size.height * 0.25)
+                                .shadow(radius: 4)
+                            
+                            Button {
+                                //videoFullScreen = true
+                                
+                                fullScreenType = .video
+                            } label: {
+                                Label("Full Screen", systemImage: "arrow.up.left.and.arrow.down.right")
+                            }
+                            .buttonStyle(.bordered)
+                        }
                     } else {
                         Text("Invalid video URL")
                             .font(.footnote)
@@ -428,8 +463,50 @@ struct LogDetailView: View {
 
             }
             .padding()
+           
+            .fullScreenCover(item: $fullScreenType) { type in
+                NavigationStack {
+                    ZStack {
+                        Color.black.ignoresSafeArea()
+                        switch type {
+                        case .video:
+                            if let player {
+                                VideoPlayer(player: player)
+                                    .ignoresSafeArea()
+                                    .onAppear { player.play() }
+                            } else {
+                                Text("No video available")
+                                    .foregroundStyle(.white)
+                            }
+                        case .camera:
+                            if let data = log.imageData, let uiImage = UIImage(data: data) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .ignoresSafeArea()
+                            } else {
+                                Image("Logo")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .ignoresSafeArea()
+                            }
+                        }
+                    }
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button {
+                                fullScreenType = nil
+                            } label: {
+                                Image(systemName: "xmark")
+                            }
+                        }
+                    }
+                    .navigationTitle( type == .video ? "Video" : "Photo" )
+                    .navigationBarTitleDisplayMode(.inline)
+                }
+            }
             .onAppear {
-                if let videoPath = log.videoPath,
+                if player == nil, let videoPath = log.videoPath,
                    !videoPath.isEmpty {
 
                     print("🎥 videoPath:", videoPath)
@@ -625,3 +702,4 @@ struct WaveAsset: Identifiable {
         .environmentObject(FormData())
         .modelContainer(container)
 }
+
