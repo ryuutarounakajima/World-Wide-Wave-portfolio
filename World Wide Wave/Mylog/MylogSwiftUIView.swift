@@ -55,7 +55,7 @@ struct MylogSwiftUIView: View {
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
-                
+                ScrollView {
                 let _ = geometry.size.width
                 let height = geometry.size.height
                 
@@ -75,11 +75,11 @@ struct MylogSwiftUIView: View {
                                     .onTapGesture {
                                         selectedAsset = firstAsset
                                     }
-                                   
+                                
                                 Text(firstAsset.dateText)
                                 
                                 Text(firstAsset.timeText)
-
+                                
                             }
                             
                             
@@ -99,7 +99,7 @@ struct MylogSwiftUIView: View {
                                 .foregroundStyle(.primary)
                             
                             AssetScrollView()
-                                
+                            
                         }
                         
                         
@@ -157,7 +157,7 @@ struct MylogSwiftUIView: View {
                         
                         VStack(alignment: .leading, spacing: height * 0.015) {
                             
-                            Text("Recent")
+                            Text("Wave log")
                                 .font(.title)
                                 .bold()
                                 .padding(.vertical)
@@ -165,70 +165,71 @@ struct MylogSwiftUIView: View {
                                 .foregroundStyle(.primary)
                             
                             LogScrollView(logs: logs)
-                                
+                            
                         }
                         
-                      /*  List {
-                            ForEach(logs) { log in
-                                
-                                VStack(alignment: .leading, spacing: 8) {
-                                    if let imageData = log.imageData, let uiImage = UIImage(data: imageData) {
-                                        Image(uiImage: uiImage)
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(height: 100)
-                                            .clipped()
-                                            .cornerRadius(12)
-                                    } else {
-                                        Image("Logo")
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(height: 180)
-                                            .clipped()
-                                            .cornerRadius(12)
-                                            .overlay(
-                                                Text("No Image Available")
-                                                    .font(.caption)
-                                                    .foregroundColor(.white)
-                                                    .padding(6)
-                                                    .background(Color.black.opacity(0.5))
-                                                    .cornerRadius(8),
-                                                alignment: .bottomTrailing
-                                            )
-                                    }
-                                    
-                                    if let ts = log.timestamp {
-                                        Text(ts.formatted(date: .abbreviated, time: .shortened))
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    
-                                    Text(log.note)
-                                        .font(.footnote)
-                                        .foregroundStyle(.secondary)
-                                        .lineLimit(3)
-                                }
-                                // 個別スワイプアクション（iOS 15+）
-                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                    Button(role: .destructive) {
-                                        deleteLogs([log])
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
-                                    }
-                                }
-                            }
-                            /* // 伝統的なスワイプ削除（編集モードや左スワイプで有効）
-                            .onDelete { indexSet in
-                                let targets = indexSet.map { logs[$0] }
-                                deleteLogs(targets)
-                            }
-                             */
-                        }
-                       */
+                        /*  List {
+                         ForEach(logs) { log in
+                         
+                         VStack(alignment: .leading, spacing: 8) {
+                         if let imageData = log.imageData, let uiImage = UIImage(data: imageData) {
+                         Image(uiImage: uiImage)
+                         .resizable()
+                         .scaledToFill()
+                         .frame(height: 100)
+                         .clipped()
+                         .cornerRadius(12)
+                         } else {
+                         Image("Logo")
+                         .resizable()
+                         .scaledToFill()
+                         .frame(height: 180)
+                         .clipped()
+                         .cornerRadius(12)
+                         .overlay(
+                         Text("No Image Available")
+                         .font(.caption)
+                         .foregroundColor(.white)
+                         .padding(6)
+                         .background(Color.black.opacity(0.5))
+                         .cornerRadius(8),
+                         alignment: .bottomTrailing
+                         )
+                         }
+                         
+                         if let ts = log.timestamp {
+                         Text(ts.formatted(date: .abbreviated, time: .shortened))
+                         .font(.caption)
+                         .foregroundStyle(.secondary)
+                         }
+                         
+                         Text(log.note)
+                         .font(.footnote)
+                         .foregroundStyle(.secondary)
+                         .lineLimit(3)
+                         }
+                         // 個別スワイプアクション（iOS 15+）
+                         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                         Button(role: .destructive) {
+                         deleteLogs([log])
+                         } label: {
+                         Label("Delete", systemImage: "trash")
+                         }
+                         }
+                         }
+                         /* // 伝統的なスワイプ削除（編集モードや左スワイプで有効）
+                          .onDelete { indexSet in
+                          let targets = indexSet.map { logs[$0] }
+                          deleteLogs(targets)
+                          }
+                          */
+                         }
+                         */
                     }
-                       
+                    
                 }
             }
+        }
         }
         .sheet(isPresented: $formData.showMyPagesheet) {
             // Present your My Page sheet content here when ready

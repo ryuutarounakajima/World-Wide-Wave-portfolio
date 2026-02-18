@@ -8,140 +8,7 @@
 import SwiftUI
 
 
-struct ReceivedForm2: View {
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject var formData: FormData
-    
-    let log: SurfLog2
-    
-    @State private var showDeleteConfirm = false
-    @State private var isButtonOpen = false
-    
-    
-    
-    var body : some View {
-        
-        VStack {
-            CustomFormSection8(title: "Size") {
-                Text(verbatim: (log.selectedSize1 ?? "") + " ~ " + (log.selectedSize2 ?? ""))
-                    .modifier(CustomFormTextModifier())
-                    .padding()
-            }
-            
-            CustomFormSection8(title: "Condition") {
-                Text(verbatim: (log.selectedCondition ?? ""))
-                    .modifier(CustomFormTextModifier())
-                    .padding()
-            }
-            
-            CustomFormSection8(title: "Swell") {
-                Text(verbatim: (log.selectedSwell ?? ""))
-                    .modifier(CustomFormTextModifier())
-                    .padding()
-            }
-            
-            CustomFormSection8(title: "Break type") {
-                Text(verbatim: (log.selectedBreaks ?? ""))
-                    .modifier(CustomFormTextModifier())
-                    .padding()
-            }
-            
-            CustomFormSection8(title: "wind") {
-            
-                VStack {
-                    Text(verbatim: (log.selectedWind ??  ""))
-                        .modifier(CustomFormTextModifier())
-                    HStack {
 
-                        Text("Strength")
-                            .font(.custom("AventirNext-Bold", size: 14))
-                            .scaleEffect(0.8)
-                            .shadow(radius: 2)
-                        
-                        Spacer()
-                        
-                        ReadOnlyValueTrack(value: log.selectedWindStrengthValue ?? 0.00, range: 0...20, gradient: Gradient(colors: [.cyan, .red]))
-                    }
-                }
-            }
-            
-            CustomFormSection8(title: "Tide") {
-                
-                VStack {
-                    Text(verbatim: (log.selectedTide ?? ""))
-                        .modifier(CustomFormTextModifier())
-                    
-                    HStack {
-                        Text("High & Low")
-                            .font(.custom("AvenirNext-Bold", size: 14))
-                            .scaleEffect(0.8)
-                            .shadow(radius: 2)
-                        
-                        Spacer()
-                        
-                        ReadOnlyValueTrack(value: log.selectedTideValue ?? 0.00, range: 0...3, gradient: Gradient(colors: [.brown, .yellow, .cyan, .blue]))
-                    }
-                }
-               
-            }
-            
-            CustomFormSection8(title: "Wax") {
-                VStack {
-                    Text(verbatim: (log.selectedWax ?? ""))
-                        .modifier(CustomFormTextModifier())
-                    
-                    HStack {
-                        Text("Cold water??")
-                            .font(
-                                .custom("AvenirNext-Bold", size: 14))
-                                .scaleEffect(0.8)
-                                .shadow(radius: 2)
-                        
-                        Spacer()
-                        
-                        ReadOnlyValueTrack(value: log.selectedWaterTemperature ?? 0.00, range: 0...36, gradient: Gradient(colors: [.white, .cyan, .orange]))
-                    }
-                }
-            }
-            
-            CustomFormSection8(title: "Note") {
-                GradientOuterFrameTextView(note: .constant(log.customNoteInput ?? ""))
-            }
-              
-            
-            Section {
-                Button(role: .destructive) {
-                    showDeleteConfirm = true
-                } label: {
-                    HStack {
-                        Spacer()
-                        Label("Delete this log", systemImage: "trash")
-                            .font(.headline)
-                        Spacer()
-                    }
-                }
-            }
-            .alert("Delete this log?", isPresented: $showDeleteConfirm) {
-                Button("Delete", role: .destructive) {
-                    modelContext.delete(log)
-                    do {
-                        try modelContext.save()
-                        dismiss()
-                    } catch {
-                        print("Failed to delete log: \(error)")
-                    }
-                }
-                Button("Cancel", role: .cancel) { }
-            } message: {
-                Text("This action cannot be undone.")
-            }
-            
-           
-            }
-        }
-        
-    }
 struct CustomFormSection5<Content: View>: View {
     var title: String
     var content: () -> Content
@@ -189,9 +56,12 @@ struct CustomFormSection8<Content: View>: View {
     var title: String
     var content: () -> Content
     
-    init(title: String, @ViewBuilder content: @escaping () -> Content) {
+    @Binding var isSelected: Bool
+    
+    init(title: String,  isSelected: Binding<Bool>, @ViewBuilder content: @escaping () -> Content) {
         self.title = title
         self.content = content
+        self._isSelected = isSelected
     }
     
     var body: some View {
@@ -199,19 +69,156 @@ struct CustomFormSection8<Content: View>: View {
         VStack(alignment: .leading) {
             
             Text(title)
-                .modifier(SectionButtonModifier(isSelected: .constant(false)))
+                .modifier(SectionButtonModifier(isSelected: $isSelected))
             content()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+       }
+    
+    
+}
+struct ReceivedForm2: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject var formData: FormData
+    
+    let log: SurfLog2
+    
+    @State private var showDeleteConfirm = false
+    @State private var isButtonOpen = false
+    
+    
+    
+    var body : some View {
+        
+        VStack {
+         
+            
+            CustomFormSection8(title: "Size", isSelected: $isButtonOpen) {
+                Text(verbatim: (log.selectedSize1 ?? "") + " ~ " + (log.selectedSize2 ?? ""))
+                    .modifier(CustomFormTextModifier())
+                    .padding()
+            }
+
+            
+            CustomFormSection8(title: "Condition", isSelected: $isButtonOpen) {
+                Text(verbatim: (log.selectedCondition ?? ""))
+                    .modifier(CustomFormTextModifier())
+                    .padding()
+            }
+            
+            CustomFormSection8(title: "Swell", isSelected: $isButtonOpen) {
+                Text(verbatim: (log.selectedSwell ?? ""))
+                    .modifier(CustomFormTextModifier())
+                    .padding()
+            }
+            
+            CustomFormSection8(title: "Break type", isSelected: $isButtonOpen) {
+                Text(verbatim: (log.selectedBreaks ?? ""))
+                    .modifier(CustomFormTextModifier())
+                    .padding()
+            }
+            
+            CustomFormSection8(title: "wind", isSelected: $isButtonOpen) {
+            
+                VStack {
+                    Text(verbatim: (log.selectedWind ??  ""))
+                        .modifier(CustomFormTextModifier())
+                    HStack {
+
+                        Text("Strength")
+                            .font(.custom("AvenirNext-Bold", size: 14))
+                            .scaleEffect(0.8)
+                            .shadow(radius: 2)
+                        
+                        Spacer()
+                        
+                        ReadOnlyValueTrack(value: log.selectedWindStrengthValue ?? 0.00, range: 0...20, gradient: Gradient(colors: [.cyan, .red]))
+                    }
+                }
+            }
+            
+            CustomFormSection8(title: "Tide", isSelected: $isButtonOpen) {
+                
+                VStack {
+                    Text(verbatim: (log.selectedTide ?? ""))
+                        .modifier(CustomFormTextModifier())
+                    
+                    HStack {
+                        Text("High & Low")
+                            .font(.custom("AvenirNext-Bold", size: 14))
+                            .scaleEffect(0.8)
+                            .shadow(radius: 2)
+                        
+                        Spacer()
+                        
+                        ReadOnlyValueTrack(value: log.selectedTideValue ?? 0.00, range: 0...3, gradient: Gradient(colors: [.brown, .yellow, .cyan, .blue]))
+                    }
+                }
+               
+            }
+            
+            CustomFormSection8(title: "Wax", isSelected: $isButtonOpen) {
+                VStack {
+                    Text(verbatim: (log.selectedWax ?? ""))
+                        .modifier(CustomFormTextModifier())
+                    
+                    HStack {
+                        Text("Cold water??")
+                            .font(
+                                .custom("AvenirNext-Bold", size: 14))
+                                .scaleEffect(0.8)
+                                .shadow(radius: 2)
+                        
+                        Spacer()
+                        
+                        ReadOnlyValueTrack(value: log.selectedWaterTemperature ?? 0.00, range: 0...36, gradient: Gradient(colors: [.white, .cyan, .orange]))
+                    }
+                }
+            }
+            
+            CustomFormSection8(title: "Note", isSelected: $isButtonOpen) {
+                GradientOuterFrameTextView(note: .constant(log.customNoteInput ?? ""))
+            }
+              
+            
+            Section {
+                Button(role: .destructive) {
+                    showDeleteConfirm = true
+                } label: {
+                    HStack {
+                        Spacer()
+                        Label("Delete this log", systemImage: "trash")
+                            .font(.headline)
+                        Spacer()
+                    }
+                }
+            }
+            .alert("Delete this log?", isPresented: $showDeleteConfirm) {
+                Button("Delete", role: .destructive) {
+                    modelContext.delete(log)
+                    do {
+                        try modelContext.save()
+                        dismiss()
+                    } catch {
+                        print("Failed to delete log: \(error)")
+                    }
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("This action cannot be undone.")
+            }
+            
+           
+            }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(.ultraThinMaterial)
-        )}
-    
-    
-}
-
+        )
+        }
+        
+    }
 //mock assets
 struct CustomFormSection3<Content: View>: View {
     
