@@ -22,33 +22,32 @@ struct ReceivedForm2: View {
     
     var body : some View {
         
-        Form {
-            CustomFormSection5(title: "Size", isSelected: $isButtonOpen) {
+        VStack {
+            CustomFormSection8(title: "Size") {
                 Text(verbatim: (log.selectedSize1 ?? "") + " ~ " + (log.selectedSize2 ?? ""))
                     .modifier(CustomFormTextModifier())
                     .padding()
             }
             
-            CustomFormSection5(title: "Condition", isSelected: $isButtonOpen) {
+            CustomFormSection8(title: "Condition") {
                 Text(verbatim: (log.selectedCondition ?? ""))
                     .modifier(CustomFormTextModifier())
                     .padding()
             }
             
-            CustomFormSection5(title: "Swell", isSelected: $isButtonOpen) {
+            CustomFormSection8(title: "Swell") {
                 Text(verbatim: (log.selectedSwell ?? ""))
                     .modifier(CustomFormTextModifier())
                     .padding()
             }
             
-            CustomFormSection5(title: "Break type", isSelected: $isButtonOpen) {
+            CustomFormSection8(title: "Break type") {
                 Text(verbatim: (log.selectedBreaks ?? ""))
                     .modifier(CustomFormTextModifier())
                     .padding()
             }
             
-            CustomFormSection5(title: "wind",
-                               isSelected: $isButtonOpen) {
+            CustomFormSection8(title: "wind") {
             
                 VStack {
                     Text(verbatim: (log.selectedWind ??  ""))
@@ -67,7 +66,7 @@ struct ReceivedForm2: View {
                 }
             }
             
-            CustomFormSection5(title: "Tide", isSelected: $isButtonOpen) {
+            CustomFormSection8(title: "Tide") {
                 
                 VStack {
                     Text(verbatim: (log.selectedTide ?? ""))
@@ -87,7 +86,7 @@ struct ReceivedForm2: View {
                
             }
             
-            CustomFormSection5(title: "Wax", isSelected: $isButtonOpen) {
+            CustomFormSection8(title: "Wax") {
                 VStack {
                     Text(verbatim: (log.selectedWax ?? ""))
                         .modifier(CustomFormTextModifier())
@@ -106,7 +105,7 @@ struct ReceivedForm2: View {
                 }
             }
             
-            CustomFormSection5(title: "Note", isSelected: $isButtonOpen) {
+            CustomFormSection8(title: "Note") {
                 GradientOuterFrameTextView(note: .constant(log.customNoteInput ?? ""))
             }
               
@@ -184,6 +183,33 @@ struct CustomFormSection5<Content: View>: View {
         }
      
     }
+}
+struct CustomFormSection8<Content: View>: View {
+    
+    var title: String
+    var content: () -> Content
+    
+    init(title: String, @ViewBuilder content: @escaping () -> Content) {
+        self.title = title
+        self.content = content
+    }
+    
+    var body: some View {
+        
+        VStack(alignment: .leading) {
+            
+            Text(title)
+                .modifier(SectionButtonModifier(isSelected: .constant(false)))
+            content()
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(.ultraThinMaterial)
+        )}
+    
+    
 }
 
 //mock assets

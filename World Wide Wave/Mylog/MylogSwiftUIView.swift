@@ -361,7 +361,7 @@ struct LogDetailView: View {
     var body: some View {
         GeometryReader {
             geo in
-            
+            ScrollView {
             VStack(spacing: 16) {
                 
                 if let ts = log.timestamp {
@@ -399,19 +399,19 @@ struct LogDetailView: View {
                             .resizable()
                             .scaledToFit()
                             .clipShape(RoundedRectangle(cornerRadius: 180))
-                            .frame(width: geo.size.width * (0.25), height: geo.size.height * 0.25)
+                            .frame( height: geo.size.height * 0.25)
                             .shadow(radius: 4)
                     }
                 }
                 
                 // Video
                 /*
-                if let videoPath = log.videoPath, !videoPath.isEmpty {
-                    if let url = URL(string: videoPath) ?? URL(string: videoPath.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? "") {
-                        VideoPlayer(player: AVPlayer(url: url))
-                            .clipShape(RoundedRectangle(cornerRadius: 180))
-                            .frame(height: geo.size.height * 0.25)
-                            .shadow(radius: 4)
+                 if let videoPath = log.videoPath, !videoPath.isEmpty {
+                 if let url = URL(string: videoPath) ?? URL(string: videoPath.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? "") {
+                 VideoPlayer(player: AVPlayer(url: url))
+                 .clipShape(RoundedRectangle(cornerRadius: 180))
+                 .frame(height: geo.size.height * 0.25)
+                 .shadow(radius: 4)
                  
                  */
                 if let videoPath = log.videoPath, !videoPath.isEmpty {
@@ -438,7 +438,7 @@ struct LogDetailView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
-
+                
                 // Map
                 Map(position: $cameraPosition) {
                     if let lat = log.coordinateLat, let lon = log.coordinateLon {
@@ -446,9 +446,10 @@ struct LogDetailView: View {
                         Marker("Here", coordinate: coordinate)
                     }
                 }
-                .frame(height: geo.size.height * 0.2)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .frame(height: geo.size.height * 0.33)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
                 .shadow(radius: 2)
+                .padding(.horizontal)
                 
                 //Go button
                 Button {
@@ -458,12 +459,12 @@ struct LogDetailView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 
+                //wave data form
                 ReceivedForm2(log: log)
                 
-
+                
             }
             .padding()
-           
             .fullScreenCover(item: $fullScreenType) { type in
                 NavigationStack {
                     ZStack {
@@ -508,11 +509,11 @@ struct LogDetailView: View {
             .onAppear {
                 if player == nil, let videoPath = log.videoPath,
                    !videoPath.isEmpty {
-
+                    
                     print("🎥 videoPath:", videoPath)
                     print("🎥 exists:",
                           FileManager.default.fileExists(atPath: videoPath))
-
+                    
                     let url = URL(fileURLWithPath: videoPath)
                     player = AVPlayer(url: url)
                     player?.play()
@@ -521,7 +522,7 @@ struct LogDetailView: View {
             .onDisappear {
                 player?.pause()
             }
-        
+        }
         }
     }
 }

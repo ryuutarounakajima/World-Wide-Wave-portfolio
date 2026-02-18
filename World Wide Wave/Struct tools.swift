@@ -652,10 +652,10 @@ struct FormViewModel: View {
             }
             */
             CustomFormSection7(title: "Note", isSelected: $isNoteSelected2, selectedValue: $formData.customNoteInput) {
+                
                 GradientOuterFrameTextView(note: $formData.customNoteInput)
+                
             }
-           
-            
         }
         .sheet(isPresented: $isNoteSelected2)
         {
