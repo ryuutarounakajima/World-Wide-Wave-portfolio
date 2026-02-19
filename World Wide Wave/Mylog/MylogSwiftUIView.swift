@@ -53,19 +53,75 @@ struct MylogSwiftUIView: View {
     @State private var selectedLog: SurfLog2? = nil
     
     var body: some View {
-        NavigationStack {
-            GeometryReader { geometry in
-                ScrollView {
-                let _ = geometry.size.width
-                let height = geometry.size.height
+        GeometryReader { geo in
+            
+            let screenHeight = geo.size.height
+            let screenWidth = geo.size.width
+            ScrollView {
+                
+                //let screenHeight = UIScreen.main.bounds.height
+               // let screenWidth = UIScreen.main.bounds.width
                 
                 if logs.isEmpty {
                     
-                    VStack(spacing: height * 0.06) {
-                        VStack(spacing: 3) {
-                            if let firstAsset = sortedWaveAssets.first {
-                                
-                                Image(firstAsset.imageName)
+                VStack(spacing: screenHeight * 0.06) {
+                    VStack(spacing: 3) {
+                        if let firstAsset = sortedWaveAssets.first {
+                            
+                            Image(firstAsset.imageName)
+                                .resizable()
+                                .scaledToFit()
+                                .clipped()
+                                .cornerRadius(180)
+                                .shadow(radius: 5)
+                                .padding()
+                                .onTapGesture {
+                                    selectedAsset = firstAsset
+                                }
+                            
+                            Text(firstAsset.dateText)
+                            
+                            Text(firstAsset.timeText)
+                            
+                        }
+                        
+                        
+                    }
+                    
+                    Text("No logs yet 🌊")
+                        .font(.headline)
+                        .foregroundColor(.gray)
+                    
+                    VStack(alignment: .leading, spacing: screenHeight * 0.015) {
+                        
+                        Text("Recent")
+                            .font(.title)
+                            .bold()
+                            .padding(.vertical)
+                            .padding(.leading)
+                            .foregroundStyle(.primary)
+                        
+                        AssetScrollView()
+                        
+                    }
+                    
+                    
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(.systemGroupedBackground))
+                .sheet(item: $selectedAsset) { asset in
+                    AssetDetailView(asset: asset)
+                }
+                
+                
+            } else {
+                
+                VStack {
+                    VStack(spacing: 8) {
+                        
+                        if let firstLog = logs.first {
+                            if let data = firstLog.imageData, let uiImage = UIImage(data: data) {
+                                Image(uiImage: uiImage)
                                     .resizable()
                                     .scaledToFit()
                                     .clipped()
@@ -73,168 +129,170 @@ struct MylogSwiftUIView: View {
                                     .shadow(radius: 5)
                                     .padding()
                                     .onTapGesture {
-                                        selectedAsset = firstAsset
+                                        selectedLog = firstLog
                                     }
+                            } else if let videoPath = firstLog.videoPath {
+                                let url: URL? = {
+                                    if videoPath.hasPrefix("http://") || videoPath.hasPrefix("https://") {
+                                        return URL(string: videoPath)
+                                    } else {
+                                        return URL(fileURLWithPath: videoPath)
+                                    }
+                                }()
                                 
-                                Text(firstAsset.dateText)
-                                
-                                Text(firstAsset.timeText)
-                                
-                            }
-                            
-                            
-                        }
-                        
-                        Text("No logs yet 🌊")
-                            .font(.headline)
-                            .foregroundColor(.gray)
-                        
-                        VStack(alignment: .leading, spacing: height * 0.015) {
-                            
-                            Text("Recent")
-                                .font(.title)
-                                .bold()
-                                .padding(.vertical)
-                                .padding(.leading)
-                                .foregroundStyle(.primary)
-                            
-                            AssetScrollView()
-                            
-                        }
-                        
-                        
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    
-                    .background(Color(.systemGroupedBackground))
-                    .sheet(item: $selectedAsset) { asset in
-                        AssetDetailView(asset: asset)
-                    }
-                    
-                    
-                } else {
-                    
-                    VStack(spacing: height * 0.06) {
-                        VStack(spacing: 3) {
-                            
-                            if let firstLog = logs.first {
-                                if let data = firstLog.imageData, let uiImage = UIImage(data: data) {
-                                    
-                                    Image(uiImage: uiImage)
-                                        .resizable()
+                                if let url {
+                                    VideoPlayer(player: AVPlayer(url: url))
                                         .scaledToFit()
                                         .clipped()
-                                        .cornerRadius(180)
+                                        //.clipShape(.capsule)
+                                        .frame(width: screenWidth * 0.8, height: screenHeight * 0.35)
+                                        .background(Color(.systemGray2))
+                                        .cornerRadius(20)
                                         .shadow(radius: 5)
-                                        .padding()
-                                        .onTapGesture {
-                                            selectedLog = firstLog
-                                        }
+                                        //.padding()
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .stroke(Color.primary.opacity(1.5), lineWidth: 1)
+                                        )
+                                        .padding(.bottom, 10)
+
+                                    
+                                    Button(action: {
+                                        selectedLog = firstLog
+                                    }) {
+                                        Text("Wave info")
+                                            .font(.headline)
+                                            .foregroundColor(.black)
+                                            .frame(width: screenWidth * 0.55,height: max(screenHeight * 0.025, 44) )
+                                            //.padding()
+                                            .background(    LinearGradient(gradient: Gradient(colors: [.blue, .cyan, .white, .brown]),
+                                                                           startPoint: .bottomTrailing,
+                                                                           endPoint: .topLeading))
+                                            .cornerRadius(12)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 12)
+                                                    .stroke(Color.primary, lineWidth: 2)
+                                            )
+                                            .shadow(radius: 3)
+                                    }
                                 } else {
                                     Image("Logo")
                                         .resizable()
                                         .scaledToFit()
                                         .clipped()
+                                        .frame(height: screenHeight * 0.25)
                                         .cornerRadius(180)
                                         .shadow(radius: 5)
                                         .padding()
                                         .onTapGesture {
                                             selectedLog = firstLog
                                         }
+                                    
+                                    Text("No URL Found...")
                                 }
-                                
-                                if let timeStamp = firstLog.timestamp {
-                                    Text(timeStamp.formatted(date: .long, time: .omitted))
-                                    Text(timeStamp.formatted(date: .omitted, time:.complete))
-                                }
+                            } else {
+                                Image("Logo")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .clipped()
+                                    .frame(height: screenHeight * 0.25)
+                                    .cornerRadius(180)
+                                    .shadow(radius: 5)
+                                    .padding()
+                                    .onTapGesture {
+                                        selectedLog = firstLog
+                                    }
+                            }
+                            
+                            if let timeStamp = firstLog.timestamp {
+                                Text(timeStamp.formatted(date: .long, time: .omitted))
+                                Text(timeStamp.formatted(date: .omitted, time:.complete))
                             }
                         }
-                        .sheet(item: $selectedLog) { log in
-                            LogDetailView(log: log)
-                        }
-                        
-                        
-                        
-                        VStack(alignment: .leading, spacing: height * 0.015) {
-                            
-                            Text("Wave log")
-                                .font(.title)
-                                .bold()
-                                .padding(.vertical)
-                                .padding(.leading)
-                                .foregroundStyle(.primary)
-                            
-                            LogScrollView(logs: logs)
-                            
-                        }
-                        
-                        /*  List {
-                         ForEach(logs) { log in
-                         
-                         VStack(alignment: .leading, spacing: 8) {
-                         if let imageData = log.imageData, let uiImage = UIImage(data: imageData) {
-                         Image(uiImage: uiImage)
-                         .resizable()
-                         .scaledToFill()
-                         .frame(height: 100)
-                         .clipped()
-                         .cornerRadius(12)
-                         } else {
-                         Image("Logo")
-                         .resizable()
-                         .scaledToFill()
-                         .frame(height: 180)
-                         .clipped()
-                         .cornerRadius(12)
-                         .overlay(
-                         Text("No Image Available")
-                         .font(.caption)
-                         .foregroundColor(.white)
-                         .padding(6)
-                         .background(Color.black.opacity(0.5))
-                         .cornerRadius(8),
-                         alignment: .bottomTrailing
-                         )
-                         }
-                         
-                         if let ts = log.timestamp {
-                         Text(ts.formatted(date: .abbreviated, time: .shortened))
-                         .font(.caption)
-                         .foregroundStyle(.secondary)
-                         }
-                         
-                         Text(log.note)
-                         .font(.footnote)
-                         .foregroundStyle(.secondary)
-                         .lineLimit(3)
-                         }
-                         // 個別スワイプアクション（iOS 15+）
-                         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                         Button(role: .destructive) {
-                         deleteLogs([log])
-                         } label: {
-                         Label("Delete", systemImage: "trash")
-                         }
-                         }
-                         }
-                         /* // 伝統的なスワイプ削除（編集モードや左スワイプで有効）
-                          .onDelete { indexSet in
-                          let targets = indexSet.map { logs[$0] }
-                          deleteLogs(targets)
-                          }
-                          */
-                         }
-                         */
+                    }
+                    .sheet(item: $selectedLog) { log in
+                        LogDetailView(log: log)
                     }
                     
+                    VStack(alignment: .leading, spacing: screenHeight * 0.015) {
+                        
+                        Text("Wave log")
+                            .font(.title)
+                            .bold()
+                            .padding(.vertical)
+                            .padding(.leading)
+                            .foregroundStyle(.primary)
+                        
+                        LogScrollView(logs: logs)
+                        
+                    }
+                    
+                    /*  List {
+                     ForEach(logs) { log in
+                     
+                     VStack(alignment: .leading, spacing: 8) {
+                     if let imageData = log.imageData, let uiImage = UIImage(data: imageData) {
+                     Image(uiImage: uiImage)
+                     .resizable()
+                     .scaledToFill()
+                     .frame(height: 100)
+                     .clipped()
+                     .cornerRadius(12)
+                     } else {
+                     Image("Logo")
+                     .resizable()
+                     .scaledToFill()
+                     .frame(height: 180)
+                     .clipped()
+                     .cornerRadius(12)
+                     .overlay(
+                     Text("No Image Available")
+                     .font(.caption)
+                     .foregroundColor(.white)
+                     .padding(6)
+                     .background(Color.black.opacity(0.5))
+                     .cornerRadius(8),
+                     alignment: .bottomTrailing
+                     )
+                     }
+                     
+                     if let ts = log.timestamp {
+                     Text(ts.formatted(date: .abbreviated, time: .shortened))
+                     .font(.caption)
+                     .foregroundStyle(.secondary)
+                     }
+                     
+                     Text(log.note)
+                     .font(.footnote)
+                     .foregroundStyle(.secondary)
+                     .lineLimit(3)
+                     }
+                     // 個別スワイプアクション（iOS 15+）
+                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                     Button(role: .destructive) {
+                     deleteLogs([log])
+                     } label: {
+                     Label("Delete", systemImage: "trash")
+                     }
+                     }
+                     }
+                     /* // 伝統的なスワイプ削除（編集モードや左スワイプで有効）
+                      .onDelete { indexSet in
+                      let targets = indexSet.map { logs[$0] }
+                      deleteLogs(targets)
+                      }
+                      */
+                     }
+                     */
+                    
                 }
+                
             }
         }
-        }
         .sheet(isPresented: $formData.showMyPagesheet) {
-            // Present your My Page sheet content here when ready
             MyPageView()
         }
+    }
     }
     
     private func deleteLogs(_ targets: [SurfLog2]) {
@@ -469,7 +527,7 @@ struct LogDetailView: View {
             .fullScreenCover(item: $fullScreenType) { type in
                 NavigationStack {
                     ZStack {
-                        Color.black.ignoresSafeArea()
+                        Color.white.ignoresSafeArea()
                         switch type {
                         case .video:
                             if let player {
@@ -482,10 +540,13 @@ struct LogDetailView: View {
                             }
                         case .camera:
                             if let data = log.imageData, let uiImage = UIImage(data: data) {
+              
                                 Image(uiImage: uiImage)
                                     .resizable()
-                                    .scaledToFit()
-                                    .ignoresSafeArea()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: geo.size.width, height: geo.size.height)
+                                    .clipped()
+                                
                             } else {
                                 Image("Logo")
                                     .resizable()

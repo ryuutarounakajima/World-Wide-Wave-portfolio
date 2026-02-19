@@ -430,10 +430,12 @@ struct CustomFormSection2<Content: View>: View {
                        }
                        .frame(height: 150) // 必要に応じてPicker高さ調整してください
                    } else {
-                      
+                       
                        
                    }
+                   
                    content()
+                   
                }
     }
     
@@ -570,6 +572,7 @@ struct FormViewModel: View {
             CustomFormSection2(title: "Size", isSelected: $isSizeSelect, selectedValue1: $formData.selectedSize1, selectedValue2: $formData.selectedSize2, options: WaveOptions.waveSizes) {
                 Text("\(formData.selectedSize1) ~ \(formData.selectedSize2)")
                     .modifier(CustomFormTextModifier())
+                    
             }
         
             //wave condtion section
@@ -646,11 +649,6 @@ struct FormViewModel: View {
             }
             
             //Note
-           /* CustomFormSection5(title: "Note", isSelected: $isNoteSelected2) {
-                GradientOuterFrameTextEditor(note: $formData.customNoteInput)
-                
-            }
-            */
             CustomFormSection7(title: "Note", isSelected: $isNoteSelected2, selectedValue: $formData.customNoteInput) {
                 
                 GradientOuterFrameTextView(note: $formData.customNoteInput)
@@ -677,6 +675,8 @@ struct NoteSheetWrapper: View {
     
     @Binding var note: String
     @Environment(\.dismiss) private var dismiss
+    @FocusState private var isFocused: Bool
+
     
     var body: some View {
         
@@ -684,8 +684,13 @@ struct NoteSheetWrapper: View {
             
             VStack {
                 GradientOuterFrameTextEditor(note: $note)
+                    .focused($isFocused)
                     .padding(.top, 50)   // ← ボタン分の余白
-                
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            isFocused = true
+                        }
+                    }
                 Spacer()
             }
             
@@ -774,8 +779,8 @@ struct GradientOuterFrameTextView: View {
 struct CustomFormTextModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(.custom("AvenirNext-Bold", size: 14))
-                        .scaleEffect(1.2)
+            .font(.custom("AvenirNext-Bold", size: 17))
+                        //.scaleEffect(1.2)
                         .shadow(radius: 2)
     }
 }

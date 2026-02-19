@@ -45,11 +45,21 @@ class waveInfoViewController: UIViewController {
             .modelContainer(ModelContainerProvider.shared)
         let hostingController = UIHostingController(rootView: swiftUIView)
         
-        addChild(hostingController)
-        hostingController.view.frame = view.bounds
-        hostingController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        view.addSubview(hostingController.view)
-        hostingController.didMove(toParent: self)
+        // ✅ 子VC登録
+              addChild(hostingController)
+              view.addSubview(hostingController.view)
+              
+              // ✅ AutoLayout使用
+              hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+              
+              NSLayoutConstraint.activate([
+                  hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+                  hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                  hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                  hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+              ])
+              
+              hostingController.didMove(toParent: self)
         
     }
     

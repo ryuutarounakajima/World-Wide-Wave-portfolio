@@ -10,6 +10,154 @@ import Foundation
 
 
 /*
+// MylogSwiftUIView
+ struct MylogSwiftUIView: View {
+     
+     @EnvironmentObject var formData: FormData
+     @Environment(\.modelContext) private var modelContext
+     @Query(sort: \SurfLog2.timestamp, order: .reverse) var logs: [SurfLog2]
+     
+     @State private var selectedAsset: WaveAsset? = nil
+     @State private var selectedLog: SurfLog2? = nil
+     
+     var body: some View {
+         NavigationStack {
+             
+             ScrollView {
+                 
+                 let screenHeight = UIScreen.main.bounds.height
+                 
+                 if logs.isEmpty {
+                     
+                     VStack(spacing: screenHeight * 0.06) {
+                         
+                         VStack(spacing: 3) {
+                             
+                             if let firstAsset = sortedWaveAssets.first {
+                                 
+                                 Image(firstAsset.imageName)
+                                     .resizable()
+                                     .scaledToFit()
+                                     .cornerRadius(180)
+                                     .shadow(radius: 5)
+                                     .padding()
+                                     .onTapGesture {
+                                         selectedAsset = firstAsset
+                                     }
+                                 
+                                 Text(firstAsset.dateText)
+                                 Text(firstAsset.timeText)
+                             }
+                         }
+                         
+                         Text("No logs yet 🌊")
+                             .font(.headline)
+                             .foregroundColor(.gray)
+                         
+                         VStack(
+                             alignment: .leading,
+                             spacing: screenHeight * 0.015
+                         ) {
+                             
+                             Text("Recent")
+                                 .font(.title)
+                                 .bold()
+                                 .padding(.vertical)
+                                 .padding(.leading)
+                             
+                             AssetScrollView()
+                         }
+                     }
+                     .frame(maxWidth: .infinity)
+                     .background(Color(.systemGroupedBackground))
+                     .sheet(item: $selectedAsset) { asset in
+                         AssetDetailView(asset: asset)
+                     }
+                     
+                 } else {
+                     
+                     VStack(spacing: screenHeight * 0.06) {
+                         
+                         VStack(spacing: 3) {
+                             
+                             if let firstLog = logs.first {
+                                 
+                                 if let data = firstLog.imageData,
+                                    let uiImage = UIImage(data: data) {
+                                     
+                                     Image(uiImage: uiImage)
+                                         .resizable()
+                                         .scaledToFit()
+                                         .cornerRadius(180)
+                                         .shadow(radius: 5)
+                                         .padding()
+                                         .onTapGesture {
+                                             selectedLog = firstLog
+                                         }
+                                     
+                                 } else {
+                                     
+                                     Image("Logo")
+                                         .resizable()
+                                         .scaledToFit()
+                                         .cornerRadius(180)
+                                         .shadow(radius: 5)
+                                         .padding()
+                                         .onTapGesture {
+                                             selectedLog = firstLog
+                                         }
+                                 }
+                                 
+                                 if let timeStamp = firstLog.timestamp {
+                                     
+                                     Text(timeStamp.formatted(date: .long, time: .omitted))
+                                     
+                                     Text(timeStamp.formatted(date: .omitted,
+                                                              time: .complete))
+                                 }
+                             }
+                         }
+                         .sheet(item: $selectedLog) { log in
+                             LogDetailView(log: log)
+                         }
+                         
+                         VStack(
+                             alignment: .leading,
+                             spacing: screenHeight * 0.015
+                         ) {
+                             
+                             Text("Wave log")
+                                 .font(.title)
+                                 .bold()
+                                 .padding(.vertical)
+                                 .padding(.leading)
+                             
+                             LogScrollView(logs: logs)
+                         }
+                     }
+                     .frame(maxWidth: .infinity)
+                 }
+             }
+             // ✅ 上は守る、下だけ無視
+             .ignoresSafeArea(.container, edges: .bottom)
+         }
+         .sheet(isPresented: $formData.showMyPagesheet) {
+             MyPageView()
+         }
+     }
+     
+     private func deleteLogs(_ targets: [SurfLog2]) {
+         for log in targets {
+             modelContext.delete(log)
+         }
+         do {
+             try modelContext.save()
+         } catch {
+             print("Failed to delete logs: \(error)")
+         }
+     }
+ }
+
 // external storage
  @Attribute(.externalStorage) var videoData: Data?
  
