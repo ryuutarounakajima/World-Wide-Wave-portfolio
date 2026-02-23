@@ -37,8 +37,8 @@ struct MyPageView: View {
                                 .resizable()
                                 .scaledToFill()
                                 .frame(
-                                    width: min(geo.size.width, geo.size.height) * 0.5,
-                                    height: min(geo.size.width, geo.size.height) * 0.5
+                                    width: max(geo.size.width, geo.size.height) * 0.6,
+                                    height: max(geo.size.width, geo.size.height) * 0.7
                                 )
                                 .clipShape(Circle())
                         } else {

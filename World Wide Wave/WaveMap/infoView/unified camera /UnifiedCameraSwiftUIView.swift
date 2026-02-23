@@ -252,6 +252,18 @@ struct UnifiedCameraSwiftUIView: View {
         .onReceive(NotificationCenter.default.publisher(for: .stopVideoCapture)) { _ in
                 stopProress()
             }
+        .onChange(of: captureImage) { oldValue, newValue in
+            // Auto-present photo sheet when a new image is captured and not recording
+            if newValue != nil && !isRecording {
+                showPhotoSheet = true
+            }
+        }
+        .onChange(of: captureVideoURL) { oldValue, newValue in
+            // Auto-present video sheet when a new video is captured and not recording
+            if newValue != nil && !isRecording {
+                showVideoSheet = true
+            }
+        }
     }
     
 }

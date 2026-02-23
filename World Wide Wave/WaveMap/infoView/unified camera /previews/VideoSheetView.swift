@@ -15,6 +15,7 @@ struct VideoSheetView: View {
     @EnvironmentObject var formData: FormData
     @Binding var isCameraPresented: Bool
     
+    
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
@@ -30,6 +31,8 @@ struct VideoSheetView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
                         formData.capturedVideoURL = url
+                        formData.generateThumbnailIfNeeded(from: url)
+                        
                         dismiss()
                         isCameraPresented = false
                     }

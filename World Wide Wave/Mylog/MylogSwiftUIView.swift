@@ -68,17 +68,18 @@ struct MylogSwiftUIView: View {
                     VStack(spacing: 3) {
                         if let firstAsset = sortedWaveAssets.first {
                             
+                         
+                            
                             Image(firstAsset.imageName)
                                 .resizable()
                                 .scaledToFit()
-                                .clipped()
-                                .cornerRadius(180)
-                                .shadow(radius: 5)
-                                .padding()
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                .frame(height: geo.size.height * 0.25)
+                                .frame(maxWidth: .infinity)
+                                .shadow(radius: 4)
                                 .onTapGesture {
                                     selectedAsset = firstAsset
                                 }
-                            
                             Text(firstAsset.dateText)
                             
                             Text(firstAsset.timeText)
@@ -123,12 +124,17 @@ struct MylogSwiftUIView: View {
                             if let data = firstLog.imageData, let uiImage = UIImage(data: data) {
                                 Image(uiImage: uiImage)
                                     .resizable()
-                                    .scaledToFit()
-                                    .clipped()
-                                    .cornerRadius(180)
+                                    .scaledToFill()
+                                    .frame(width: screenWidth * 0.8, height: screenHeight * 0.35)
+                                    .background(Color(.systemGray2))
+                                    .cornerRadius(20)
                                     .shadow(radius: 5)
-                                    .padding()
-                                    .onTapGesture {
+                                    //.padding()
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .stroke(Color.primary.opacity(1.5), lineWidth: 1)
+                                    )
+                                    .padding(.bottom, 10)                .onTapGesture {
                                         selectedLog = firstLog
                                     }
                             } else if let videoPath = firstLog.videoPath {
@@ -142,7 +148,7 @@ struct MylogSwiftUIView: View {
                                 
                                 if let url {
                                     VideoPlayer(player: AVPlayer(url: url))
-                                        .scaledToFit()
+                                        .scaledToFill()
                                         .clipped()
                                         //.clipShape(.capsule)
                                         .frame(width: screenWidth * 0.8, height: screenHeight * 0.35)
@@ -176,32 +182,54 @@ struct MylogSwiftUIView: View {
                                             .shadow(radius: 3)
                                     }
                                 } else {
+                                    ZStack {
+                                        Image("Logo")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(maxWidth: screenWidth * 0.7, maxHeight: screenHeight * 0.3)
+                                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                                            .shadow(radius: 5)
+                                            .padding(.vertical, 8)
+                                            .grayscale(1.0)
+                                            .onTapGesture {
+                                                selectedLog = firstLog
+                                            }
+                                        
+                                        Text("No URL Found...")
+                                                  .font(.headline)
+                                                  .bold()
+                                                  .foregroundColor(.white)
+                                                  .padding(.horizontal, 12)
+                                                  .padding(.vertical, 6)
+                                                  .background(Color.black.opacity(0.6))
+                                                  .clipShape(Capsule())
+                                        
+                                    }
+                                }
+                            } else {
+                                ZStack {
                                     Image("Logo")
                                         .resizable()
                                         .scaledToFit()
-                                        .clipped()
-                                        .frame(height: screenHeight * 0.25)
-                                        .cornerRadius(180)
+                                        .frame(maxWidth: screenWidth * 0.7, maxHeight: screenHeight * 0.3)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
                                         .shadow(radius: 5)
-                                        .padding()
+                                        .padding(.vertical, 8)
+                                        .grayscale(1.0)
                                         .onTapGesture {
                                             selectedLog = firstLog
                                         }
                                     
-                                    Text("No URL Found...")
+                                    Text("No capture...")
+                                              .font(.headline)
+                                              .bold()
+                                              .foregroundColor(.white)
+                                              .padding(.horizontal, 12)
+                                              .padding(.vertical, 6)
+                                              .background(Color.black.opacity(0.6))
+                                              .clipShape(Capsule())
+                                    
                                 }
-                            } else {
-                                Image("Logo")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .clipped()
-                                    .frame(height: screenHeight * 0.25)
-                                    .cornerRadius(180)
-                                    .shadow(radius: 5)
-                                    .padding()
-                                    .onTapGesture {
-                                        selectedLog = firstLog
-                                    }
                             }
                             
                             if let timeStamp = firstLog.timestamp {
@@ -328,13 +356,47 @@ struct LogScrollView: View {
                                 .onTapGesture {
                                     selectedLog = log
                                 }
+                        } else if let thumbnailData = log.thumbnailData,
+                                  let thumbnailImage = UIImage(data: thumbnailData) {
+                            ZStack {
+                                Image(uiImage: thumbnailImage)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .clipped()
+                                
+                                Circle()
+                                    .fill(Color.black.opacity(0.35))
+                                    .frame(width: 48, height: 48)
+                                    .overlay(
+                                        Image(systemName: "play.fill")
+                                            .foregroundStyle(.white)
+                                            .font(.system(size: 20, weight: .bold))
+                                    )
+                            }
+                            .cornerRadius(180)
+                            .shadow(radius: 5)
+                            .onTapGesture {
+                                selectedLog = log
+                            }
                         } else {
                             Image("Logo")
                                 .resizable()
                                 .scaledToFit()
+                                .grayscale(1.0)
                                 .clipped()
                                 .cornerRadius(180)
                                 .shadow(radius: 5)
+                                .overlay(
+                                    Text("No capture")
+                                        .font(.subheadline)
+                                        .foregroundStyle(.white)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 6)
+                                        .background(Color.black.opacity(0.5))
+                                        .clipShape(Capsule())
+                                        .padding(8),
+                                    alignment: .center
+                                )
                                 .onTapGesture {
                                     selectedLog = log
                                 }
@@ -457,9 +519,22 @@ struct LogDetailView: View {
                         Image("Logo")
                             .resizable()
                             .scaledToFit()
-                            .clipShape(RoundedRectangle(cornerRadius: 180))
-                            .frame( height: geo.size.height * 0.25)
-                            .shadow(radius: 4)
+                            .grayscale(1.0)
+                            .clipped()
+                            .cornerRadius(180)
+                            .shadow(radius: 5)
+                            .frame(height: geo.size.height * 0.25)
+                            .overlay(
+                                Text("No capture")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.white)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 6)
+                                    .background(Color.black.opacity(0.5))
+                                    .clipShape(Capsule())
+                                    .padding(8),
+                                alignment: .center
+                            )
                     }
                 }
                 
@@ -543,9 +618,10 @@ struct LogDetailView: View {
               
                                 Image(uiImage: uiImage)
                                     .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: geo.size.width, height: geo.size.height)
+                                    .scaledToFill()
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                                     .clipped()
+                                    .ignoresSafeArea()
                                 
                             } else {
                                 Image("Logo")
@@ -588,6 +664,7 @@ struct LogDetailView: View {
         }
     }
 }
+
 
 struct AssetDetailView: View {
     

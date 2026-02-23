@@ -247,8 +247,8 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate, AVCaptureF
                     print("✅ Saved to Documents:", newURL.path)
                     print("✅ Exists after copy:",
                           fileManager.fileExists(atPath: newURL.path))
-                    
-                    // 🔥 ここが超重要
+            
+            // 🔥 ここが超重要
                     onVideoCaptured?(newURL)
         } catch {
             print("❌ Copy failed:", error)
@@ -256,6 +256,26 @@ extension UnifiedCameraViewController: AVCapturePhotoCaptureDelegate, AVCaptureF
         
        // onVideoCaptured?(outputFileURL)
         
+    }
+    func generateThumbnail(from url: URL) -> UIImage? {
+    
+        let asset = AVAsset(url: url)
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+        
+        let time = CMTime(seconds: 0.5, preferredTimescale: 600)
+        
+        do {
+            
+            let cgImage = try generator.copyCGImage(at: time, actualTime: nil)
+            return UIImage(cgImage: cgImage)
+            
+        } catch {
+             
+            print("thumbnail error:", error)
+                   return nil
+        }
+      
     }
     
 //MARK: - photo capture

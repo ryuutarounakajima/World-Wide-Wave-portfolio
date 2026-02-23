@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreLocation
 import SwiftData
-
+import AVFoundation
 
 // MARK: - Model
 
@@ -81,7 +81,6 @@ class SurfLog2 {
     var timestamp: Date?
     var note: String?
     var videoPath: String?
-    
     //@Attribute(.externalStorage)
     var imageData: Data?
     
@@ -96,9 +95,8 @@ class SurfLog2 {
     var selectedTideValue: Double?
     var selectedWax: String?
     var selectedWaterTemperature: Double?
-    
     var customNoteInput: String?
-    
+    var thumbnailData: Data?
     
     
     init(
@@ -119,8 +117,8 @@ class SurfLog2 {
         waterTemperatureValue: Double = 0.0,
         imageData: Data? = nil,
         videoPath: String? = nil,
-        customNoteInput: String?  = ""
-        
+        customNoteInput: String  = "",
+        thumbnailData: Data? = nil
     ) {
         
         self.coordinateLat = coordinateLat
@@ -135,6 +133,7 @@ class SurfLog2 {
         Tide: \(selectedTide) (\(String(format: "%.1f", selectedTideValue)))
         Wax: \(selectedWax)
         Water Temp: \(String(format: "%.1f", waterTemperatureValue))
+        cusutomNoteInput: \(customNoteInput)
         """
         
         self.imageData = imageData
@@ -151,6 +150,7 @@ class SurfLog2 {
         self.selectedWax = selectedWax
         self.selectedWaterTemperature = waterTemperatureValue
         self.customNoteInput = customNoteInput
+        self.thumbnailData = thumbnailData
     }
 }
 
@@ -187,7 +187,7 @@ final class FormData: ObservableObject {
     @Published var customNoteInput: String = ""
     
     @Published var showMyPagesheet: Bool = false
-    
+    @Published var thumbnailData: Data?
     
     func isFormValid() -> Bool {
         return !selectedSize.isEmpty && !selectedCondition.isEmpty && !selectedSwell.isEmpty && !selectedWind.isEmpty
@@ -203,6 +203,12 @@ final class FormData: ObservableObject {
             print("no image captured")
         }
         
+        if let thumbnail = thumbnailData {
+            print("tumbnail captured: \(thumbnail)")
+        } else {
+            print("no thumbnail captured")
+        }
+        
          if let videoURL = capturedVideoURL {
             print("video captured: \(videoURL)")
         } else {
@@ -210,6 +216,25 @@ final class FormData: ObservableObject {
         }
     }
     
+    @MainActor
+    func generateThumbnailIfNeeded(from url: URL) {
+        let asset = AVAsset(url: url)
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+
+        let time = CMTime(seconds: 0.5, preferredTimescale: 600)
+
+        do {
+            let cgImage = try generator.copyCGImage(at: time, actualTime: nil)
+            let image = UIImage(cgImage: cgImage)
+            self.thumbnailData = image.jpegData(compressionQuality: 0.7)
+            print("✅ thumbnail generated")
+        } catch {
+            print("❌ thumbnail error:", error)
+            self.thumbnailData = nil
+        }
+    }
+   
     @MainActor
     func saveToSwifData(context: ModelContext) async {
         
@@ -230,7 +255,7 @@ final class FormData: ObservableObject {
                           waterTemperatureValue: waterTemperatureValue,
                           imageData: capturedImage?.jpegData(compressionQuality: 0.8),
                           videoPath: capturedVideoURL?.path,
-                          customNoteInput: customNoteInput
+                          customNoteInput: customNoteInput, thumbnailData: thumbnailData
        )
         
         context.insert(log)
@@ -279,6 +304,7 @@ final class FormData: ObservableObject {
         capturedImage = nil
         capturedVideoURL = nil
         customNoteInput = ""
+        thumbnailData = nil
     }
     
     
