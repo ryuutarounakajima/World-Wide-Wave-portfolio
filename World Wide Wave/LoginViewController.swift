@@ -201,6 +201,7 @@ class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
         backgroundColor = CAGradientLayer()
         backgroundColor.frame = view.bounds
         backgroundColor.colors = [
+            UIColor.black.cgColor,
             UIColor.blue.cgColor,
             UIColor.cyan.cgColor,
             UIColor.white.cgColor,
