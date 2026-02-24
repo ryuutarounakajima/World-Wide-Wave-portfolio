@@ -38,6 +38,7 @@
 		6CB288842E448164000D65B9 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB288832E448163000D65B9 /* CustomNavigationController.swift */; };
 		6CCCD4DC2CBFD50300572E3C /* sampleCodeFlie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCCD4DB2CBFD50300572E3C /* sampleCodeFlie.swift */; };
 		8D63A8552EB9C1690017BB62 /* Struct tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D63A8542EB9C1690017BB62 /* Struct tools.swift */; };
+		8D6808CF2F4D484A0039AA20 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6808CE2F4D48490039AA20 /* KeychainService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +95,7 @@
 		6CB288832E448163000D65B9 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		6CCCD4DB2CBFD50300572E3C /* sampleCodeFlie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sampleCodeFlie.swift; sourceTree = "<group>"; };
 		8D63A8542EB9C1690017BB62 /* Struct tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Struct tools.swift"; sourceTree = "<group>"; };
+		8D6808CE2F4D48490039AA20 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -184,6 +186,7 @@
 				6C0F9D912CB8FE27006BF12E /* World Wide Wave.entitlements */,
 				6C8483FD2CA57D5300CE6B1E /* AppDelegate.swift */,
 				6C8483FF2CA57D5300CE6B1E /* SceneDelegate.swift */,
+				8D6808CE2F4D48490039AA20 /* KeychainService.swift */,
 				6C8484012CA57D5300CE6B1E /* LoginViewController.swift */,
 				6C9786622E6D4F00005E55DC /* LoadingView.swift */,
 				6CFF35492E2CDCBE00485B19 /* myLog */,
@@ -379,6 +382,7 @@
 				6CCCD4DC2CBFD50300572E3C /* sampleCodeFlie.swift in Sources */,
 				6C8483FE2CA57D5300CE6B1E /* AppDelegate.swift in Sources */,
 				6C8484082CA57D5300CE6B1E /* World_Wide_Wave.xcdatamodeld in Sources */,
+				8D6808CF2F4D484A0039AA20 /* KeychainService.swift in Sources */,
 				6CB288842E448164000D65B9 /* CustomNavigationController.swift in Sources */,
 				6C8484002CA57D5300CE6B1E /* SceneDelegate.swift in Sources */,
 			);

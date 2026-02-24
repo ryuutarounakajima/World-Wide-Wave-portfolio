@@ -73,17 +73,24 @@ class MylogViewController: UIViewController {
     
     @IBAction func logoutButtonPressed(_ sender: Any) {
         
-        UserDefaults.standard.removeObject(forKey: "appleAuthToken")
-        UserDefaults.standard.removeObject(forKey: "useremail")
-        UserDefaults.standard.synchronize()
+        //UserDefaults.standard.removeObject(forKey: "appleAuthToken")
+        //UserDefaults.standard.removeObject(forKey: "useremail")
+        //UserDefaults.standard.synchronize()
         
-        if let viewController = storyboard?.instantiateViewController(withIdentifier: "ViewController") as? LoginViewController {
+        _ = KeychainService.shared.delete(for: "appleAuthToken")
+        print("Logout success: token deleted")
+        
+      /*   if let viewController = storyboard?.instantiateViewController(withIdentifier: "ViewController") as? LoginViewController {
             
             self.view.window?.rootViewController = viewController
             self.view.window?.makeKeyAndVisible()
-            
+       }
+       */
+            resetToLoginRoot()
             print("logout success")
-        }
+        
+        
+        
     }
     
     
@@ -93,7 +100,26 @@ class MylogViewController: UIViewController {
         formData.showMyPagesheet = true
     }
   
-    
+    // MARK: - Root reset helper
+    private func resetToLoginRoot() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        // Ensure the storyboard ID of the login screen is set to "LoginViewController"
+        let loginVC = storyboard.instantiateViewController(withIdentifier: "ViewController")
+
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first {
+            window.rootViewController = loginVC
+            window.makeKeyAndVisible()
+        } else if let window = self.view.window {
+            window.rootViewController = loginVC
+            window.makeKeyAndVisible()
+        } else {
+            // Fallback: present modally if window not found
+            loginVC.modalPresentationStyle = .fullScreen
+            self.present(loginVC, animated: true, completion: nil)
+        }
+    }
+
 
     /*
     // MARK: - Navigation

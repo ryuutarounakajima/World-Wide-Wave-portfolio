@@ -8,6 +8,7 @@
 import UIKit
 import AuthenticationServices
 import CoreData
+import Security
 
 class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
     
@@ -73,7 +74,7 @@ class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
             print("Already logged in")
             
         } else {
-            performAppleSingnIn()
+            // performAppleSingnIn()
         }
         
     }
@@ -91,7 +92,7 @@ class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
     
     private func isLoggedIn() -> Bool {
         
-        if let token = UserDefaults.standard.string(forKey: "appleAuthToken") {
+        if  let token = KeychainService.shared.readString(for: "appleAuthToken") {
             return !token.isEmpty
         }
         return false
@@ -164,8 +165,8 @@ class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
             
             let appleAuthToken = appleIDCredential.identityToken != nil ? String(data: appleIDCredential.identityToken!, encoding: .utf8) : "nilだよ~ん"
             
-            UserDefaults.standard.set(appleAuthToken, forKey: "appleAuthToken")
-            
+           // UserDefaults.standard.set(appleAuthToken, forKey: "appleAuthToken")
+            _ = KeychainService.shared.saveString(appleAuthToken ?? "", for: "appleAuthToken")
             
             
             let userIdentifier = appleIDCredential.user
