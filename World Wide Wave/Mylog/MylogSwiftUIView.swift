@@ -780,7 +780,7 @@ struct AssetScrollView: View {
 }
 
 // MARK: - mock assets
-let waveAssetImages: [String] = ["wave1", /*"wave2",*/ "wave3", "wave4", "wave5", "wave6", "Logo"]
+let waveAssetImages: [String] = ["wave1", /*"wave2",*/ "wave3", /*"wave4",*/ "wave5", "wave6", "Logo"]
 let waveAssets: [WaveAsset] = waveAssetImages.map { name in
     let randomDate = randomDateInBirthToCurent()
     let (dateText, timeText) = formatDate(randomDate)
