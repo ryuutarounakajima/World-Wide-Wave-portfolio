@@ -51,6 +51,7 @@ struct MylogSwiftUIView: View {
     
     @State private var selectedAsset : WaveAsset? = nil
     @State private var selectedLog: SurfLog2? = nil
+    @State private var showDeleteAlert = false
     
     var body: some View {
         GeometryReader { geo in
@@ -89,13 +90,12 @@ struct MylogSwiftUIView: View {
                         
                     }
                     
-                    Text("No logs yet 🌊")
-                        .font(.headline)
-                        .foregroundColor(.gray)
+                //    Text("No logs yet 🌊")
+                       
                     
                     VStack(alignment: .leading, spacing: screenHeight * 0.015) {
                         
-                        Text("Recent")
+                        Text("wave log")
                             .font(.title)
                             .bold()
                             .padding(.vertical)
@@ -109,7 +109,7 @@ struct MylogSwiftUIView: View {
                     
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color(.systemGroupedBackground))
+                //.background(Color(.systemGroupedBackground))
                 .sheet(item: $selectedAsset) { asset in
                     AssetDetailView(asset: asset)
                 }
@@ -253,66 +253,28 @@ struct MylogSwiftUIView: View {
                         
                         LogScrollView(logs: logs)
                         
+                        Button(role: .destructive) {
+                            showDeleteAlert = true
+                        } label: {
+                            Text("Delete All Logs")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: max(screenHeight * 0.025, 44))
+                                .background(Color.red)
+                                .foregroundColor(.white)
+                                .cornerRadius(12)
+                                .padding(.horizontal)
+                                .shadow(radius: 3)
+                        }
+                        .padding(.top, 8)
+                        .alert("Delete all logs?", isPresented: $showDeleteAlert) {
+                            Button("Delete", role: .destructive) {
+                                deleteLogs(logs)
+                            }
+                            Button("Cancel", role: .cancel) {}
+                        }
+                        
                     }
-                    
-                    /*  List {
-                     ForEach(logs) { log in
-                     
-                     VStack(alignment: .leading, spacing: 8) {
-                     if let imageData = log.imageData, let uiImage = UIImage(data: imageData) {
-                     Image(uiImage: uiImage)
-                     .resizable()
-                     .scaledToFill()
-                     .frame(height: 100)
-                     .clipped()
-                     .cornerRadius(12)
-                     } else {
-                     Image("Logo")
-                     .resizable()
-                     .scaledToFill()
-                     .frame(height: 180)
-                     .clipped()
-                     .cornerRadius(12)
-                     .overlay(
-                     Text("No Image Available")
-                     .font(.caption)
-                     .foregroundColor(.white)
-                     .padding(6)
-                     .background(Color.black.opacity(0.5))
-                     .cornerRadius(8),
-                     alignment: .bottomTrailing
-                     )
-                     }
-                     
-                     if let ts = log.timestamp {
-                     Text(ts.formatted(date: .abbreviated, time: .shortened))
-                     .font(.caption)
-                     .foregroundStyle(.secondary)
-                     }
-                     
-                     Text(log.note)
-                     .font(.footnote)
-                     .foregroundStyle(.secondary)
-                     .lineLimit(3)
-                     }
-                     // 個別スワイプアクション（iOS 15+）
-                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                     Button(role: .destructive) {
-                     deleteLogs([log])
-                     } label: {
-                     Label("Delete", systemImage: "trash")
-                     }
-                     }
-                     }
-                     /* // 伝統的なスワイプ削除（編集モードや左スワイプで有効）
-                      .onDelete { indexSet in
-                      let targets = indexSet.map { logs[$0] }
-                      deleteLogs(targets)
-                      }
-                      */
-                     }
-                     */
-                    
                 }
                 
             }
@@ -665,7 +627,6 @@ struct LogDetailView: View {
     }
 }
 
-
 struct AssetDetailView: View {
     
     let asset: WaveAsset
@@ -780,7 +741,7 @@ struct AssetScrollView: View {
 }
 
 // MARK: - mock assets
-let waveAssetImages: [String] = ["wave1", /*"wave2",*/ "wave3", /*"wave4",*/ "wave5", "wave6", "Logo"]
+let waveAssetImages: [String] = ["wave1", /*"wave2",*/ "wave3", "wave4", "wave5", "wave6", ]
 let waveAssets: [WaveAsset] = waveAssetImages.map { name in
     let randomDate = randomDateInBirthToCurent()
     let (dateText, timeText) = formatDate(randomDate)
