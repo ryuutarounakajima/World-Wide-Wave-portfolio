@@ -185,10 +185,9 @@ struct WaveInfoSwiftUIView: View {
                                 .onAppear {
                                     updateBlinking()
                                 }
-                                .alert("Are you an optimistionist?", isPresented: $showAlert) {
-                                    Button("Yes,but not goona save my data") {
-                                        print("Yes")
-                                        print("You are optimistic person when you save the data!!")
+                                .alert("Save this log?", isPresented: $showAlert) {
+                                    Button("Don’t Save", role: .cancel) {
+                                        // do nothing
                                     }
                                     Button("Yes") {
                                         
@@ -210,7 +209,7 @@ struct WaveInfoSwiftUIView: View {
                                       */
                                     }
                                 } message:{
-                                    Text("This will determine your future")
+                                    Text("Your wave info will be saved. You can view it later in My Log.")
                                 }
                                 Spacer()
                             }

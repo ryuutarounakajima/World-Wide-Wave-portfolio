@@ -65,55 +65,77 @@ struct MylogSwiftUIView: View {
                 
                 if logs.isEmpty {
                     
-                VStack(spacing: screenHeight * 0.06) {
-                    VStack(spacing: 3) {
-                        if let firstAsset = sortedWaveAssets.first {
-                            
-                         
-                            
-                            Image(firstAsset.imageName)
-                                .resizable()
-                                .scaledToFit()
-                                .clipShape(RoundedRectangle(cornerRadius: 12))
-                                .frame(height: geo.size.height * 0.25)
-                                .frame(maxWidth: .infinity)
-                                .shadow(radius: 4)
-                                .onTapGesture {
-                                    selectedAsset = firstAsset
-                                }
-                            Text(firstAsset.dateText)
-                            
-                            Text(firstAsset.timeText)
-                            
-                        }
+                    ZStack {
+                        Image("Logo")
+                            //.resizable()
+                            .scaledToFill()
+                            .frame(maxWidth: screenWidth * 1.0, maxHeight: screenHeight * 1.0)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .shadow(radius: 5)
+                            .padding(.vertical, 8)
+                            .grayscale(1.0)
+                            .opacity(0.2)
                         
                         
-                    }
-                    
-                //    Text("No logs yet 🌊")
-                       
-                    
-                    VStack(alignment: .leading, spacing: screenHeight * 0.015) {
-                        
-                        Text("wave log")
+                        Text("No logs yet...")
                             .font(.title)
                             .bold()
-                            .padding(.vertical)
-                            .padding(.leading)
-                            .foregroundStyle(.primary)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color.black.opacity(0.6))
+                            .clipShape(Capsule())
+                    
+                    }
+                   
                         
-                        AssetScrollView()
+              //mock myview
+            /*VStack(spacing: screenHeight * 0.06) {
+                VStack(spacing: 3) {
+                    if let firstAsset = sortedWaveAssets.first {
+                        
+                        
+                        
+                        Image(firstAsset.imageName)
+                            .resizable()
+                            .scaledToFit()
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .frame(height: geo.size.height * 0.25)
+                            .frame(maxWidth: .infinity)
+                            .shadow(radius: 4)
+                            .onTapGesture {
+                                selectedAsset = firstAsset
+                            }
+                        Text(firstAsset.dateText)
+                        
+                        Text(firstAsset.timeText)
                         
                     }
                     
                     
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                //.background(Color(.systemGroupedBackground))
-                .sheet(item: $selectedAsset) { asset in
-                    AssetDetailView(asset: asset)
-                }
                 
+        //    Text("No logs yet 🌊")
+
+            VStack(alignment: .leading, spacing: screenHeight * 0.015) {
+                
+                Text("wave log")
+                    .font(.title)
+                    .bold()
+                    .padding(.vertical)
+                    .padding(.leading)
+                    .foregroundStyle(.primary)
+                
+                AssetScrollView()
+                
+            }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            //.background(Color(.systemGroupedBackground))
+            .sheet(item: $selectedAsset) { asset in
+                AssetDetailView(asset: asset)
+            }
+            */
                 
             } else {
                 
