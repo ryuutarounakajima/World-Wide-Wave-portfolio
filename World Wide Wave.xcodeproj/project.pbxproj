@@ -578,8 +578,8 @@
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to the camera for capturing photos and videos.";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app uses Face ID to provide secure and convenient access to your account.";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "The app retrieves location information in the background.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app uses location information while in use";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "www uses your location in the background to automatically track routes to spots like 'Shonan' or 'Chiba' even when the app is closed.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "www uses your location to pinpoint surf spots on the map and to record exactly where your logs are created, such as 'Shonan' or 'Chiba'.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app requires access to the microphone for recording audio.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This app requires access to the photo library to save photos and videos.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app requires access to the photo library to select and upload photos or videos.";
@@ -619,8 +619,8 @@
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to the camera for capturing photos and videos.";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app uses Face ID to provide secure and convenient access to your account.";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "The app retrieves location information in the background.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app uses location information while in use";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "www uses your location in the background to automatically track routes to spots like 'Shonan' or 'Chiba' even when the app is closed.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "www uses your location to pinpoint surf spots on the map and to record exactly where your logs are created, such as 'Shonan' or 'Chiba'.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app requires access to the microphone for recording audio.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This app requires access to the photo library to save photos and videos.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app requires access to the photo library to select and upload photos or videos.";

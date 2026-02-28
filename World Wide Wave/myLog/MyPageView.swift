@@ -18,6 +18,26 @@ struct MyPageView: View {
     @State private var selectedItem: PhotosPickerItem?
     @State private var selectedImage: UIImage?
     @State private var isButtonOpen: Bool = false
+    @State private var showSaveSuccess: Bool = false
+    @State private var showDeleteSuccess: Bool = false
+    
+    @FocusState private var isNameFocused: Bool
+    
+    private func deleteUser() {
+        
+        for user in userData {
+            modelContext.delete(user)
+        }
+        
+        do {
+            try modelContext.save()
+            
+            print("User data deleted")
+            showDeleteSuccess = true
+        } catch {
+            print("Delte user data error: \(error)")
+        }
+    }
     
     var body: some View {
         
@@ -50,41 +70,76 @@ struct MyPageView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
-            .frame(height: UIScreen.main.bounds.height * 0.35) // ← ここで固定
+            .frame(height: UIScreen.main.bounds.height * 0.35)
             .clipped()
 
             
-            Form {
+            
                 
-                CustomFormSection5(title: "Name", isSelected: $isButtonOpen) {
-                    
-                    TextField("name", text: $userName)
-                        .textFieldStyle(.automatic)
-                }
+            CustomFormSection5(title: "Name", isSelected: $isButtonOpen) {
                 
-                
+                TextField("name", text: $userName)
+                    .textFieldStyle(.automatic)
+                    .submitLabel(.done)
+                    .focused($isNameFocused)
             }
+                
+                
+            Spacer()
       
-            Button("save") {
-                let userInfo = userData.first ?? UserData()
-                
-                userInfo.userName = userName
-                
-                if let image = selectedImage {
-                    userInfo.imageData = image.jpegData(compressionQuality: 0.75)
+            HStack(spacing: 20) {
+                // Save button (blue)
+                Button(action: {
+                    let userInfo = userData.first ?? UserData()
+                    userInfo.userName = userName
+                    if let image = selectedImage {
+                        userInfo.imageData = image.jpegData(compressionQuality: 0.75)
+                    }
+                    if userData.isEmpty {
+                        modelContext.insert(userInfo)
+                    }
+                    do {
+                        try modelContext.save()
+                        showSaveSuccess = true
+                        print("User name is \(userInfo.userName ?? "Surfing Ailean")")
+                    } catch {
+                        print("save error", error)
+                    }
+                }) {
+                    Text("save")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(width: UIScreen.main.bounds.width * 0.33)
+                        .frame(height: 44)
+                        .background(Color.blue)
+                        .cornerRadius(12)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.primary.opacity(0.2), lineWidth: 1)
+                        )
+                        .shadow(radius: 3)
                 }
-                if userData.isEmpty {
-                    modelContext.insert(userInfo)
+
+                // Delete button (red)
+                Button(role: .destructive) {
+                    deleteUser()
+                } label: {
+                    Text("Delete Account")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(width: UIScreen.main.bounds.width * 0.33)
+                        .frame(height: 44)
+                        .background(Color.red)
+                        .cornerRadius(12)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.primary.opacity(0.2), lineWidth: 1)
+                        )
+                        .shadow(radius: 3)
                 }
-                
-                do {
-                    try modelContext.save()
-                    print("User name is \(userInfo.userName ?? "Ailean")")
-                } catch {
-                    print("save error", error)
-                }
-                
             }
+            .padding(.horizontal)
+            
             
             Spacer()
         }
@@ -99,6 +154,12 @@ struct MyPageView: View {
                 }
             }
         }
+        .onAppear {
+            // Auto-focus the name field so the keyboard shows immediately
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                isNameFocused = true
+            }
+        }
         .onChange(of: selectedItem) { _, newItem in
               Task {
                   if let data = try? await newItem?.loadTransferable(type: Data.self),
@@ -107,6 +168,12 @@ struct MyPageView: View {
                   }
               }
           }
+        .alert("Saved successfully", isPresented: $showSaveSuccess) {
+            Button("OK", role: .cancel) {}
+        }
+        .alert("Deleted successfully", isPresented: $showDeleteSuccess) {
+            Button("OK", role: .cancel) {}
+        }
     }
 }
 
@@ -139,3 +206,4 @@ struct MyPageView: View {
     return MyPageView()
         .modelContainer(container)
 }
+

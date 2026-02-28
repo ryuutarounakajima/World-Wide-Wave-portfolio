@@ -28,27 +28,27 @@ struct CustomFormSection5<Content: View>: View {
     }
 
     var body: some View {
-        
-        Section(header: Button(action: {
-            withAnimation {
-                isSelected = false
-            }
-        }) {
-            Text(title)
-                .headerProminence(.increased)
-                .modifier(SectionButtonModifier(isSelected: $isSelected))
-            
-        }) {
-            
-            content()
-            
-            if isSelected {
+        VStack(alignment: .leading) {
+            Section(header: Button(action: {
+                withAnimation {
+                    isSelected = false
+                }
+            }) {
+                Text(title)
+                    .headerProminence(.increased)
+                    .modifier(SectionButtonModifier(isSelected: $isSelected))
                 
-            } else {
+            }) {
                 
+                content()
+                
+                if isSelected {
+                    
+                } else {
+                    
+                }
             }
         }
-     
     }
 }
 struct CustomFormSection8<Content: View>: View {

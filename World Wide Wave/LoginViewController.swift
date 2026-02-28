@@ -75,6 +75,16 @@ class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
             
         } else {
             // performAppleSingnIn()
+            // loginButton move
+            let alert = UIAlertController(
+                title: "Sign In Required", message: "Please sign in with Apple to access to your surflog.", preferredStyle: .alert
+            )
+            
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            
+            self.present(alert, animated: true, completion: nil)
+            
+            print("Not logged in")
         }
         
     }
