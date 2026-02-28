@@ -13,14 +13,14 @@ struct MyPageView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Query private var userData: [UserData]
-    
+    @Query private var logs: [SurfLog2]
     @State private var userName = ""
     @State private var selectedItem: PhotosPickerItem?
     @State private var selectedImage: UIImage?
     @State private var isButtonOpen: Bool = false
     @State private var showSaveSuccess: Bool = false
     @State private var showDeleteSuccess: Bool = false
-    
+    @State private var showDeleteConfirm: Bool = false
     @FocusState private var isNameFocused: Bool
     
     private func deleteUser() {
@@ -29,10 +29,14 @@ struct MyPageView: View {
             modelContext.delete(user)
         }
         
+        for log in logs {
+            modelContext.delete(log)
+        }
+        
         do {
             try modelContext.save()
             
-            print("User data deleted")
+            print("User data and log deleted")
             showDeleteSuccess = true
         } catch {
             print("Delte user data error: \(error)")
@@ -122,7 +126,8 @@ struct MyPageView: View {
 
                 // Delete button (red)
                 Button(role: .destructive) {
-                    deleteUser()
+                   // deleteUser()
+                    showDeleteConfirm = true
                 } label: {
                     Text("Delete Account")
                         .font(.headline)
@@ -173,6 +178,17 @@ struct MyPageView: View {
         }
         .alert("Deleted successfully", isPresented: $showDeleteSuccess) {
             Button("OK", role: .cancel) {}
+        }
+        .alert("Delete Account?", isPresented: $showDeleteConfirm) {
+            
+            Button("Cancel", role: .cancel) {
+                
+            }
+            Button("Delete", role: .destructive) {
+                deleteUser()
+            }
+        } message: {
+            Text("This will permanently delete your account and all surf logs. This action cannot be undone.")
         }
     }
 }
