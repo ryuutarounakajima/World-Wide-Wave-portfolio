@@ -1,6 +1,5 @@
 # 🌊 World Wide Wave
-[![App Store](https://img.shields.io)](https://apps.apple.com/us/app/world-wide-wave/id6758753103)
-
+[![App Store](https://img.shields.io/badge/App_Store-Download-blue?logo=apple&style=for-the-badge)](https://apps.apple.com/us/app/world-wide-wave/id6758753103)
 This app is available on the appstore.
 It showcases the features and UI elements that have been completed so far, without including any private assets.
 This branch will be updated whenever the main branch receives major updates.
@@ -42,7 +41,7 @@ Authentication view for Apple users only.
 
 Apple でサインイン専用の認証画面です。
 
-<img src="screenshots/loginview.png" alt="Login Screen" height= "400">
+<!-- <img src="screenshots/loginview.png" alt="Login Screen" height= "400"> -->
 
 File:[LoginViewController.swift](./World%20Wide%20Wave/LoginViewController.swift)
 
