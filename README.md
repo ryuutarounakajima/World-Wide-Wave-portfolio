@@ -42,7 +42,7 @@ Authentication view for Apple users only.
 
 Apple でサインイン専用の認証画面です。
 
- <img src="screenshots/loginview.gif" alt="Login Screen" height= "400"> 
+ <img src="screenshots/loginview.gif" alt="Login Screen" height= "400" width= "200"> 
 
 File:[LoginViewController.swift](./World%20Wide%20Wave/LoginViewController.swift)
 
@@ -54,7 +54,7 @@ Users can long-press on the map to register surf point location.
 
 マップを長押しすることで、新しいサーフポイントを登録できます。
 
-<img src="screenshots/mapview.gif" alt="Login Screen" height= "400">
+<img src="screenshots/mapview.gif" alt="Login Screen" height= "400" width= "200">
 
 Flie: [WaveMapViewController](./World%20Wide%20Wave/WaveMap/mapView/WaveMapViewController.swift)
 
