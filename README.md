@@ -42,7 +42,7 @@ Authentication view for Apple users only.
 
 Apple でサインイン専用の認証画面です。
 
-<!-- <img src="screenshots/loginview.png" alt="Login Screen" height= "400"> -->
+ <img src="screenshots/loginview.png" alt="Login Screen" height= "400"> 
 
 File:[LoginViewController.swift](./World%20Wide%20Wave/LoginViewController.swift)
 
