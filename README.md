@@ -37,6 +37,9 @@ World Wide Wave は SwiftUI と UIKit を使用して開発された iOS アプ�
 
 
 ### Login view
+![Sign in with Apple](https://img.shields.io/badge/Sign_in_with_Apple-000000?style=for-the-badge&logo=apple&logoColor=white)
+![Authentication](https://image.shields.io/badge/Authentication-424242?style=for-the-badge&logo=auth0&logoColor=white)
+[FaceID/TouchID](https://image.shields.io/badge/Biometrics-007AFF?style=for-the-badge&logo=apple&logoColor=white)
 
 Authentication view for Apple users only.
 
