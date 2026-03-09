@@ -55,9 +55,20 @@ Apple でサインイン専用の認証画面です。
 
 File:[LoginViewController.swift](./World%20Wide%20Wave/LoginViewController.swift)
 
+---
+
+
+
+
+
+
 
 
 ### MapView(Surf Point Registration)
+
+</a> <a href="#">
+  <img src="https://img.shields.io/badge/MapKit-007AFF?style=for-the-badge&logo=apple-maps&logoColor=white" alt="Map">
+</a>
 
 Users can long-press on the map to register surf point location.
 
