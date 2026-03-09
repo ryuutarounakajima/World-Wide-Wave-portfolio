@@ -93,12 +93,5 @@ Flie:
     [MylogSwiftUiView](./World%20Wide%20Wave/myLog/MylogSwiftUIView.swift)
  
 
-📦 Clone This Portfolio Branch
-
-You can clone this portfolio branch and open it in Xcode using:
-
-このポートフォリオブランチは Xcode でクローンして開くことができます:
-
-git clone -b portfolio https://github.com/ryuutarounakajima/World-Wide-Wave-portfolio.git
 
 
