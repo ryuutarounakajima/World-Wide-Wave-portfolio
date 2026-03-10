@@ -67,16 +67,13 @@ File:[LoginViewController.swift](./World%20Wide%20Wave/LoginViewController.swift
 ### MapView(Surf Point Registration)
 
 </a> <a href="#">
-  <img src="https://img.shields.io/badge/MapKit-007AFF?style=for-the-badge&logo=apple-maps&logoColor=white" alt="Map"><img src="https://img.shields.io/badge/UIKit-2396F3?style=for-the-badge&logo=apple&logoColor=white">
-<img src="https://img.shields.io/badge/SwiftUI-0A84FF?style=for-the-badge&logo=swift&logoColor=white">
+  <img src="https://img.shields.io/badge/MapKit-007AFF?style=for-the-badge&logo=apple-maps&logoColor=white" alt="Map"><img src="https://img.shields.io/badge/UIKit-2396F3?style=for-the-badge&logo=apple&logoColor=white"><img src="https://img.shields.io/badge/SwiftUI-0A84FF?style=for-the-badge&logo=swift&logoColor=white">
 </a>
 
 Users can long-press on the map to register surf point location.
 
 ・マップを長押しすることで、新しいサーフポイントを登録できます。
-　
 ・UIViewControllerRepresentable を用いて UIKit SwiftUI を連携させ、画面遷移を実装しています。
-
 ・MapKit については UIKit のクラスを利用することで、より細かい UI カスタマイズを実現しています。 SwiftUI だけでは難しい MapKit の細かい UI カスタマイズを実現するため、UIKit を併用しています。
 　
 <img src="screenshots/mapview.gif" alt="Login Screen" height= "400" width= "200">
@@ -91,13 +88,13 @@ File: [WaveInfoSwifUIViewController](./World%20Wide%20Wave/WaveMap/mapView/WaveM
 <img src="https://img.shields.io/badge/SwiftData-FA7343?style=for-the-badge&logo=apple&logoColor=white" alt="SwiftData">
 <img src="https://img.shields.io/badge/CloudKit-0A84FF?style=for-the-badge&logo=icloud&logoColor=white" alt="CloudKit">
 
-<img src="screenshots/mylogview.gif" alt="mylog Screen" height= "400" width= "200">
+
 Users can view a list of their recorded wave logs from the other tabs.
 
 他のタブ画面(Mapview)で記録した波ログを一覧で確認できます。
 
-<img src="screenshots/mylogview.gif" alt="Log collection" height= "400">
 
+<img src="screenshots/mylogview.gif" alt="mylog Screen" height= "400" width= "200">
 Flie:
     [MylogSwiftUiView](./World%20Wide%20Wave/myLog/MylogSwiftUIView.swift)
  
