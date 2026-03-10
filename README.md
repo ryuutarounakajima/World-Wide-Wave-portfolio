@@ -85,8 +85,7 @@ File: [WaveInfoSwifUIViewController](./World%20Wide%20Wave/WaveMap/mapView/WaveM
 
 ### MylogView(Coleection of User's Wave Logs)
 
-<img src="https://img.shields.io/badge/SwiftData-FA7343?style=for-the-badge&logo=apple&logoColor=white" alt="SwiftData">
-<img src="https://img.shields.io/badge/CloudKit-0A84FF?style=for-the-badge&logo=icloud&logoColor=white" alt="CloudKit">
+<img src="https://img.shields.io/badge/SwiftData-FA7343?style=for-the-badge&logo=apple&logoColor=white" alt="SwiftData"><img src="https://img.shields.io/badge/CloudKit-0A84FF?style=for-the-badge&logo=icloud&logoColor=white" alt="CloudKit">
 
 
 Users can view a list of their recorded wave logs from the other tabs.
