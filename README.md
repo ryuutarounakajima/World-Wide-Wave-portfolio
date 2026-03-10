@@ -38,10 +38,9 @@ World Wide Wave は SwiftUI と UIKit を使用して開発された iOS アプ�
 
 ### Login view
 
-<a href="#">
-  <img src="https://img.shields.io/badge/Sign_in_with_Apple-000000?style=for-the-badge&logo=apple&logoColor=white" alt="Sign in with Apple">
-</a> <a href="#"><img src="https://img.shields.io/badge/Authentication-424242?style=for-the-badge&logo=auth0&logoColor=white" alt="Authentication">
-</a> <a href="#"><img src="https://img.shields.io/badge/Biometrics-007AFF?style=for-the-badge&logo=apple&logoColor=white" alt="FaceID/TouchID">
+<a href="#"> <img src="https://img.shields.io/badge/Sign_in_with_Apple-000000?style=for-the-badge&logo=apple&logoColor=white" alt="Sign in with Apple">
+</a><a href="#"> <img src="https://img.shields.io/badge/Authentication-424242?style=for-the-badge&logo=auth0&logoColor=white" alt="Authentication">
+</a><a href="#"> <img src="https://img.shields.io/badge/Biometrics-007AFF?style=for-the-badge&logo=apple&logoColor=white" alt="FaceID/TouchID">
 </a>
 
 
@@ -53,13 +52,8 @@ World Wide Wave は SwiftUI と UIKit を使用して開発された iOS アプ�
 
 File:[LoginViewController.swift](./World%20Wide%20Wave/LoginViewController.swift)
 
+
 ---
-
-
-
-
-
-
 
 
 ### MapView(Surf Point Registration)
@@ -97,8 +91,4 @@ Users can view a list of their recorded wave logs from the other tabs.
 Flie:
     [MylogSwiftUiView](./World%20Wide%20Wave/myLog/MylogSwiftUIView.swift)
  
-File: [MylogSwiftUIView](./World%20Wide%20Wave/myLog/MylogSwiftUIView.swift)
-
-File: [MylogSwiftUIView](./myLog/MylogSwiftUIView.swift)
-
 
