@@ -64,7 +64,7 @@ struct MylogSwiftUIView: View {
                // let screenWidth = UIScreen.main.bounds.width
                 
                 if logs.isEmpty {
-                    
+                  /*
                     ZStack {
                         Image("Logo")
                             //.resizable()
@@ -87,10 +87,10 @@ struct MylogSwiftUIView: View {
                             .clipShape(Capsule())
                     
                     }
-                   
+                  */
                         
               //mock myview
-            /*VStack(spacing: screenHeight * 0.06) {
+            VStack(spacing: screenHeight * 0.06) {
                 VStack(spacing: 3) {
                     if let firstAsset = sortedWaveAssets.first {
                         
@@ -135,7 +135,7 @@ struct MylogSwiftUIView: View {
             .sheet(item: $selectedAsset) { asset in
                 AssetDetailView(asset: asset)
             }
-            */
+            
                 
             } else {
                 
