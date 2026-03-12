@@ -57,7 +57,7 @@ File:[LoginViewController.swift](./World%20Wide%20Wave/LoginViewController.swift
 ### MapView(Surf Point Registration)
 
 </a> <a href="#">
-  <img src="https://img.shields.io/badge/MapKit-007AFF?style=for-the-badge&logo=apple-maps&logoColor=white" alt="Map"><img src="https://img.shields.io/badge/UIKit-2396F3?style=for-the-badge&logo=apple&logoColor=white"><img src="https://img.shields.io/badge/SwiftUI-0A84FF?style=for-the-badge&logo=swift&logoColor=white">
+  <img src="https://img.shields.io/badge/MapKit-007AFF?style=for-the-badge&logo=apple-maps&logoColor=white" alt="Map"><img src="https://img.shields.io/badge/UIKit-2396F3?style=for-the-badge&logo=apple&logoColor=white"><img src="https://img.shields.io/badge/SwiftUI-0A84FF?style=for-the-badge&logo=swift&logoColor=white"><img src="https://img.shields.io/badge/CoreLocation-007AFF?style=for-the-badge&logo=apple&logoColor=white">
 </a>
 
 Users can long-press on the map to register surf point location.
@@ -89,7 +89,9 @@ Flie:
  
 
 ### Camera fundction
-
+</a> <a href="#">
+<img src="https://img.shields.io/badge/AVFoundation-000000?style=for-the-badge&logo=apple&logoColor=white" alt="AVFoundation"><img src="https://img.shields.io/badge/UIKit-2396F3?style=for-the-badge&logo=apple&logoColor=white">
+</a>
 - This application implements a custom camera and video recording system using AVFoundation.  
 Landscape video recording is fully supported for a more flexible shooting experience.
 
@@ -97,8 +99,6 @@ Landscape video recording is fully supported for a more flexible shooting experi
 
 
 <img src="screenshots/unifiedcamera.png" alt="mylog Screen" height= "400" width= "200">
-
-<img src="screenshots/unifiedVideo.png" alt="mylog Screen" height= "200" width= "400">
 
 <img src="screenshots/unifiedcamera.gif" alt="mylog Screen" height= "200" width= "400">
 
