@@ -46,7 +46,7 @@ World Wide Wave は SwiftUI と UIKit を使用して開発された iOS アプ�
 
 - Apple でサインイン専用の認証画面です。
 
- <img src="screenshots/loginview.gif" alt="Login Screen" height= "400" width= "200"> 
+<img src="screenshots/loginview.gif" alt="Login Screen" height= "400" width= "200"> 
 
 File:[LoginViewController.swift](./World%20Wide%20Wave/LoginViewController.swift)
 
@@ -66,7 +66,6 @@ Users can long-press on the map to register surf point location.
 - UIViewControllerRepresentable を用いて UIKit SwiftUI を連携させ、画面遷移を実装しています。
 - MapKit については UIKit のクラスを利用することで、より細かい UI カスタマイズを実現しています。 SwiftUI だけでは難しい MapKit の細かい UI カスタマイズを実現するため、UIKit を併用しています。
 
-　
 <img src="screenshots/mapview.gif" alt="Login Screen" height= "400" width= "200">
 
 Flie: [WaveMapViewController](./World%20Wide%20Wave/WaveMap/mapView/WaveMapViewController.swift)
@@ -83,7 +82,6 @@ Users can view a list of their recorded wave logs from the other tabs.
 
 他のタブ画面(Mapview)で記録した波ログを一覧で確認できます。
 
-
 <img src="screenshots/mylogview.gif" alt="mylog Screen" height= "400" width= "200">
 
 Flie:
@@ -97,13 +95,11 @@ Landscape video recording is fully supported for a more flexible shooting experi
 
 このアプリでは AVFoundation を使用して独自のカメラ・動画撮影機能を実装しています。より柔軟な撮影体験のため、横画面（ランドスケープ）での動画撮影にも対応しています。
 
-<p align= "center">
-  <img src="screenshots/unifiedcamera.png" alt="mylog Screen" height= "400" width= "200" style="margin-right:10px"/>
-  <img src="screenshots/unifiedVideo.png" alt="mylog Screen" height= "200" width= "400" style="margin-right:10px"/>
-</p>
 
-[Watch Demo Video](screenshots/unifiedVideo.mov)
- 
+<img src="screenshots/unifiedcamera.png" alt="mylog Screen" height= "400" width= "200" style="margin-right:10px"/>
+
+<img src="screenshots/unifiedVideo.png" alt="mylog Screen" height= "200" width= "400" style="margin-right:10px"/>
+
 Flie:
-    [MylogSwiftUiView](./World%20Wide%20Wave/WaveMap/InfoView/unified camera )
+    [MylogSwiftUiView](./World%20Wide%20Wave/WaveMap/InfoView/unified%20camera)
  
