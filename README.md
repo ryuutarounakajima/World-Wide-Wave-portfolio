@@ -101,5 +101,6 @@ Landscape video recording is fully supported for a more flexible shooting experi
 <img src="screenshots/unifiedVideo.png" alt="mylog Screen" height= "200" width= "400" style="margin-right:10px"/>
 
 Flie:
-    [MylogSwiftUiView](./World%20Wide%20Wave/WaveMap/InfoView/unified_camera)
+    [MylogSwiftUiView](./World%20Wide%20Wave/WaveMap/infoView/unified_camera)
  
+
