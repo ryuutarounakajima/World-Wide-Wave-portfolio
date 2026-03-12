@@ -93,7 +93,10 @@ Flie:
 ### Camera fundction
 
 
-<p align="center">
+
   <img src="screenshots/unifiedcamera.png" alt="mylog Screen" height= "400" width= "200" style="margin-right:10px"/>
-  <img src="screenshots/unifiedVideo.png" alt="mylog Screen" height= "400" width= "200" style="margin-right:10px"/>
-</p>
+  <img src="screenshots/unifiedVideo.png" alt="mylog Screen" height= "200" width= "400" style="margin-right:10px"/>
+
+
+  <img src="screenshots/unifiedcamera.png" alt="mylog Screen" height= "400" width= "200" style="margin-right:10px"/>
+  <img src="screenshots/unifiedVideo.png" alt="mylog Screen" height= "400" width= "400" style="margin-right:10px"/>
