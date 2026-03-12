@@ -1,6 +1,5 @@
 # 🌊 World Wide Wave
-link↓
-
+link to app↓
 [![App Store](https://img.shields.io/badge/App_Store-Download-blue?logo=apple&style=for-the-badge)](https://apps.apple.com/us/app/world-wide-wave/id6758753103)
 
 This app is available on the appstore.
