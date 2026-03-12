@@ -92,11 +92,18 @@ Flie:
 
 ### Camera fundction
 
+- This application implements a custom camera and video recording system using AVFoundation.  
+Landscape video recording is fully supported for a more flexible shooting experience.
 
+このアプリでは AVFoundation を使用して独自のカメラ・動画撮影機能を実装しています。より柔軟な撮影体験のため、横画面（ランドスケープ）での動画撮影にも対応しています。
 
+<p align= "center">
   <img src="screenshots/unifiedcamera.png" alt="mylog Screen" height= "400" width= "200" style="margin-right:10px"/>
   <img src="screenshots/unifiedVideo.png" alt="mylog Screen" height= "200" width= "400" style="margin-right:10px"/>
+</p>
 
-
-  <img src="screenshots/unifiedcamera.png" alt="mylog Screen" height= "400" width= "200" style="margin-right:10px"/>
-  <img src="screenshots/unifiedVideo.png" alt="mylog Screen" height= "400" width= "400" style="margin-right:10px"/>
+[Watch Demo Video](screenshots/unifiedVideo.mov)
+ 
+Flie:
+    [MylogSwiftUiView](./World%20Wide%20Wave/WaveMap/InfoView/unified camera )
+ 
