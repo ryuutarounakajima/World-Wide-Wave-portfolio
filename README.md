@@ -90,3 +90,6 @@ Flie:
     [MylogSwiftUiView](./World%20Wide%20Wave/myLog/MylogSwiftUIView.swift)
  
 
+### Camera fundction
+
+<img src="screenshots/unifiedcamera.png" alt="mylog Screen" height= "400" width= "200"><img src="screenshots/unifiedVideo.png" alt="mylog Screen" height= "400" width= "200">
