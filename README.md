@@ -138,7 +138,7 @@ SwiftData and CloudKit is used to local persistence.
 ユーザーが記録したサーフログを一覧表示できます。
 SwiftData を利用してログを保存しています。
 
-File:[LoginViewController.swift](./World%20Wide%20Wave/mylog)
+File:[LoginViewController.swift](./World%20Wide%20Wave/myLog)
 
 ### 📷 Custom Camera System
 
