@@ -48,18 +48,18 @@ This project follows the MVVM architecture pattern.
 このプロジェクトではMVVMアーキテクチャを採用しています。
 
 --- 
+```
 View (SwiftUI / UIKit)
         │
-        │ State Binding
         ▼
-ViewModel (FormData)
+ViewModel (State / FormData)
         │
-        │ 
         ▼
 Model (SwiftData)
         │
         ▼
-Persistence (Cloud Kit)
+Persistence (CloudKit)
+```
 ---
 
 ### Model
@@ -176,29 +176,29 @@ File:[LoginViewController.swift](./World%20Wide%20Wave/WaveMap/infoView/unified_
 ## 📂 Project Structure
 
 ---
-World Wide Wave
+```
+WorldWideWave
 │
-├── WaveMap
-|   |
-│   ├── mapView
-│   │   └── WaveMapViewController.swift
-|   |
-│   └── infoView
-|       |
-│       ├── unified_camera
-│       │   └──UnifiedCameraSwiftUIView.swift
-|       |
-│       └── WaveInfoSwiftUIView.swift
+├─ WaveMap
+│   ├─ mapView
+│   │   └─ WaveMapViewController.swift
+│   │
+│   └─ infoView
+│       ├─ unified_camera
+│       │   └─ UnifiedCameraSwiftUIView.swift
+│       │
+│       └─ WaveInfoSwiftUIView.swift
 │
-├── myLog
-│   └── MylogSwiftUIView.swift
+├─ myLog
+│   └─ MylogSwiftUIView.swift
 │
-├── Login
-│   └── LoginViewController.swift
+├─ Login
+│   └─ LoginViewController.swift
 │
-└── Models
-    ├── SurfLog2
-    └── UserData
+└─ Models
+    ├─ SurfLog2.swift
+    └─ UserData.swift
+```
 --- 
 
 ## 🚀 Future Improvements
