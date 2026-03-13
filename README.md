@@ -23,7 +23,7 @@ mainブランチに大きな更新が入ったときに随時更新されます�
 ## 📲 Overview
 
 World Wide Wave is an ios app built using Swiftui and Uikit.
-This app allows users to 
+This app allows users to :
 - Record surf condition
 - Pin surf point on a map
 - Log wave conditions using a condition list with photos or videos.
@@ -92,8 +92,6 @@ SwiftUI views render the UI Nd react to ViewModel state.
 Examples:
 - FormViewModel 
 
-View receive state from the ViewModel using @EnvironmentObject.
-
 File:[LoginViewController.swift](./World%20Wide%20Wave/Struct_tools.swift)
 
 ---
@@ -145,7 +143,6 @@ File:[LoginViewController.swift](./World%20Wide%20Wave/mylog)
 ### Custom Camera Systen
 
 This app implements a custom camera and video recording system using AVFoundation.
-
 Features:
 - photo capture
 - video recording
@@ -153,7 +150,6 @@ Features:
 - automatic video thumbnail generation
 
 AVFoundation を使用して独自のカメラ機能を実装しています。
-
 機能:
 - 写真撮影
 - 動画撮影
@@ -197,15 +193,10 @@ WorldWideWave
 
 ## 🚀 Future Improvements
 
-- Cloud synchronization improvements
-- Advanced wave analytics
-- Community surf point sharing
-- Apple Watch integration
-
-- Cloud同期の改善
-- 波データ分析機能
-- サーフポイント共有機能
-- Apple Watch対応
+- Cloud synchronization improvements  Cloud同期の改善
+- Advanced wave analytics  波データ分析機能
+- Community surf point sharing  サーフポイント共有機能
+- Apple Watch integration  Apple Watch対応
 
  ---
  
