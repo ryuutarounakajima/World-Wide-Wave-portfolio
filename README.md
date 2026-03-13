@@ -100,7 +100,7 @@ File:[LoginViewController.swift](./World%20Wide%20Wave/Struct_tools.swift)
 
 ---
 
-## Tech Stack
+## 🧰 Tech Stack
 <a href="#">
 <img src="https://img.shields.io/badge/SwiftUI-0A84FF?style=for-the-badge&logo=swift&logoColor=white"> <img src="https://img.shields.io/badge/UIKit-2396F3?style=for-the-badge&logo=apple&logoColor=white"> <img src="https://img.shields.io/badge/MapKit-007AFF?style=for-the-badge&logo=apple-maps&logoColor=white"> <img src="https://img.shields.io/badge/CoreLocation-007AFF?style=for-the-badge&logo=apple&logoColor=white"> <img src="https://img.shields.io/badge/SwiftData-FA7343?style=for-the-badge&logo=apple&logoColor=white"> <img src="https://img.shields.io/badge/CloudKit-0A84FF?style=for-the-badge&logo=icloud&logoColor=white"> <img src="https://img.shields.io/badge/AVFoundation-000000?style=for-the-badge&logo=apple&logoColor=white">
 </a>
@@ -110,7 +110,7 @@ File:[LoginViewController.swift](./World%20Wide%20Wave/Struct_tools.swift)
 
 ## 🛠 Key Features (MVP)
 
-###SurfLog Recording
+### SurfLog Recording
 
 user can record surf seddions including:
 - location
@@ -215,97 +215,3 @@ WorldWideWave
 
  ---
  
- 
- 
- 
- 
- 
- 
- 
- 
-- Record surf locations and conditions with photos/videos　and information form. 
-- Long-press to register new points via MapKit.
-- Intergration of SwiftUI views and UIkit controllers.
-
-- サーフィンの位置やコンディションを写真/ビデオとインフォメーションフォームで記録します。
-- MapKitを活用し、長押しで新規ポイントを登録可能。
-- SwiftUIとUIKitを組み合わせた設計。
-
-
-
-## ⚙️features
-
-
-### Login view
-
-<a href="#"> <img src="https://img.shields.io/badge/Sign_in_with_Apple-000000?style=for-the-badge&logo=apple&logoColor=white" alt="Sign in with Apple"><img src="https://img.shields.io/badge/Authentication-424242?style=for-the-badge&logo=auth0&logoColor=white" alt="Authentication"><img src="https://img.shields.io/badge/Biometrics-007AFF?style=for-the-badge&logo=apple&logoColor=white" alt="FaceID/TouchID">
-</a>
-
-
-- Authentication view for Apple users only.
-
-- Apple でサインイン専用の認証画面です。
-
-<img src="screenshots/loginview.gif" alt="Login Screen" height= "400" width= "200"> 
-
-File:[LoginViewController.swift](./World%20Wide%20Wave/LoginViewController.swift)
-
-
----
-
-
-### MapView(Surf Point Registration)
-
-</a> <a href="#">
-  <img src="https://img.shields.io/badge/MapKit-007AFF?style=for-the-badge&logo=apple-maps&logoColor=white" alt="Map"><img src="https://img.shields.io/badge/UIKit-2396F3?style=for-the-badge&logo=apple&logoColor=white"><img src="https://img.shields.io/badge/SwiftUI-0A84FF?style=for-the-badge&logo=swift&logoColor=white"><img src="https://img.shields.io/badge/CoreLocation-007AFF?style=for-the-badge&logo=apple&logoColor=white">
-</a>
-
-Users can long-press on the map to register surf point location.
-
-- マップを長押しすることで、新しいサーフポイントを登録できます。
-- UIViewControllerRepresentable を用いて UIKit SwiftUI を連携させ、画面遷移を実装しています。
-- MapKit については UIKit のクラスを利用することで、より細かい UI カスタマイズを実現しています。 SwiftUI だけでは難しい MapKit の細かい UI カスタマイズを実現するため、UIKit を併用しています。
-
-<img src="screenshots/mapview.gif" alt="Login Screen" height= "400" width= "200">
-
-Flie: [WaveMapViewController](./World%20Wide%20Wave/WaveMap/mapView/WaveMapViewController.swift)
-
-File: [WaveInfoSwifUIViewController](./World%20Wide%20Wave/WaveMap/mapView/WaveMapViewController.swift) 
-
-
-### MylogView(Coleection of User's Wave Logs)
-
-<img src="https://img.shields.io/badge/SwiftData-FA7343?style=for-the-badge&logo=apple&logoColor=white" alt="SwiftData"><img src="https://img.shields.io/badge/CloudKit-0A84FF?style=for-the-badge&logo=icloud&logoColor=white" alt="CloudKit">
-
-
-Users can view a list of their recorded wave logs from the other tabs.
-
-他のタブ画面(Mapview)で記録した波ログを一覧で確認できます。
-
-<img src="screenshots/mylogview.gif" alt="mylog Screen" height= "400" width= "200">
-
-Flie:
-    [MylogSwiftUiView](./World%20Wide%20Wave/myLog/MylogSwiftUIView.swift)
- 
-
-### Camera fundction
-</a> <a href="#">
-<img src="https://img.shields.io/badge/AVFoundation-000000?style=for-the-badge&logo=apple&logoColor=white" alt="AVFoundation"><img src="https://img.shields.io/badge/UIKit-2396F3?style=for-the-badge&logo=apple&logoColor=white">
-</a>
-- This application implements a custom camera and video recording system using AVFoundation.  
-Landscape video recording is fully supported for a more flexible shooting experience.
-
-このアプリでは AVFoundation を使用して独自のカメラ・動画撮影機能を実装しています。より柔軟な撮影体験のため、横画面（ランドスケープ）での動画撮影にも対応しています。
-
-
-<img src="screenshots/unifiedcamera.png" alt="mylog Screen" height= "400" width= "200">
-
-<img src="screenshots/unifiedcamera.gif" alt="mylog Screen" height= "200" width= "400">
-
-Flie:
-    [MylogSwiftUiView](./World%20Wide%20Wave/WaveMap/infoView/unified_camera)
- 
-
-
-
-
