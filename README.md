@@ -175,9 +175,9 @@ WorldWideWave
 │   │
 │   └─ infoView
 │       ├─ unified_camera
-│       │   └─ UnifiedCameraSwiftUIView.swift
+│       │   └─ UnifiedCameraViewController.swift
 │       │
-│       └─ WaveInfoSwiftUIView.swift
+│       └─ WaveInfoViewController.swift
 │
 ├─ myLog
 │   └─ MylogSwiftUIView.swift
@@ -186,8 +186,8 @@ WorldWideWave
 │   └─ LoginViewController.swift
 │
 └─ Models
-    ├─ SurfLog2.swift
-    └─ UserData.swift
+    ├─ SurfLog2
+    └─ UserData
 ```
 --- 
 
@@ -198,5 +198,5 @@ WorldWideWave
 - Community surf point sharing  サーフポイント共有機能
 - Apple Watch integration  Apple Watch対応
 
- ---
+---
  
