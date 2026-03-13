@@ -92,7 +92,7 @@ SwiftUI views render the UI Nd react to ViewModel state.
 Examples:
 - FormViewModel 
 
-File:[LoginViewController.swift](./World%20Wide%20Wave/Struct_tools.swift)
+File:[Struct_tools.swift](./World%20Wide%20Wave/Struct_tools.swift)
 
 ---
 
@@ -128,7 +128,7 @@ MapKit is implemented using UIKit to achieve deeper UI customization.
 ユーザーは マップを長押しすることでサーフポイントを登録できます。
 MapKit の細かい UI カスタマイズを実現するため、UIKit を併用しています。
 
-File:[LoginViewController.swift](./World%20Wide%20Wave/WaveMap/mapView/WaveMapViewController.swift)
+File:[WaveMapViewController.swift](./World%20Wide%20Wave/WaveMap/mapView/WaveMapViewController.swift)
 
 ### 📋 Surf Log List
 
@@ -138,7 +138,7 @@ SwiftData and CloudKit is used to local persistence.
 ユーザーが記録したサーフログを一覧表示できます。
 SwiftData を利用してログを保存しています。
 
-File:[LoginViewController.swift](./World%20Wide%20Wave/myLog)
+File:[myLog](./World%20Wide%20Wave/myLog)
 
 ### 📷 Custom Camera System
 
@@ -159,7 +159,7 @@ AVFoundation を使用して独自のカメラ機能を実装しています。
 <img src="screenshots/unifiedcamera.png" height="400"> 
 <img src="screenshots/unifiedcamera.gif" height="200">
 
-File:[LoginViewController.swift](./World%20Wide%20Wave/WaveMap/infoView/unified_camera)
+File:[unified_camera](./World%20Wide%20Wave/WaveMap/infoView/unified_camera)
 
 ---
 
