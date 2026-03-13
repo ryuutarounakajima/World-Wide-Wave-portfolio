@@ -23,7 +23,6 @@ mainブランチに大きな更新が入ったときに随時更新されます�
 ## 📲 Overview
 
 World Wide Wave is an ios app built using Swiftui and Uikit.
-
 This app allows users to 
 - Record surf condition
 - Pin surf point on a map
@@ -32,7 +31,6 @@ This app allows users to
 
 
 World Wide Wave は SwiftUI と UIKit を使用して開発された iOS アプリです。
-
 このアプリでは以下が可能です。
 - サーフコンディションを記録
 - 地図上にサーフポイントをピン留め
@@ -127,11 +125,9 @@ user can record surf seddions including:
 ### Map Interaction
 
 Users can long-press the map to register surf points.
-
 MapKit is implemented using UIKit to achieve deeper UI customization.
 
 ユーザーは マップを長押しすることでサーフポイントを登録できます。
-
 MapKit の細かい UI カスタマイズを実現するため、UIKit を併用しています。
 
 File:[LoginViewController.swift](./World%20Wide%20Wave/WaveMap/mapView/WaveMapViewController.swift)
@@ -139,11 +135,9 @@ File:[LoginViewController.swift](./World%20Wide%20Wave/WaveMap/mapView/WaveMapVi
 ### Surf Log List
 
 User can view previously recorded surf logs.
-
 SwiftData and CloudKit is used to local persistence.
 
 ユーザーが記録したサーフログを一覧表示できます。
-
 SwiftData を利用してログを保存しています。
 
 File:[LoginViewController.swift](./World%20Wide%20Wave/mylog)
