@@ -60,7 +60,7 @@ Persistence (CloudKit)
 ```
 ---
 
-### Model
+### ⚙️Model
 
 Implemented using SwiftData @Model
 - SurfLog2
@@ -74,7 +74,7 @@ Stores surf session information such as:
 - generated video thumbnails
 - user data
 
-### ViewModel
+### 𝌭ViewModel
 
 Implemented using FormData
 - FormData
@@ -86,7 +86,7 @@ Manages form and user input such as:
 - saving data to SwiftData
 - Video thumbnails are generated using AVFoundation.
 
-### View
+### ⌗View
 
 SwiftUI views render the UI Nd react to ViewModel state.
 Examples:
@@ -106,7 +106,7 @@ File:[LoginViewController.swift](./World%20Wide%20Wave/Struct_tools.swift)
 
 ## 🛠 Key Features (MVP)
 
-### SurfLog Recording
+### ⏺️ SurfLog Recording
 
 user can record surf seddions including:
 - location
@@ -120,7 +120,7 @@ user can record surf seddions including:
 - 風や潮位
 - 写真 / 動画
 
-### Map Interaction
+### 📍 Map Interaction
 
 Users can long-press the map to register surf points.
 MapKit is implemented using UIKit to achieve deeper UI customization.
@@ -130,7 +130,7 @@ MapKit の細かい UI カスタマイズを実現するため、UIKit を併用
 
 File:[LoginViewController.swift](./World%20Wide%20Wave/WaveMap/mapView/WaveMapViewController.swift)
 
-### Surf Log List
+### 📋 Surf Log List
 
 User can view previously recorded surf logs.
 SwiftData and CloudKit is used to local persistence.
@@ -140,7 +140,7 @@ SwiftData を利用してログを保存しています。
 
 File:[LoginViewController.swift](./World%20Wide%20Wave/mylog)
 
-### Custom Camera Systen
+### 📷 Custom Camera System
 
 This app implements a custom camera and video recording system using AVFoundation.
 Features:
