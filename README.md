@@ -1,5 +1,5 @@
 # 🌊 World Wide Wave
-link to this app↓
+link to the app↓
 
 [![App Store](https://img.shields.io/badge/App_Store-Download-blue?logo=apple&style=for-the-badge)](https://apps.apple.com/us/app/world-wide-wave/id6758753103)
 
@@ -13,18 +13,216 @@ mainブランチに大きな更新が入ったときに随時更新されます�
 
 ---
 
+## 🎬 App Demo
+<img src="screenshots/loginview.gif" alt="Login Screen" height= "400" width= "200"> 
+<img src="screenshots/mapview.gif" alt="Login Screen" height= "400" width= "200"> 
+<img src="screenshots/mylogview.gif" alt="Login Screen" height= "400" width= "200"> 
+
+---
+
 ## 📲 Overview
 
 World Wide Wave is an ios app built using Swiftui and Uikit.
-It allows users to explore wave information, map interactions, and 
-view visual elements.
+
+This app allows users to 
+- Record surf condition
+- Pin surf point on a map
+- Log wave conditions using a condition list with photos or videos.
+- Manage surf logs in a visual interface
+
 
 World Wide Wave は SwiftUI と UIKit を使用して開発された iOS アプリです。
-波の情報確認、地図上のインタラクション、ビジュアル UI などを備えています。
+
+このアプリでは以下が可能です。
+- サーフコンディションを記録
+- 地図上にサーフポイントをピン留め
+- コンディションリストと写真・動画を使って波の状態を記録
+- 視覚的なインターフェースでサーフログを管理
+
+---
+
+## 🏗 Architecture
+
+This project follows the MVVM architecture pattern.
+
+このプロジェクトではMVVMアーキテクチャを採用しています。
+
+--- 
+View (SwiftUI / UIKit)
+        │
+        │ State Binding
+        ▼
+ViewModel (FormData)
+        │
+        │ 
+        ▼
+Model (SwiftData)
+        │
+        ▼
+Persistence (Cloud Kit)
+---
+
+### Model
+
+Implemented using SwiftData @Model
+- SurfLog2
+- userData
+
+Stores surf session information such as:
+- location
+- wave condition
+- wind / tide
+- photos and videos
+- generated video thumbnails
+- user data
+
+### ViewModel
+
+Implemented using FormData
+- FormData
+
+Manages form and user input such as:
+- form validation
+- thumbnail generation
+- media processing
+- saving data to SwiftData
+- Video thumbnails are generated using AVFoundation.
+
+### View
+
+SwiftUI views render the UI Nd react to ViewModel state.
+Examples:
+- FormViewModel 
+
+View receive state from the ViewModel using @EnvironmentObject.
+
+File:[LoginViewController.swift](./World%20Wide%20Wave/Struct_tools.swift)
+
+---
+
+## Tech Stack
+<a href="#">
+<img src="https://img.shields.io/badge/SwiftUI-0A84FF?style=for-the-badge&logo=swift&logoColor=white"> <img src="https://img.shields.io/badge/UIKit-2396F3?style=for-the-badge&logo=apple&logoColor=white"> <img src="https://img.shields.io/badge/MapKit-007AFF?style=for-the-badge&logo=apple-maps&logoColor=white"> <img src="https://img.shields.io/badge/CoreLocation-007AFF?style=for-the-badge&logo=apple&logoColor=white"> <img src="https://img.shields.io/badge/SwiftData-FA7343?style=for-the-badge&logo=apple&logoColor=white"> <img src="https://img.shields.io/badge/CloudKit-0A84FF?style=for-the-badge&logo=icloud&logoColor=white"> <img src="https://img.shields.io/badge/AVFoundation-000000?style=for-the-badge&logo=apple&logoColor=white">
+</a>
+
+---
 
 
-### 🛠 Key Features (MVP)
+## 🛠 Key Features (MVP)
 
+###SurfLog Recording
+
+user can record surf seddions including:
+- location
+- wave conditions
+- wind and tide
+- photos and videos
+
+サーフセッションの情報を記録できます。
+- 位置情報
+- 波のサイズやコンディション
+- 風や潮位
+- 写真 / 動画
+
+### Map Interaction
+
+Users can long-press the map to register surf points.
+
+MapKit is implemented using UIKit to achieve deeper UI customization.
+
+ユーザーは マップを長押しすることでサーフポイントを登録できます。
+
+MapKit の細かい UI カスタマイズを実現するため、UIKit を併用しています。
+
+File:[LoginViewController.swift](./World%20Wide%20Wave/WaveMap/mapView/WaveMapViewController.swift)
+
+### Surf Log List
+
+User can view previously recorded surf logs.
+
+SwiftData and CloudKit is used to local persistence.
+
+ユーザーが記録したサーフログを一覧表示できます。
+
+SwiftData を利用してログを保存しています。
+
+File:[LoginViewController.swift](./World%20Wide%20Wave/mylog)
+
+### Custom Camera Systen
+
+This app implements a custom camera and video recording system using AVFoundation.
+
+Features:
+- photo capture
+- video recording
+- landscape video support
+- automatic video thumbnail generation
+
+AVFoundation を使用して独自のカメラ機能を実装しています。
+
+機能:
+- 写真撮影
+- 動画撮影
+- 横画面動画対応
+- 動画サムネイル自動生成
+
+<img src="screenshots/unifiedcamera.png" height="400"> 
+<img src="screenshots/unifiedcamera.gif" height="200">
+
+File:[LoginViewController.swift](./World%20Wide%20Wave/WaveMap/infoView/unified_camera)
+
+---
+
+## 📂 Project Structure
+
+---
+World Wide Wave
+│
+├── WaveMap
+|   |
+│   ├── mapView
+│   │   └── WaveMapViewController.swift
+|   |
+│   └── infoView
+|       |
+│       ├── unified_camera
+│       │   └──UnifiedCameraSwiftUIView.swift
+|       |
+│       └── WaveInfoSwiftUIView.swift
+│
+├── myLog
+│   └── MylogSwiftUIView.swift
+│
+├── Login
+│   └── LoginViewController.swift
+│
+└── Models
+    ├── SurfLog2
+    └── UserData
+--- 
+
+## 🚀 Future Improvements
+
+- Cloud synchronization improvements
+- Advanced wave analytics
+- Community surf point sharing
+- Apple Watch integration
+
+- Cloud同期の改善
+- 波データ分析機能
+- サーフポイント共有機能
+- Apple Watch対応
+
+ ---
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 - Record surf locations and conditions with photos/videos　and information form. 
 - Long-press to register new points via MapKit.
 - Intergration of SwiftUI views and UIkit controllers.
@@ -107,4 +305,7 @@ Landscape video recording is fully supported for a more flexible shooting experi
 Flie:
     [MylogSwiftUiView](./World%20Wide%20Wave/WaveMap/infoView/unified_camera)
  
+
+
+
 
