@@ -76,7 +76,7 @@ Stores surf session information such as:
 
 ### 𝌭ViewModel
 
-Implemented using FormData
+Implemented using:
 - FormData
 
 Manages form and user input such as:
