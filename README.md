@@ -193,10 +193,10 @@ WorldWideWave
 
 ## 🚀 Future Improvements
 
-- Cloud synchronization improvements  Cloud同期の改善
-- Advanced wave analytics  波データ分析機能
-- Community surf point sharing  サーフポイント共有機能
-- Apple Watch integration  Apple Watch対応
+- Cloud synchronization improvements  - Cloud同期の改善
+- Advanced wave analytics  - 波データ分析機能
+- Community surf point sharing  - サーフポイント共有機能
+- Apple Watch integration  - Apple Watch対応
 
 ---
  
